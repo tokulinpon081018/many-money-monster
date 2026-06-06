@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>English Monster Quest</title>
+<style>
+:root{--bg1:#8be9fd;--bg2:#ffb86c;--card:#fffdf7;--ink:#263238;--accent:#ff4d6d;--good:#19c37d;--bad:#ff5a5f;--gold:#ffd166;}
+*{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--ink);min-height:100vh;padding:14px;}
+.app{max-width:520px;margin:0 auto}.top{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:10px}.badge{background:rgba(255,255,255,.82);border:2px solid rgba(255,255,255,.9);border-radius:999px;padding:7px 10px;font-weight:800;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.card{background:var(--card);border-radius:26px;padding:16px;box-shadow:0 10px 24px rgba(0,0,0,.18);border:3px solid rgba(255,255,255,.65);overflow:hidden}.title{text-align:center;margin:4px 0 10px;font-size:28px;line-height:1.05}.sub{text-align:center;font-weight:700;color:#586069;margin-bottom:10px}.stage{font-weight:900;text-align:center;background:#fff0b3;border-radius:16px;padding:9px;margin-bottom:10px}.monster-area{text-align:center;position:relative;margin:10px 0 6px}.monster{font-size:92px;line-height:1;display:inline-block;filter:drop-shadow(0 8px 6px rgba(0,0,0,.2));transition:transform .25s, opacity .35s}.monster-name{font-weight:900;font-size:20px}.hp{font-size:25px;letter-spacing:3px;margin:7px 0}.damage{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);font-size:34px;font-weight:1000;color:#e63946;text-shadow:2px 2px 0 #fff;opacity:0;pointer-events:none}.question-box{background:#f0f7ff;border:3px solid #bde0fe;border-radius:20px;padding:13px;margin:12px 0}.qno{font-size:13px;font-weight:800;color:#52616b}.question{font-size:25px;font-weight:1000;margin:8px 0;text-align:center}.hint{background:#fff7d6;border-left:7px solid var(--gold);padding:10px;border-radius:12px;font-weight:700;font-size:14px}.choices{display:grid;gap:10px}.choice{border:0;border-radius:18px;padding:15px 12px;font-size:18px;font-weight:900;color:#fff;box-shadow:0 6px 0 rgba(0,0,0,.18);touch-action:manipulation}.choice:nth-child(1){background:#ff5a7a}.choice:nth-child(2){background:#3da5ff}.choice:nth-child(3){background:#24c46b}.choice:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.18)}.message{min-height:54px;text-align:center;font-weight:900;font-size:18px;margin:12px 0 4px}.small{font-size:13px;color:#586069;text-align:center}.next,.restart,.bookbtn{width:100%;border:0;border-radius:18px;padding:14px;margin-top:10px;font-size:17px;font-weight:1000;background:#2f3a8f;color:white;box-shadow:0 6px 0 rgba(0,0,0,.2)}.bookbtn{background:#7b2cbf}.hidden{display:none}.progress{height:16px;background:#e9ecef;border-radius:99px;overflow:hidden;border:2px solid white}.bar{height:100%;width:0%;background:linear-gradient(90deg,#06d6a0,#ffd166,#ff6b6b);transition:width .5s}.shake{animation:shake .45s linear}.defeat{animation:defeat .8s ease forwards}.pop{animation:pop .7s ease}.flash{animation:flash .35s ease}.floatDamage{animation:floatDamage .75s ease forwards}@keyframes shake{0%,100%{transform:translateX(0) rotate(0)}15%{transform:translateX(-16px) rotate(-8deg)}30%{transform:translateX(14px) rotate(8deg)}45%{transform:translateX(-12px) rotate(-6deg)}60%{transform:translateX(10px) rotate(6deg)}75%{transform:translateX(-6px) rotate(-3deg)}}@keyframes defeat{0%{transform:scale(1) rotate(0);opacity:1}45%{transform:scale(1.25) rotate(15deg)}100%{transform:scale(0) rotate(720deg);opacity:0}}@keyframes pop{0%{transform:scale(.5);opacity:.3}60%{transform:scale(1.18)}100%{transform:scale(1);opacity:1}}@keyframes flash{0%{background:#fff}50%{background:#ffe66d}100%{background:var(--card)}}@keyframes floatDamage{0%{opacity:0;transform:translate(-50%,-30%) scale(.6)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-120%) scale(1.45)}}.book{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.entry{background:#f7f7ff;border-radius:14px;padding:9px;font-weight:800;font-size:13px;border:2px solid #e1e1ff}.clear{font-size:30px;text-align:center;font-weight:1000}.footer{margin-top:10px;text-align:center;font-size:12px;color:#556}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><div class="badge" id="lv">Lv 1</div><div class="badge" id="exp">EXP 0/100</div><div class="badge" id="stageBadge">Stage 1</div></div>
+  <div class="progress"><div class="bar" id="progressBar"></div></div>
+  <div class="card" id="card">
+    <h1 class="title">English Monster Quest</h1>
+    <div class="sub">英検5級モンスターを50問でたおせ！</div>
+    <div class="stage" id="stageTitle">Stage 1：あいさつの森</div>
+    <div class="monster-area">
+      <div class="damage" id="damage">-1❤️</div>
+      <div class="monster" id="monster">🟢</div>
+      <div class="monster-name" id="monsterName">Greeting Slime</div>
+      <div class="hp" id="hp">❤️❤️❤️</div>
+    </div>
+    <div class="question-box">
+      <div class="qno" id="qno">Question 1 / 50</div>
+      <div class="question" id="question">Hello.</div>
+      <div class="hint" id="hint">ヒント：会ったときのあいさつ</div>
+    </div>
+    <div class="choices" id="choices"></div>
+    <div class="message" id="message">正しい答えをえらんで攻撃！</div>
+    <button class="next hidden" id="nextBtn">次の問題へ ▶</button>
+    <button class="bookbtn" id="bookBtn">📖 図鑑を見る</button>
+    <div id="book" class="book hidden"></div>
+    <button class="restart hidden" id="restartBtn">もう一度あそぶ</button>
+  </div>
+  <div class="footer">GitHub Pages版・1ファイルで動作</div>
+</div>
+<script>
+const stages=[
+ {title:'Stage 1：あいさつの森',monster:'🟢',name:'Greeting Slime',bg1:'#8be9fd',bg2:'#b8f7d4'},
+ {title:'Stage 2：家族の洞窟',monster:'👺',name:'Family Goblin',bg1:'#cdb4db',bg2:'#ffc8dd'},
+ {title:'Stage 3：数字火山',monster:'🐲',name:'Number Dragon',bg1:'#ff9f1c',bg2:'#ffbf69'},
+ {title:'Stage 4：食べ物の城',monster:'🍔',name:'Food Ogre',bg1:'#ffd166',bg2:'#95d5b2'},
+ {title:'Stage 5：英検5級魔王城',monster:'👑',name:'King Eiken',bg1:'#7b2cbf',bg2:'#f72585'}
+];
+const qs=[
+['Hello.','こんにちは','さようなら','おやすみ','会ったときのあいさつ'],['Good morning.','おはよう','こんばんは','ありがとう','朝のあいさつ'],['Good night.','おやすみ','おはよう','こんにちは','寝る前に使う'],['Thank you.','ありがとう','ごめんなさい','またね','感謝のことば'],["You're welcome.",'どういたしまして','はじめまして','おめでとう','Thank you.への返事'],['Goodbye.','さようなら','こんにちは','おはよう','別れるとき'],['See you.','またね','ごめんね','助けて','また会う感じ'],['How are you?','元気ですか','何歳ですか','どこですか','相手の調子を聞く'],["I'm fine.",'元気です','私は好きです','私は行きます','How are you?への返事'],['Nice to meet you.','はじめまして','おやすみ','いただきます','初めて会ったとき'],
+['father','父','母','姉妹','家族の男の親'],['mother','母','父','兄弟','家族の女の親'],['brother','兄弟','姉妹','祖父','男のきょうだい'],['sister','姉妹','兄弟','祖母','女のきょうだい'],['family','家族','学校','友だち','家にいる大切な人たち'],['friend','友だち','先生','父','一緒に遊ぶ人'],['teacher','先生','生徒','兄','学校で教える人'],['student','生徒','先生','母','学校で学ぶ人'],['your brother is tall.','あなたの兄弟は背が高い','あなたの兄弟は走る','あなたの父は若い','tallは背が高い'],['This is my mother.','こちらは私の母です','私は母が好きです','母は学校にいます','This is は「こちらは」'],
+['one','1','2','10','最初の数字'],['two','2','3','12','oneの次'],['three','3','13','30','1,2,の次'],['five','5','15','50','手の指の数'],['ten','10','20','100','両手の指の数'],['eleven','11','7','20','tenの次'],['twenty','20','12','2','tenが2つ'],['first','1番目','2番目','3番目','順番の1'],['second','2番目','1番目','10番目','順番の2'],['How old are you?','何歳ですか','何時ですか','何個ですか','年齢を聞く'],
+['apple','りんご','水','ごはん','赤い果物'],['bread','パン','牛乳','魚','朝食で食べることもある'],['water','水','肉','りんご','飲みもの。数えにくい'],['milk','牛乳','水','卵','白い飲みもの'],['rice','ごはん','パン','肉','日本の主食'],['fish','魚','鳥','犬','海や川にいる'],['I like dogs.','私は犬が好きです','私は犬です','私は犬を持っています','likeは「好き」'],['I want water.','私は水がほしい','私は水が好き','私は水を見る','wantは「ほしい」'],['Do you like apples?','りんごは好きですか','りんごを持っていますか','りんごはいくつですか','Do you likeで好きを聞く'],['I eat breakfast.','私は朝食を食べます','私は朝に走ります','私は夜寝ます','eatは食べる'],
+['Can you help me?','手伝ってくれますか','どこに行きますか','何歳ですか','Can youでお願い'],['Where is the station?','駅はどこですか','駅はいつですか','駅は何ですか','Whereは場所'],['What time is it?','何時ですか','何歳ですか','何曜日ですか','timeは時間'],['I go to school.','私は学校へ行きます','私は学校が好きです','私は先生です','go toで「〜へ行く」'],['She plays tennis.','彼女はテニスをします','彼はテニスを見ます','彼女は泳ぎます','playsはスポーツをする'],['He has a bike.','彼は自転車を持っています','彼は自転車に乗ります','彼女は車を持っています','hasは持っている'],['Open the door.','ドアを開けて','ドアを閉めて','ドアを見て','openは開ける'],['Close the window.','窓を閉めて','窓を開けて','窓を洗って','closeは閉める'],['I have no time.','時間がありません','お金がありません','友だちがいません','no timeで時間がない'],['Congratulations!','おめでとう','ありがとう','ごめんなさい','成功した相手に言う']
+].map((a,i)=>({q:a[0],correct:a[1],choices:[a[1],a[2],a[3]],hint:'ヒント：'+a[4],stage:Math.floor(i/10)}));
+let idx=0, level=1, exp=0, hp=3, defeated=[], locked=false;
+const $=id=>document.getElementById(id);
+function shuffle(arr){return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1])}
+function setStage(){const s=stages[qs[idx]?.stage||4]; document.documentElement.style.setProperty('--bg1',s.bg1);document.documentElement.style.setProperty('--bg2',s.bg2);$('stageTitle').textContent=s.title;$('stageBadge').textContent='Stage '+(qs[idx].stage+1);$('monster').textContent=s.monster;$('monsterName').textContent=s.name;}
+function hearts(){return '❤️'.repeat(hp)+'🤍'.repeat(3-hp)}
+function render(){locked=false; if(idx>=qs.length){clearGame();return} setStage(); const q=qs[idx]; $('qno').textContent=`Question ${idx+1} / 50`; $('question').textContent=q.q; $('hint').textContent=q.hint; $('hp').textContent=hearts(); $('message').textContent='正しい答えをえらんで攻撃！'; $('nextBtn').classList.add('hidden'); $('choices').innerHTML=''; shuffle(q.choices).forEach(c=>{const b=document.createElement('button');b.className='choice';b.textContent=c;b.onclick=()=>answer(c);$('choices').appendChild(b)}); $('progressBar').style.width=(idx/50*100)+'%'; $('lv').textContent='Lv '+level; $('exp').textContent=`EXP ${exp}/100`; $('monster').classList.remove('defeat'); $('monster').style.opacity=1; $('monster').style.transform='';}
+function answer(c){if(locked)return; locked=true; const q=qs[idx]; if(c===q.correct){hp--; exp+=20; $('message').textContent='⚔️ 正解！こうげき！'; $('damage').textContent='-1❤️'; $('damage').classList.remove('floatDamage'); void $('damage').offsetWidth; $('damage').classList.add('floatDamage'); $('monster').classList.remove('shake'); void $('monster').offsetWidth; $('monster').classList.add('shake'); $('hp').textContent=hearts(); if(exp>=100){level++; exp-=100; setTimeout(()=>{$('message').textContent='✨ レベルアップ！ Lv '+level+'！'},550)} if(hp<=0){const s=stages[q.stage]; if(!defeated.includes(s.name))defeated.push(s.name); setTimeout(()=>{ $('monster').classList.add('defeat'); $('message').textContent='💥 '+s.name+' をたおした！ 図鑑に登録！';},550); setTimeout(()=>{hp=3;idx++; render();},1900);}else{setTimeout(()=>{$('nextBtn').classList.remove('hidden'); locked=false;},750)}}else{$('message').textContent='💦 ちがう！ モンスターの反撃！ 正解は「'+q.correct+'」'; setTimeout(()=>{$('nextBtn').classList.remove('hidden'); locked=false;},900)}}
+$('nextBtn').onclick=()=>{idx++; if(idx%10===0)hp=3; render()};
+$('bookBtn').onclick=()=>{const b=$('book'); b.classList.toggle('hidden'); b.innerHTML=stages.map(s=>`<div class="entry">${defeated.includes(s.name)?'✅':'🔒'} ${s.monster}<br>${s.name}</div>`).join('')};
+function clearGame(){$('card').innerHTML=`<div class="clear">🎉 CLEAR! 🎉</div><p class="sub">50問クリア！英検5級モンスターを全部たおした！</p><div class="monster pop">🏆</div><button class="restart" onclick="location.reload()">もう一度あそぶ</button>`;$('progressBar').style.width='100%'}
+render();
+</script>
+</body>
+</html>
