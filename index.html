@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>英検5級モンスター図鑑</title>
+  <style>
+    :root{--bg1:#fff4c7;--bg2:#d9f7ff;--main:#ff7aa2;--dark:#333;--ok:#20b86f;--bad:#ff4d6d;}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:var(--dark);min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:14px;}
+    .game{width:min(460px,100%);background:#fff;border-radius:28px;box-shadow:0 12px 35px rgba(0,0,0,.18);padding:18px;border:5px solid #fff;position:relative;overflow:hidden;}
+    .top{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:10px;}
+    h1{font-size:24px;margin:0;color:#ff4d8d;text-shadow:1px 2px 0 #ffe2ed;line-height:1.1}
+    .pill{background:#fff0f6;border:2px solid #ffb3cf;border-radius:999px;padding:7px 10px;font-weight:800;font-size:13px;white-space:nowrap;}
+    .stage{background:linear-gradient(90deg,#8de77c,#6bd5ff);border-radius:20px;padding:10px 12px;font-weight:900;text-align:center;margin:8px 0;color:#123;}
+    .monsterArea{text-align:center;background:#f7fbff;border:3px dashed #b9e4ff;border-radius:24px;padding:12px;margin-top:10px;position:relative;}
+    .monsterName{font-size:19px;font-weight:900;margin-bottom:6px;}
+    .monster{width:150px;height:130px;margin:4px auto 10px;position:relative;filter:drop-shadow(0 8px 0 rgba(0,0,0,.08));transition:transform .2s, opacity .3s;}
+    .body{position:absolute;left:16px;top:24px;width:118px;height:95px;border-radius:50% 50% 42% 42%;background:var(--monster);border:4px solid rgba(0,0,0,.12);}
+    .eye{position:absolute;top:48px;width:24px;height:30px;background:#fff;border-radius:50%;border:3px solid #222;z-index:3;}
+    .eye.left{left:48px}.eye.right{right:48px}.pupil{position:absolute;left:7px;top:9px;width:8px;height:10px;background:#222;border-radius:50%;}
+    .mouth{position:absolute;left:62px;top:88px;width:28px;height:14px;border-bottom:5px solid #222;border-radius:0 0 20px 20px;z-index:3;}
+    .cheek{position:absolute;top:82px;width:18px;height:10px;background:rgba(255,115,150,.5);border-radius:50%;z-index:3}.cheek.l{left:34px}.cheek.r{right:34px}
+    .antenna{position:absolute;width:15px;height:44px;background:var(--monster);border-radius:20px;top:0;border:3px solid rgba(0,0,0,.10)}
+    .antenna.a{left:42px;transform:rotate(-22deg)}.antenna.b{right:42px;transform:rotate(22deg)}
+    .accessory{position:absolute;z-index:4;font-size:34px;left:50%;top:0;transform:translateX(-50%)}
+    .damageText{position:absolute;left:50%;top:60px;transform:translateX(-50%);font-size:34px;font-weight:900;color:#ff1744;text-shadow:2px 2px 0 #fff;opacity:0;pointer-events:none;}
+    .damageText.show{animation:popDamage .7s ease-out;}
+    @keyframes popDamage{0%{opacity:0;transform:translate(-50%,10px) scale(.7)}30%{opacity:1;transform:translate(-50%,-20px) scale(1.2)}100%{opacity:0;transform:translate(-50%,-55px) scale(.9)}}
+    .shake{animation:shake .45s linear;}
+    @keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-12px) rotate(-5deg)}30%{transform:translateX(12px) rotate(5deg)}45%{transform:translateX(-10px) rotate(-4deg)}60%{transform:translateX(10px) rotate(4deg)}75%{transform:translateX(-6px) rotate(-2deg)}}
+    .defeated{animation:defeat .9s ease-in forwards;}
+    @keyframes defeat{0%{transform:scale(1) rotate(0);opacity:1}50%{transform:scale(1.15) rotate(12deg);opacity:.8}100%{transform:scale(.1) rotate(720deg);opacity:0}}
+    .hpLabel{font-weight:900;margin:2px 0 5px;}.hpbar{height:20px;background:#e7eef5;border-radius:999px;overflow:hidden;border:2px solid #d2dde8}.hpfill{height:100%;width:100%;background:linear-gradient(90deg,#36d16f,#ffd447,#ff5a7c);border-radius:999px;transition:width .45s ease;}
+    .progress{font-weight:900;text-align:center;margin:10px 0 8px;color:#555}.questionBox{background:#fff9e8;border:3px solid #ffd66b;border-radius:22px;padding:15px;margin:12px 0;text-align:center;}.question{font-size:30px;font-weight:900;margin:5px 0 8px;color:#263238}.hint{font-size:14px;color:#6b5b00;background:#fff1b5;border-radius:14px;padding:8px;font-weight:700;}
+    .choices{display:grid;gap:10px}.choice{border:0;border-radius:18px;padding:15px;font-size:18px;font-weight:900;color:#fff;box-shadow:0 5px 0 rgba(0,0,0,.18);cursor:pointer;transition:.08s transform;}.choice:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.18)}.choice:nth-child(1){background:#ff6b8f}.choice:nth-child(2){background:#42a5f5}.choice:nth-child(3){background:#37c978}.choice:disabled{opacity:.65;cursor:not-allowed}
+    .message{min-height:52px;text-align:center;font-size:18px;font-weight:900;margin:12px 0;padding:10px;border-radius:18px;background:#f4f7ff;}.ok{color:var(--ok)}.bad{color:var(--bad)}
+    .nextBtn,.bookBtn,.restartBtn{width:100%;border:0;border-radius:18px;padding:14px;font-size:18px;font-weight:900;background:#8e5cff;color:#fff;box-shadow:0 5px 0 rgba(0,0,0,.18);margin-top:8px}.nextBtn{display:none}.smallBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}.bookBtn{background:#ff9f1c}.restartBtn{background:#00bcd4}.book{display:none;background:#fff;border:3px solid #ddd;border-radius:22px;padding:12px;margin-top:12px}.book h2{margin:0 0 8px;color:#ff4d8d}.bookGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.card{border-radius:14px;padding:10px;background:#f2f2f2;font-weight:800;text-align:center}.card.done{background:#e2ffe9;border:2px solid #55d77a}.clear{font-size:24px;text-align:center;font-weight:900;color:#ff4d8d;background:#fff2fb;border-radius:20px;padding:14px;margin-top:10px;display:none}.soundNote{text-align:center;font-size:12px;color:#666;margin-top:8px}.tapStart{position:absolute;inset:0;background:rgba(255,255,255,.94);z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}.tapStart button{border:0;border-radius:20px;background:#ff5f9c;color:white;font-size:22px;font-weight:900;padding:16px 22px;box-shadow:0 6px 0 rgba(0,0,0,.18)}
+  </style>
+</head>
+<body>
+  <div class="game">
+    <div class="tapStart" id="tapStart"><h1>英検5級<br>モンスター図鑑</h1><p>音を鳴らすために<br>最初にボタンを押してね</p><button onclick="startGame()">ゲーム開始 🔊</button></div>
+    <div class="top"><h1>英検5級<br>モンスター図鑑</h1><div class="pill" id="level">Lv.1</div></div>
+    <div class="stage" id="stageName">Stage</div>
+    <div class="monsterArea">
+      <div class="monsterName" id="monsterName"></div>
+      <div class="monster" id="monster"><div class="accessory" id="accessory"></div><div class="antenna a"></div><div class="antenna b"></div><div class="body"></div><div class="eye left"><div class="pupil"></div></div><div class="eye right"><div class="pupil"></div></div><div class="mouth" id="mouth"></div><div class="cheek l"></div><div class="cheek r"></div></div>
+      <div class="damageText" id="damageText">-10%</div>
+      <div class="hpLabel">MONSTER HP</div><div class="hpbar"><div class="hpfill" id="hpfill"></div></div>
+    </div>
+    <div class="progress" id="progress"></div>
+    <div class="questionBox"><div class="question" id="question"></div><div class="hint" id="hint"></div></div>
+    <div class="choices" id="choices"></div>
+    <div class="message" id="message">答えを選んで攻撃！</div>
+    <button class="nextBtn" id="nextBtn" onclick="nextQuestion()">次の問題へ ▶</button>
+    <div class="smallBtns"><button class="bookBtn" onclick="toggleBook()">図鑑を見る 📖</button><button class="restartBtn" onclick="restart()">最初から 🔁</button></div>
+    <div class="book" id="book"><h2>モンスター図鑑</h2><div class="bookGrid" id="bookGrid"></div></div>
+    <div class="clear" id="clearBox">🏆 GAME CLEAR!<br>英検5級モンスターを全部たおした！</div>
+    <div class="soundNote">※iPhoneではマナーモード中、音が小さい場合があります。</div>
+  </div>
+<script>
+const monsters=[
+ {name:'Greeting Monster',stage:'🌱 Stage1 あいさつの森',color:'#6ee77c',acc:'🌱'},
+ {name:'Family Monster',stage:'🏠 Stage2 家族の洞窟',color:'#65c7ff',acc:'👓'},
+ {name:'Number Monster',stage:'🔢 Stage3 数字火山',color:'#ffae42',acc:'🔢'},
+ {name:'Food Monster',stage:'🍎 Stage4 食べ物の城',color:'#ffd447',acc:'🍳'},
+ {name:'King Eiken',stage:'👑 Stage5 英検5級魔王城',color:'#b879ff',acc:'👑'}
+];
+const questions=[
+ ['Hello.','こんにちは',['こんにちは','さようなら','おやすみ'],'会ったときに使う基本のあいさつ'],
+ ['Good morning.','おはよう',['こんばんは','おはよう','ありがとう'],'朝に使うあいさつ'],
+ ['Good night.','おやすみ',['こんにちは','おやすみ','またね'],'寝る前によく使う'],
+ ['Thank you.','ありがとう',['ありがとう','ごめんなさい','どういたしまして'],'何かをしてもらったとき'],
+ ["You're welcome.",'どういたしまして',['どういたしまして','ありがとう','こんにちは'],'Thank you. と言われた後'],
+ ['See you.','またね',['またね','おはよう','こんばんは'],'別れるときの軽い言い方'],
+ ['Goodbye.','さようなら',['さようなら','ありがとう','こんにちは'],'別れるときの言葉'],
+ ['How are you?','元気ですか？',['元気ですか？','何歳ですか？','どこですか？'],'相手の調子を聞く'],
+ ["I'm fine.",'元気です',['眠いです','元気です','疲れました'],'How are you? への返事'],
+ ['Nice to meet you.','はじめまして',['はじめまして','ありがとう','おやすみ'],'初めて会ったとき'],
+ ['father','父',['父','母','兄'],'家族の男性'],
+ ['mother','母',['兄','母','姉'],'家族の女性'],
+ ['brother','弟・兄',['弟・兄','姉・妹','父'],'男のきょうだい'],
+ ['sister','姉・妹',['兄','母','姉・妹'],'女のきょうだい'],
+ ['family','家族',['学校','家族','先生'],'家の人たち'],
+ ['grandfather','祖父',['祖父','祖母','父'],'おじいちゃん'],
+ ['grandmother','祖母',['祖母','母','姉'],'おばあちゃん'],
+ ['uncle','おじ',['おじ','おば','兄'],'父母の兄弟など'],
+ ['aunt','おば',['おば','おじ','母'],'父母の姉妹など'],
+ ['This is my family.','これは私の家族です',['これは私の学校です','これは私の家族です','これは私の先生です'],'This is は「これは」'],
+ ['one','1',['1','2','3'],'数字'],['two','2',['1','2','5'],'数字'],['three','3',['2','3','4'],'数字'],['four','4',['4','5','6'],'数字'],['five','5',['5','7','8'],'数字'],['six','6',['6','9','10'],'数字'],['seven','7',['7','8','9'],'数字'],['eight','8',['8','10','12'],'数字'],['nine','9',['7','8','9'],'数字'],['ten','10',['10','11','12'],'数字'],
+ ['apple','りんご',['りんご','みかん','ぶどう'],'赤い果物'],['banana','バナナ',['りんご','バナナ','いちご'],'黄色い果物'],['bread','パン',['牛乳','パン','ごはん'],'朝ごはんにも出る'],['rice','ごはん',['ごはん','パン','肉'],'日本でよく食べる主食'],['water','水',['水','牛乳','お茶'],'飲み物'],['milk','牛乳',['ジュース','牛乳','水'],'白い飲み物'],['egg','卵',['卵','肉','魚'],'にわとりから'],['fish','魚',['魚','鳥','犬'],'海や川にいる'],['meat','肉',['肉','魚','卵'],'ステーキなど'],['I like apples.','私はりんごが好きです',['私は犬が好きです','私はりんごが好きです','私は魚が好きです'],'I like は「私は好き」'],
+ ['I am Ken.','私はケンです',['私はケンです','私は先生です','私は元気です'],'自己紹介'],['I am ten years old.','私は10歳です',['私は10歳です','私は10人います','私は10冊持っています'],'年齢を言う'],['This is a dog.','これは犬です',['これは猫です','これは犬です','これは鳥です'],'This is は「これは」'],['Can you swim?','泳げますか？',['泳げますか？','走れますか？','歌えますか？'],'Can you は「できますか」'],['Yes, I can.','はい',['いいえ','はい','たぶん'],'Can you? への肯定'],["No, I can't.",'いいえ',['はい','こんにちは','いいえ'],'Can you? への否定'],['What is your name?','あなたの名前は何ですか？',['あなたの名前は何ですか？','あなたは何歳ですか？','どこに住んでいますか？'],'name は名前'],['Where do you live?','どこに住んでいますか？',['何歳ですか？','どこに住んでいますか？','何が好きですか？'],'Where は「どこ」'],['I like dogs.','私は犬が好きです',['私は犬が好きです','私は猫です','私は犬です'],'dogs は犬たち・犬全般'],['Your brother is tall.','あなたの兄弟は背が高いです',['あなたの兄弟は背が高いです','あなたの兄弟は速いです','あなたの兄弟は若いです'],'tall は背が高い']
+];
+let index=0, answered=false, audioCtx=null, defeated=[false,false,false,false,false];
+function beep(freq,dur,type='sine',gain=.08){if(!audioCtx)return;const o=audioCtx.createOscillator();const g=audioCtx.createGain();o.type=type;o.frequency.value=freq;g.gain.value=gain;o.connect(g);g.connect(audioCtx.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+dur);o.stop(audioCtx.currentTime+dur)}
+function sound(name){ if(name==='correct'){beep(660,.12);setTimeout(()=>beep(880,.16),110)} if(name==='wrong'){beep(180,.22,'sawtooth',.06)} if(name==='attack'){beep(120,.08,'square',.07);setTimeout(()=>beep(90,.12,'square',.06),70)} if(name==='win'){[440,660,880,1320].forEach((f,i)=>setTimeout(()=>beep(f,.16),i*110))} if(name==='level'){[523,659,784,1046].forEach((f,i)=>setTimeout(()=>beep(f,.15),i*90))} }
+function startGame(){audioCtx=new (window.AudioContext||window.webkitAudioContext)();document.getElementById('tapStart').style.display='none';render()}
+function monsterIndex(){return Math.floor(index/10)}function stageProgress(){return index%10}
+function render(){answered=false;const mi=monsterIndex();const m=monsters[mi];document.documentElement.style.setProperty('--monster',m.color);document.getElementById('stageName').textContent=m.stage;document.getElementById('monsterName').textContent=m.name;document.getElementById('accessory').textContent=m.acc;document.getElementById('level').textContent='Lv.'+(mi+1);document.getElementById('progress').textContent='Question '+(index+1)+' / 50';const hp=(10-stageProgress())*10;document.getElementById('hpfill').style.width=hp+'%';const q=questions[index];document.getElementById('question').textContent=q[0];document.getElementById('hint').textContent='ヒント：'+q[3];const choices=document.getElementById('choices');choices.innerHTML='';q[2].forEach(c=>{const b=document.createElement('button');b.className='choice';b.textContent=c;b.onclick=()=>answer(c);choices.appendChild(b)});document.getElementById('message').textContent='答えを選んで攻撃！';document.getElementById('message').className='message';document.getElementById('nextBtn').style.display='none';const monster=document.getElementById('monster');monster.className='monster';monster.style.opacity=1;renderBook()}
+function answer(choice){if(answered)return;answered=true;document.querySelectorAll('.choice').forEach(b=>b.disabled=true);const q=questions[index];const msg=document.getElementById('message');if(choice===q[1]){sound('correct');setTimeout(()=>sound('attack'),150);msg.innerHTML='✨ 正解！<br>⚔️ アタック！！';msg.className='message ok';attackEffect();}else{sound('wrong');msg.innerHTML='❌ おしい！<br>正解は「'+q[1]+'」';msg.className='message bad';document.getElementById('nextBtn').style.display='block';}}
+function attackEffect(){const monster=document.getElementById('monster');const dmg=document.getElementById('damageText');monster.classList.add('shake');dmg.classList.remove('show');void dmg.offsetWidth;dmg.classList.add('show');const hpAfter=(9-stageProgress())*10;setTimeout(()=>{document.getElementById('hpfill').style.width=Math.max(0,hpAfter)+'%'},250);setTimeout(()=>{monster.classList.remove('shake'); if(stageProgress()===9){defeatMonster()}else{document.getElementById('nextBtn').style.display='block'}},650)}
+function defeatMonster(){const mi=monsterIndex();defeated[mi]=true;renderBook();sound('win');const monster=document.getElementById('monster');monster.classList.add('defeated');document.getElementById('message').innerHTML='💥 '+monsters[mi].name+' をたおした！<br>📖 図鑑登録！';setTimeout(()=>sound('level'),700);setTimeout(()=>{if(index===49){document.getElementById('clearBox').style.display='block';document.getElementById('nextBtn').style.display='none'}else{document.getElementById('nextBtn').style.display='block';document.getElementById('nextBtn').textContent='次のモンスターへ ▶'}},1000)}
+function nextQuestion(){index++; if(index>=questions.length){return} document.getElementById('nextBtn').textContent='次の問題へ ▶';render()}
+function renderBook(){const grid=document.getElementById('bookGrid');grid.innerHTML='';monsters.forEach((m,i)=>{const d=document.createElement('div');d.className='card '+(defeated[i]?'done':'');d.innerHTML='No.00'+(i+1)+'<br>'+m.acc+' '+m.name+'<br>'+(defeated[i]?'討伐済み ✅':'未発見 ❔');grid.appendChild(d)})}
+function toggleBook(){const b=document.getElementById('book');b.style.display=b.style.display==='block'?'none':'block'}
+function restart(){index=0;defeated=[false,false,false,false,false];document.getElementById('clearBox').style.display='none';render()}
+</script>
+</body>
+</html>
