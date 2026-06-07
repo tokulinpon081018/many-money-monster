@@ -191,17 +191,6 @@ h1{font-size:21px;margin:0;color:#ff4d8d;text-align:center}
   <div class="bgm">♪ BGM ON</div>
 </div>
 
-  <div class="monsterParty">
-    <div class="partySpeech">Hello! Good morning!</div>
-    <div class="partyRow">
-      <span class="partyMonster purple">👑</span>
-      <span class="partyMonster green">🌱</span>
-      <span class="partyMonster blue">👓</span>
-      <span class="partyMonster orange">🔢</span>
-      <span class="partyMonster yellow">🍳</span>
-    </div>
-  </div>
-
   <p class="startText">出題順を選んでね♪</p>
 
   <button onclick="startGame(false)">⭐ 順番どおり</button>
@@ -327,7 +316,9 @@ function startGame(random){
  sound('start');
  order=stages.map(s=>[...Array(s.length).keys()]);
  if(random) order.forEach(o=>shuffle(o));
-
+ document.getElementById('tapStart').style.display='none';
+ render();
+}
  const start=document.getElementById('tapStart');
  start.style.display='none';
  start.style.visibility='hidden';
