@@ -310,18 +310,11 @@ function startGame(random){
  order=stages.map(s=>[...Array(s.length).keys()]);
  if(random) order.forEach(o=>shuffle(o));
 
- document.getElementById('tapStart').style.display='none';
-
  stage=0;
  qpos=0;
+ answered=false;
 
- render();
-}
- const start=document.getElementById('tapStart');
- start.style.display='none';
- start.style.visibility='hidden';
- start.style.pointerEvents='none';
- start.remove();
+ document.getElementById('tapStart').style.display='none';
 
  render();
 }
