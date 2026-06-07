@@ -143,6 +143,22 @@ h1{font-size:21px;margin:0;color:#ff4d8d;text-align:center}
 .startBtns button:last-child{background:linear-gradient(90deg,#248cff,#23c36b)}
 .bgm{position:absolute;left:10px;bottom:10px;background:rgba(0,0,0,.35);color:#fff;border-radius:999px;padding:7px 10px;font-weight:900}
 .tapHint{font-size:13px;font-weight:900;background:#fff;border-radius:16px;padding:7px 10px;margin-top:8px}
+  .monsterImage{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  z-index:5;
+}
+.monster .body,
+.monster .eye,
+.monster .mouth,
+.monster .cheek,
+.monster .antenna,
+.monster .accessory{
+  display:none;
+}
 </style>
 </head>
 <body>
@@ -201,6 +217,7 @@ h1{font-size:21px;margin:0;color:#ff4d8d;text-align:center}
   <div class="monsterArea">
     <div class="monsterName" id="monsterName"></div>
     <div class="monster" id="monster">
+      <img id="monsterImage" class="monsterImage" src="" alt="monster">
       <div class="accessory" id="accessory"></div>
       <div class="antenna a"></div><div class="antenna b"></div>
       <div class="body"></div>
@@ -231,11 +248,11 @@ h1{font-size:21px;margin:0;color:#ff4d8d;text-align:center}
 
 <script>
 const monsters=[
- {name:'Greeting Monster',stage:'🌱 Stage1 あいさつの森',color:'#6ee77c',acc:'🌱'},
- {name:'Family Monster',stage:'🏠 Stage2 家族の洞窟',color:'#65c7ff',acc:'👓'},
- {name:'Number Monster',stage:'🔢 Stage3 数字火山',color:'#ffae42',acc:'🔢'},
- {name:'Food Monster',stage:'🍎 Stage4 食べ物の城',color:'#ffd447',acc:'🍳'},
- {name:'King Eiken',stage:'👑 Stage5 英検5級魔王城',color:'#b879ff',acc:'👑'}
+ {name:'Greeting Monster',stage:'🌱 Stage1 あいさつの森',color:'#6ee77c',acc:'🌱',image:'img/green_monster.png'},
+ {name:'Family Monster',stage:'🏠 Stage2 家族の洞窟',color:'#65c7ff',acc:'👓',image:'img/blue_monster.png'},
+ {name:'Number Monster',stage:'🔢 Stage3 数字火山',color:'#ffae42',acc:'🔢',image:'img/orange_monster.png'},
+ {name:'Food Monster',stage:'🍎 Stage4 食べ物の城',color:'#ffd447',acc:'🍳',image:'img/yellow_monster.png'},
+ {name:'King Eiken',stage:'👑 Stage5 英検5級魔王城',color:'#b879ff',acc:'👑',image:'img/purple_monster.png'}
 ];
 
 const stages=[
