@@ -191,14 +191,6 @@ h1{font-size:21px;margin:0;color:#ff4d8d;text-align:center}
   <div class="bgm">♪ BGM ON</div>
 </div>
 
-  <p class="startText">出題順を選んでね♪</p>
-
-  <button onclick="startGame(false)">⭐ 順番どおり</button>
-  <button onclick="startGame(true)">🎲 ステージ内ランダム</button>
-
-  <p class="startText small">英文を押すと、もう一度しゃべるよ</p>
-</div>
-
 <div class="game">
   <h1>英検5級モンスターバトル</h1>
   <div class="stage" id="stageName"></div>
@@ -314,9 +306,15 @@ function shuffle(arr){for(let i=arr.length-1;i>0;i--){let j=Math.floor(Math.rand
 function startGame(random){
  audioCtx=new (window.AudioContext||window.webkitAudioContext)();
  sound('start');
+
  order=stages.map(s=>[...Array(s.length).keys()]);
  if(random) order.forEach(o=>shuffle(o));
+
  document.getElementById('tapStart').style.display='none';
+
+ stage=0;
+ qpos=0;
+
  render();
 }
  const start=document.getElementById('tapStart');
