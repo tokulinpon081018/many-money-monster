@@ -48,16 +48,97 @@ h1{font-size:21px;margin:0;color:#ff4d8d;text-align:center}
 .tapStart{position:fixed;inset:0;background:rgba(255,255,255,.97);z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
 .tapStart button{border:0;border-radius:20px;background:#ff5f9c;color:white;font-size:21px;font-weight:900;padding:14px 20px;margin:8px;box-shadow:0 6px 0 rgba(0,0,0,.18)}
 .soundNote{text-align:center;font-size:11px;color:#666;margin-top:5px}
+  .startTitle{
+  font-size:32px;
+  line-height:1.05;
+  color:#ff4d8d;
+  text-shadow:3px 3px 0 #fff,5px 5px 0 rgba(0,0,0,.08);
+  margin-bottom:10px;
+}
+
+.monsterParty{
+  background:rgba(255,255,255,.72);
+  border:3px dashed #ffb3cf;
+  border-radius:26px;
+  padding:12px 8px;
+  margin:8px 0 12px;
+  box-shadow:0 8px 0 rgba(0,0,0,.06);
+}
+
+.partySpeech{
+  display:inline-block;
+  background:#fff;
+  color:#1e88e5;
+  font-weight:900;
+  border-radius:999px;
+  padding:7px 14px;
+  margin-bottom:8px;
+  box-shadow:0 4px 0 rgba(0,0,0,.08);
+}
+
+.partyRow{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+}
+
+.partyMonster{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  font-size:28px;
+  border:3px solid rgba(0,0,0,.12);
+  box-shadow:0 6px 0 rgba(0,0,0,.10);
+  animation:partyBounce 1.6s infinite ease-in-out;
+}
+
+.partyMonster.green{background:#6ee77c}
+.partyMonster.blue{background:#65c7ff;animation-delay:.1s}
+.partyMonster.orange{background:#ffae42;animation-delay:.2s}
+.partyMonster.yellow{background:#ffd447;animation-delay:.3s}
+.partyMonster.purple{background:#b879ff;animation-delay:.4s}
+
+.startText{
+  font-weight:900;
+  margin:8px 0;
+}
+
+.startText.small{
+  font-size:13px;
+}
+
+@keyframes partyBounce{
+  0%,100%{transform:translateY(0) rotate(0)}
+  50%{transform:translateY(-8px) rotate(4deg)}
+}
 </style>
 </head>
 <body>
 
 <div class="tapStart" id="tapStart">
-  <h1>英検5級<br>モンスターバトル Ver.3</h1>
-  <p>出題順を選んでね</p>
-  <button onclick="startGame(false)">順番どおり</button>
-  <button onclick="startGame(true)">ステージ内ランダム</button>
-  <p>英文を押すと、もう一度しゃべるよ</p>
+  <h1 class="startTitle">英検5級<br>モンスターバトル</h1>
+
+  <div class="monsterParty">
+    <div class="partySpeech">Hello! Good morning!</div>
+    <div class="partyRow">
+      <span class="partyMonster purple">👑</span>
+      <span class="partyMonster green">🌱</span>
+      <span class="partyMonster blue">👓</span>
+      <span class="partyMonster orange">🔢</span>
+      <span class="partyMonster yellow">🍳</span>
+    </div>
+  </div>
+
+  <p class="startText">出題順を選んでね♪</p>
+
+  <button onclick="startGame(false)">⭐ 順番どおり</button>
+  <button onclick="startGame(true)">🎲 ステージ内ランダム</button>
+
+  <p class="startText small">英文を押すと、もう一度しゃべるよ</p>
 </div>
 
 <div class="game">
