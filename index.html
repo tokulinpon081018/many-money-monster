@@ -327,7 +327,13 @@ function startGame(random){
  sound('start');
  order=stages.map(s=>[...Array(s.length).keys()]);
  if(random) order.forEach(o=>shuffle(o));
- document.getElementById('tapStart').style.display='none';
+
+ const start=document.getElementById('tapStart');
+ start.style.display='none';
+ start.style.visibility='hidden';
+ start.style.pointerEvents='none';
+ start.remove();
+
  render();
 }
 
