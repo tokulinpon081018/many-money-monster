@@ -352,6 +352,7 @@ function sound(name){
 function render(){
  answered=false;tapCount=0;
  const m=monsters[stage],qq=q();
+  document.getElementById("monsterImage").src = m.image;
  document.documentElement.style.setProperty('--monster',m.color);
  document.getElementById('stageName').textContent=m.stage;
  document.getElementById('monsterName').textContent=m.name;
