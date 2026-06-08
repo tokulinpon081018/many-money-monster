@@ -159,6 +159,30 @@ h1{font-size:21px;margin:0;color:#ff4d8d;text-align:center}
 .monster .accessory{
   display:none;
 }
+  .mini{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+
+.mini::before,
+.mini::after{
+  display:none !important;
+}
+
+.mini img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+
+.minimouth,
+.hand,
+.crown,
+.glasses{
+  display:none !important;
+}
 </style>
 </head>
 <body>
@@ -175,16 +199,16 @@ h1{font-size:21px;margin:0;color:#ff4d8d;text-align:center}
     <div class="speech s3">I'm fine!</div>
     <div class="speech s4">I like apples!</div>
 
-    <div class="mini m1"><div class="crown">👑</div><div class="minimouth"></div><div class="hand"></div></div>
-    <div class="mini m2"><div class="minimouth"></div><div class="hand"></div></div>
-    <div class="mini m3"><div class="glasses">◯◯</div><div class="minimouth"></div><div class="hand"></div></div>
-    <div class="mini m4"><div class="minimouth"></div><div class="hand"></div></div>
-    <div class="mini m5"><div class="minimouth"></div><div class="hand"></div></div>
+    <div class="mini m1"><img src="img/purple_monster.png" alt="purple monster"></div>
+　　　<div class="mini m2"><img src="img/green_monster.png" alt="green monster"></div>
+　　　<div class="mini m3"><img src="img/blue_monster.png" alt="blue monster"></div>
+　　　<div class="mini m4"><img src="img/orange_monster.png" alt="orange monster"></div>
+　　　<div class="mini m5"><img src="img/yellow_monster.png" alt="yellow monster"></div>
   </div>
 
   <div class="startBtns">
-    <button onclick="alert('押せた');startGame(false)">⭐ 順番どおり</button>
-    <button onclick="alert('押せた');startGame(true)">🎲 ステージ内ランダム</button>
+    <button onclick="startGame(false)">⭐ 順番どおり</button>
+<button onclick="startGame(true)">🎲 ステージ内ランダム</button>
   </div>
 
   <div class="tapHint">英文をタップすると、もう一度しゃべるよ♪</div>
