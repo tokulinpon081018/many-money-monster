@@ -449,24 +449,51 @@ function answer(choice){
   const msg = document.getElementById('message');
   const monsterImg = document.getElementById('monsterImage');
 
+  function shakeMonster(big=false){
+    if(!monsterImg || !monsterImg.animate) return;
+
+    if(big){
+      monsterImg.animate(
+        [
+          { transform:'scale(1) rotate(0deg)' },
+          { transform:'scale(1.06) rotate(-4deg)' },
+          { transform:'scale(1.06) rotate(4deg)' },
+          { transform:'scale(1.04) rotate(-3deg)' },
+          { transform:'scale(1.04) rotate(3deg)' },
+          { transform:'scale(1) rotate(0deg)' }
+        ],
+        {
+          duration:700,
+          easing:'ease-in-out'
+        }
+      );
+    }else{
+      monsterImg.animate(
+        [
+          { transform:'translateX(0) rotate(0deg)' },
+          { transform:'translateX(-8px) rotate(-3deg)' },
+          { transform:'translateX(8px) rotate(3deg)' },
+          { transform:'translateX(-6px) rotate(-2deg)' },
+          { transform:'translateX(6px) rotate(2deg)' },
+          { transform:'translateX(0) rotate(0deg)' }
+        ],
+        {
+          duration:450,
+          easing:'ease-in-out'
+        }
+      );
+    }
+  }
+
   if(choice === qq.jp){
     sound('correct');
     msg.innerHTML = '✨ 正解！';
     msg.className = 'message ok';
 
-    monsterImg.classList.remove('shake','stageShake');
-    void monsterImg.offsetWidth;
-
     if(qpos === 9){
-      monsterImg.classList.add('stageShake');
-      setTimeout(() => {
-        monsterImg.classList.remove('stageShake');
-      }, 700);
+      shakeMonster(true);
     }else{
-      monsterImg.classList.add('shake');
-      setTimeout(() => {
-        monsterImg.classList.remove('shake');
-      }, 450);
+      shakeMonster(false);
     }
 
     setTimeout(() => {
