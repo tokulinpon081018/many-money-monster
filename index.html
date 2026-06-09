@@ -224,6 +224,29 @@ h1{
   color:#666;
   margin-top:6px;
 }
+  .shake{
+  animation:shake .45s;
+}
+
+.stageShake{
+  animation:stageShake .7s;
+}
+
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-8px) rotate(-3deg)}
+  40%{transform:translateX(8px) rotate(3deg)}
+  60%{transform:translateX(-6px) rotate(-2deg)}
+  80%{transform:translateX(6px) rotate(2deg)}
+}
+
+@keyframes stageShake{
+  0%,100%{transform:scale(1) rotate(0)}
+  20%{transform:scale(1.06) rotate(-4deg)}
+  40%{transform:scale(1.06) rotate(4deg)}
+  60%{transform:scale(1.04) rotate(-3deg)}
+  80%{transform:scale(1.04) rotate(3deg)}
+}
 </style>
 </head>
 <body>
@@ -424,11 +447,27 @@ function answer(choice){
 
   const qq = q();
   const msg = document.getElementById('message');
+  const monsterImg = document.getElementById('monsterImage');
 
   if(choice === qq.jp){
     sound('correct');
     msg.innerHTML = '✨ 正解！';
     msg.className = 'message ok';
+
+    monsterImg.classList.remove('shake','stageShake');
+    void monsterImg.offsetWidth;
+
+    if(qpos === 9){
+      monsterImg.classList.add('stageShake');
+      setTimeout(() => {
+        monsterImg.classList.remove('stageShake');
+      }, 700);
+    }else{
+      monsterImg.classList.add('shake');
+      setTimeout(() => {
+        monsterImg.classList.remove('shake');
+      }, 450);
+    }
 
     setTimeout(() => {
       document.getElementById('hpfill').style.width = Math.max(0, (9 - qpos) * 10) + '%';
