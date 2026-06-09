@@ -25,9 +25,9 @@ body{
   padding:14px;
 }
 h1{
-  margin:0 0 10px;
+  margin:0 0 8px;
   text-align:center;
-  font-size:24px;
+  font-size:22px;
   color:#ff4d8d;
 }
 .startScreen{
@@ -92,11 +92,11 @@ h1{
   margin-bottom:6px;
 }
 .monsterImg{
-  width:170px;
-  height:170px;
+  width:130px;
+  height:130px;
   object-fit:contain;
   display:block;
-  margin:0 auto 8px;
+  margin:0 auto 6px;
 }
 .hpLabel{
   font-weight:900;
@@ -125,12 +125,12 @@ h1{
   background:#fff9e8;
   border:3px solid #ffd66b;
   border-radius:18px;
-  padding:12px;
-  margin:8px 0;
+  padding:10px;
+  margin:6px 0;
   text-align:center;
 }
 .question{
-  font-size:26px;
+  font-size:22px;
   font-weight:900;
   color:#263238;
 }
@@ -156,8 +156,8 @@ h1{
 .choice{
   border:0;
   border-radius:15px;
-  padding:12px;
-  font-size:16px;
+  padding:10px;
+  font-size:15px;
   font-weight:900;
   color:#fff;
   box-shadow:0 4px 0 rgba(0,0,0,.18);
@@ -168,17 +168,17 @@ h1{
 .choice:disabled{opacity:.65}
 .message{
   text-align:center;
-  font-size:15px;
+  font-size:14px;
   font-weight:900;
-  margin:10px 0;
-  padding:10px;
+  margin:8px 0;
+  padding:8px;
   border-radius:15px;
   background:#f4f7ff;
-  min-height:44px;
+  min-height:38px;
 }
 .ok{color:#20b86f}
 .bad{color:#ff4d6d}
-.nextBtn,.restartBtn{
+.restartBtn{
   width:100%;
   border:0;
   border-radius:15px;
@@ -186,15 +186,9 @@ h1{
   font-size:16px;
   font-weight:900;
   color:#fff;
+  background:#00bcd4;
   box-shadow:0 4px 0 rgba(0,0,0,.18);
   margin-top:8px;
-}
-.nextBtn{
-  background:#8e5cff;
-  display:none;
-}
-.restartBtn{
-  background:#00bcd4;
 }
 .clear{
   font-size:22px;
@@ -259,7 +253,6 @@ h1{
 
       <div class="choices" id="choices"></div>
       <div class="message" id="message">答えを選んで攻撃！</div>
-      <button class="nextBtn" id="nextBtn" onclick="nextQuestion()">次の問題へ ▶</button>
       <button class="restartBtn" onclick="restart()">最初から 🔁</button>
       <div class="clear" id="clearBox">🏆 GAME CLEAR!<br>英検5級モンスターを全部たおした！</div>
       <div class="note">※iPhoneではマナーモード中、音が小さい場合があります。</div>
@@ -391,7 +384,6 @@ function render(){
   document.getElementById('hint').textContent = 'ヒント：' + qq.hint;
   document.getElementById('message').textContent = '答えを選んで攻撃！';
   document.getElementById('message').className = 'message';
-  document.getElementById('nextBtn').style.display = 'none';
 
   const choices = document.getElementById('choices');
   choices.innerHTML = '';
@@ -427,25 +419,34 @@ function answer(choice){
 
     setTimeout(() => {
       if(qpos === 9){
-        if(stage === 4){
-          clearGame();
-        }else{
-          sound('stage');
-          msg.innerHTML = '🎉 ステージクリア！<br>次のモンスターへ！';
-          document.getElementById('nextBtn').textContent = '次のステージへ ▶';
-          document.getElementById('nextBtn').style.display = 'block';
+  if(stage === 4){
+    clearGame();
+  }else{
+    sound('stage');
+    msg.innerHTML = '🎉 ステージクリア！<br>次のモンスターへ！';
+    setTimeout(() => {
+      nextQuestion();
+    }, 900);
+  }
+}else{
+  setTimeout(() => {
+    nextQuestion();
+  }, 700);
+}
         }
       }else{
-        document.getElementById('nextBtn').textContent = '次の問題へ ▶';
-        document.getElementById('nextBtn').style.display = 'block';
+        setTimeout(() => {
+  nextQuestion();
+}, 900);
       }
     }, 600);
   } else {
     sound('wrong');
     msg.innerHTML = '❌ おしい！<br>正解は「' + qq.jp + '」';
     msg.className = 'message bad';
-    document.getElementById('nextBtn').textContent = '次の問題へ ▶';
-    document.getElementById('nextBtn').style.display = 'block';
+    setTimeout(() => {
+  nextQuestion();
+}, 900);
   }
 }
 
@@ -468,7 +469,6 @@ function nextQuestion(){
 function clearGame(){
   sound('clear');
   document.getElementById('clearBox').style.display = 'block';
-  document.getElementById('nextBtn').style.display = 'none';
   document.getElementById('message').innerHTML = '🏆 全ステージクリア！すごい！';
   document.getElementById('hpfill').style.width = '0%';
 }
