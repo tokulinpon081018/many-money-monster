@@ -122,8 +122,8 @@ h1{font-size:21px;margin:0;color:#ff4d8d;text-align:center}
 .party{position:relative;width:330px;height:300px;margin:2px auto 8px}
 .mini{
   position:absolute;
-  width:120px;
-  height:110px;
+  width:96px;
+  height:82px;
   animation:bounce 1.8s infinite ease-in-out;
   background:none !important;
   border:none !important;
@@ -135,11 +135,11 @@ h1{font-size:21px;margin:0;color:#ff4d8d;text-align:center}
 .mini::before{left:24px}.mini::after{right:24px}
 .minimouth{position:absolute;left:38px;top:55px;width:23px;height:13px;background:#6b2b25;border-radius:0 0 20px 20px}
 .hand{position:absolute;width:28px;height:28px;background:#fff;border-radius:50%;border:3px solid rgba(0,0,0,.12)}
-.m1{left:118px;top:0;--c:#b879ff;animation-delay:.1s}
-.m2{left:20px;top:80px;--c:#6ee77c;animation-delay:.2s}
-.m3{right:20px;top:80px;--c:#65c7ff;animation-delay:.3s}
-.m4{left:45px;bottom:15px;--c:#ffae42;animation-delay:.4s}
-.m5{right:45px;bottom:15px;--c:#ffd447;animation-delay:.5s}
+.m1{left:118px;top:0;animation-delay:.1s}
+.m2{left:20px;top:80px;animation-delay:.2s}
+.m3{right:20px;top:80px;animation-delay:.3s}
+.m4{left:45px;bottom:15px;animation-delay:.4s}
+.m5{right:45px;bottom:15px;animation-delay:.5s}
 .m1 .hand{left:78px;top:53px}.m2 .hand{right:-12px;top:45px}.m3 .hand{left:-12px;top:45px}.m4 .hand{right:-12px;top:30px}.m5 .hand{left:-12px;top:30px}
 .crown{position:absolute;top:-22px;left:33px;font-size:28px}
 .glasses{position:absolute;top:24px;left:17px;font-size:60px}
@@ -181,10 +181,12 @@ h1{font-size:21px;margin:0;color:#ff4d8d;text-align:center}
 }
 
 .mini img{
-  width:100%;
-  height:100%;
+  width:118%;
+  height:118%;
   object-fit:contain;
   display:block;
+  margin-left:-9%;
+  margin-top:-9%;
 }
 
 .minimouth,
