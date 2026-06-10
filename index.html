@@ -669,11 +669,31 @@ function beep(freq,dur,type='sine',gain=.08){
 }
 
 function sound(name){
-  if(name==='start'){[523,659,784].forEach((f,i)=>setTimeout(()=>beep(f,.12),i*90))}
-  if(name==='correct'){beep(660,.1);setTimeout(()=>beep(880,.13),90)}
-  if(name==='wrong'){beep(180,.22,'sawtooth',.06)}
-  if(name==='stage'){[523,659,784,1046].forEach((f,i)=>setTimeout(()=>beep(f,.18),i*140))}
-  if(name==='clear'){[523,659,784,1046,784,1046,1318].forEach((f,i)=>setTimeout(()=>beep(f,.22),i*170))}
+  if(name==='start'){
+    [523,659,784].forEach((f,i)=>setTimeout(()=>beep(f,.12),i*90));
+  }
+
+  if(name==='correct'){
+    beep(660,.1);
+    setTimeout(()=>beep(880,.13),90);
+  }
+
+  if(name==='wrong'){
+    beep(180,.22,'sawtooth',.06);
+  }
+
+  if(name==='stage'){
+    const notes = [523,659,784,1046,784,1046,1318];
+    notes.forEach((f,i)=>{
+      setTimeout(()=>beep(f,.18,'triangle',.09), i*120);
+    });
+  }
+
+  if(name==='clear'){
+    [523,659,784,1046,784,1046,1318].forEach((f,i)=>
+      setTimeout(()=>beep(f,.22,'triangle',.1),i*170)
+    );
+  }
 }
 </script>
 </body>
