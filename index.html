@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>英検5級モンスターバトル</title>
-<style>
+<div id="stageClearFx" class="stageClearFx">🎉 STAGE CLEAR! 🎉</div>
+  <style>
 *{box-sizing:border-box}
 html,body{
   margin:0;
@@ -247,6 +248,47 @@ h1{
   60%{transform:scale(1.04) rotate(-3deg)}
   80%{transform:scale(1.04) rotate(3deg)}
 }
+    .stageClearFx{
+  position:fixed;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%) scale(.7);
+  background:linear-gradient(90deg,#ff5f9c,#ff9f43);
+  color:#fff;
+  font-size:28px;
+  font-weight:1000;
+  padding:18px 24px;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+  z-index:9999;
+  opacity:0;
+  pointer-events:none;
+  text-align:center;
+  white-space:nowrap;
+}
+
+.stageClearFx.show{
+  animation:stageClearPop .9s ease-out;
+}
+
+@keyframes stageClearPop{
+  0%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.7);
+  }
+  20%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1.08);
+  }
+  70%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(1.06);
+  }
+}
 </style>
 </head>
 <body>
@@ -448,6 +490,7 @@ function answer(choice){
   const qq = q();
   const msg = document.getElementById('message');
   const monsterImg = document.getElementById('monsterImage');
+  const stageClearFx = document.getElementById('stageClearFx');
 
   function shakeMonster(big=false){
     if(!monsterImg || !monsterImg.animate) return;
@@ -485,6 +528,16 @@ function answer(choice){
     }
   }
 
+  function showStageClear(){
+    if(!stageClearFx) return;
+    stageClearFx.classList.remove('show');
+    void stageClearFx.offsetWidth;
+    stageClearFx.classList.add('show');
+    setTimeout(() => {
+      stageClearFx.classList.remove('show');
+    }, 900);
+  }
+
   if(choice === qq.jp){
     sound('correct');
     msg.innerHTML = '✨ 正解！';
@@ -507,9 +560,10 @@ function answer(choice){
         }else{
           sound('stage');
           msg.innerHTML = '🎉 ステージクリア！';
+          showStageClear();
           setTimeout(() => {
             nextQuestion();
-          }, 700);
+          }, 1000);
         }
       }else{
         nextQuestion();
@@ -526,7 +580,7 @@ function answer(choice){
     }, 800);
   }
 }
-
+  
 function nextQuestion(){
   if(qpos === 9){
     stage++;
