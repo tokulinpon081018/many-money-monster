@@ -289,6 +289,18 @@ h1{
     transform:translate(-50%,-50%) scale(1.06);
   }
 }
+  .choice.selected{
+  outline:4px solid #222;
+  transform:scale(0.97);
+}
+
+.choice.correctPick{
+  background:#20b86f !important;
+}
+
+.choice.wrongPick{
+  background:#ff4d6d !important;
+}
 </style>
 </head>
 <body>
@@ -476,22 +488,30 @@ function render(){
   }
 
   shuffledChoices.forEach(c => {
-    const b = document.createElement('button');
-    b.className = 'choice';
-    b.textContent = c;
-    b.onclick = () => answer(c);
-    choices.appendChild(b);
-  });
+  const b = document.createElement('button');
+  b.className = 'choice';
+  b.textContent = c;
+  b.onclick = () => answer(c, b);
+  choices.appendChild(b);
+});
 
   setTimeout(() => speak(), 250);
 }
 
-function answer(choice){
+function answer(choice, clickedBtn){
   if(answered) return;
   answered = true;
 
   speechSynthesis.cancel();
-  document.querySelectorAll('.choice').forEach(b => b.disabled = true);
+
+  document.querySelectorAll('.choice').forEach(b => {
+    b.disabled = true;
+    b.classList.remove('selected','correctPick','wrongPick');
+  });
+
+  if(clickedBtn){
+    clickedBtn.classList.add('selected');
+  }
 
   const qq = q();
   const msg = document.getElementById('message');
@@ -532,6 +552,95 @@ function answer(choice){
       );
     }
   }
+
+  function showStageClear(){
+    const oldFx = document.getElementById('stageClearFx');
+    if(oldFx) oldFx.remove();
+
+    const fx = document.createElement('div');
+    fx.id = 'stageClearFx';
+    fx.textContent = '🎉 STAGE CLEAR! 🎉';
+    fx.style.position = 'fixed';
+    fx.style.left = '50%';
+    fx.style.top = '50%';
+    fx.style.transform = 'translate(-50%,-50%) scale(0.7)';
+    fx.style.background = 'linear-gradient(90deg,#ff5f9c,#ff9f43)';
+    fx.style.color = '#fff';
+    fx.style.fontSize = '28px';
+    fx.style.fontWeight = '1000';
+    fx.style.padding = '18px 24px';
+    fx.style.borderRadius = '20px';
+    fx.style.boxShadow = '0 10px 30px rgba(0,0,0,.25)';
+    fx.style.zIndex = '9999';
+    fx.style.opacity = '0';
+    fx.style.pointerEvents = 'none';
+    fx.style.whiteSpace = 'nowrap';
+    document.body.appendChild(fx);
+
+    fx.animate(
+      [
+        { opacity:0, transform:'translate(-50%,-50%) scale(0.7)' },
+        { opacity:1, transform:'translate(-50%,-50%) scale(1.08)', offset:0.2 },
+        { opacity:1, transform:'translate(-50%,-50%) scale(1)', offset:0.7 },
+        { opacity:0, transform:'translate(-50%,-50%) scale(1.06)' }
+      ],
+      {
+        duration:900,
+        easing:'ease-out'
+      }
+    );
+
+    setTimeout(() => {
+      fx.remove();
+    }, 950);
+  }
+
+  if(choice === qq.jp){
+    if(clickedBtn) clickedBtn.classList.add('correctPick');
+
+    sound('correct');
+    msg.innerHTML = '✨ 正解！';
+    msg.className = 'message ok';
+
+    if(qpos === 9){
+      shakeMonster(true);
+    }else{
+      shakeMonster(false);
+    }
+
+    setTimeout(() => {
+      document.getElementById('hpfill').style.width = Math.max(0, (9 - qpos) * 10) + '%';
+    }, 120);
+
+    setTimeout(() => {
+      if(qpos === 9){
+        if(stage === 4){
+          clearGame();
+        }else{
+          sound('stage');
+          msg.innerHTML = '🎉 ステージクリア！';
+          showStageClear();
+          setTimeout(() => {
+            nextQuestion();
+          }, 1000);
+        }
+      }else{
+        nextQuestion();
+      }
+    }, 500);
+
+  } else {
+    if(clickedBtn) clickedBtn.classList.add('wrongPick');
+
+    sound('wrong');
+    msg.innerHTML = '❌ 正解は「' + qq.jp + '」';
+    msg.className = 'message bad';
+
+    setTimeout(() => {
+      nextQuestion();
+    }, 800);
+  }
+}
 
   function showStageClear(){
     const oldFx = document.getElementById('stageClearFx');
