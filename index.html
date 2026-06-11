@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>英検5級モンスターバトル</title>
-<div id="stageClearFx" class="stageClearFx">🎉 STAGE CLEAR! 🎉</div>
-  <style>
+<style>
 *{box-sizing:border-box}
 html,body{
   margin:0;
@@ -150,6 +149,7 @@ h1{
   font-weight:900;
   color:#263238;
   line-height:1.2;
+  cursor:pointer;
 }
 .kana{
   font-size:14px;
@@ -178,11 +178,22 @@ h1{
   font-weight:900;
   color:#fff;
   box-shadow:0 4px 0 rgba(0,0,0,.18);
+  transition:.15s;
 }
 .choice:nth-child(1){background:#ff6b8f}
 .choice:nth-child(2){background:#42a5f5}
 .choice:nth-child(3){background:#37c978}
-.choice:disabled{opacity:.65}
+.choice:disabled{opacity:.95}
+.choice.selected{
+  outline:4px solid #222;
+  transform:scale(0.97);
+}
+.choice.correctPick{
+  background:#20b86f !important;
+}
+.choice.wrongPick{
+  background:#ff4d6d !important;
+}
 .message{
   text-align:center;
   font-size:14px;
@@ -225,82 +236,6 @@ h1{
   color:#666;
   margin-top:6px;
 }
-  .shake{
-  animation:shake .45s;
-}
-
-.stageShake{
-  animation:stageShake .7s;
-}
-
-@keyframes shake{
-  0%,100%{transform:translateX(0)}
-  20%{transform:translateX(-8px) rotate(-3deg)}
-  40%{transform:translateX(8px) rotate(3deg)}
-  60%{transform:translateX(-6px) rotate(-2deg)}
-  80%{transform:translateX(6px) rotate(2deg)}
-}
-
-@keyframes stageShake{
-  0%,100%{transform:scale(1) rotate(0)}
-  20%{transform:scale(1.06) rotate(-4deg)}
-  40%{transform:scale(1.06) rotate(4deg)}
-  60%{transform:scale(1.04) rotate(-3deg)}
-  80%{transform:scale(1.04) rotate(3deg)}
-}
-    .stageClearFx{
-  position:fixed;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%) scale(.7);
-  background:linear-gradient(90deg,#ff5f9c,#ff9f43);
-  color:#fff;
-  font-size:28px;
-  font-weight:1000;
-  padding:18px 24px;
-  border-radius:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
-  z-index:9999;
-  opacity:0;
-  pointer-events:none;
-  text-align:center;
-  white-space:nowrap;
-}
-
-.stageClearFx.show{
-  animation:stageClearPop .9s ease-out;
-}
-
-@keyframes stageClearPop{
-  0%{
-    opacity:0;
-    transform:translate(-50%,-50%) scale(.7);
-  }
-  20%{
-    opacity:1;
-    transform:translate(-50%,-50%) scale(1.08);
-  }
-  70%{
-    opacity:1;
-    transform:translate(-50%,-50%) scale(1);
-  }
-  100%{
-    opacity:0;
-    transform:translate(-50%,-50%) scale(1.06);
-  }
-}
-  .choice.selected{
-  outline:4px solid #222;
-  transform:scale(0.97);
-}
-
-.choice.correctPick{
-  background:#20b86f !important;
-}
-
-.choice.wrongPick{
-  background:#ff4d6d !important;
-}
 </style>
 </head>
 <body>
@@ -313,11 +248,11 @@ h1{
       <p>10問正解で1体たおそう！</p>
 
       <div class="party">
-        <img src="img/green_monster.png?v=10" alt="green monster">
-        <img src="img/blue_monster.png?v=10" alt="blue monster">
-        <img src="img/purple_monster.png?v=10" alt="purple monster">
-        <img src="img/orange_monster.png?v=10" alt="orange monster">
-        <img src="img/yellow_monster.png?v=10" alt="yellow monster">
+        <img src="img/green_monster.png?v=20" alt="green monster">
+        <img src="img/blue_monster.png?v=20" alt="blue monster">
+        <img src="img/purple_monster.png?v=20" alt="purple monster">
+        <img src="img/orange_monster.png?v=20" alt="orange monster">
+        <img src="img/yellow_monster.png?v=20" alt="yellow monster">
       </div>
 
       <button class="startBtn" onclick="startGame(false)">⭐ 順番どおり</button>
@@ -356,11 +291,11 @@ h1{
 
 <script>
 const monsters = [
-  {name:'Greeting Monster',stage:'🌱 Stage1 あいさつの森',image:'img/green_monster.png?v=10'},
-  {name:'Family Monster',stage:'🏠 Stage2 家族の洞窟',image:'img/blue_monster.png?v=10'},
-  {name:'Number Monster',stage:'🔢 Stage3 数字火山',image:'img/orange_monster.png?v=10'},
-  {name:'Food Monster',stage:'🍎 Stage4 食べ物の城',image:'img/yellow_monster.png?v=10'},
-  {name:'King Eiken',stage:'👑 Stage5 英検5級魔王城',image:'img/purple_monster.png?v=10'}
+  {name:'Greeting Monster',stage:'🌱 Stage1 あいさつの森',image:'img/green_monster.png?v=20'},
+  {name:'Family Monster',stage:'🏠 Stage2 家族の洞窟',image:'img/blue_monster.png?v=20'},
+  {name:'Number Monster',stage:'🔢 Stage3 数字火山',image:'img/orange_monster.png?v=20'},
+  {name:'Food Monster',stage:'🍎 Stage4 食べ物の城',image:'img/yellow_monster.png?v=20'},
+  {name:'King Eiken',stage:'👑 Stage5 英検5級魔王城',image:'img/purple_monster.png?v=20'}
 ];
 
 const stages = [
@@ -488,12 +423,15 @@ function render(){
   }
 
   shuffledChoices.forEach(c => {
-  const b = document.createElement('button');
-  b.className = 'choice';
-  b.textContent = c;
-  b.onclick = () => answer(c, b);
-  choices.appendChild(b);
-});
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'choice';
+    b.textContent = c;
+    b.onclick = function(){
+      answer(c, this);
+    };
+    choices.appendChild(b);
+  });
 
   setTimeout(() => speak(), 250);
 }
@@ -509,13 +447,13 @@ function answer(choice, clickedBtn){
     b.classList.remove('selected','correctPick','wrongPick');
   });
 
-  if(clickedBtn){
-    clickedBtn.classList.add('selected');
-  }
-
   const qq = q();
   const msg = document.getElementById('message');
   const monsterImg = document.getElementById('monsterImage');
+
+  if(clickedBtn){
+    clickedBtn.classList.add('selected');
+  }
 
   function shakeMonster(big=false){
     if(!monsterImg || !monsterImg.animate) return;
@@ -596,7 +534,9 @@ function answer(choice, clickedBtn){
   }
 
   if(choice === qq.jp){
-    if(clickedBtn) clickedBtn.classList.add('correctPick');
+    if(clickedBtn){
+      clickedBtn.classList.add('correctPick');
+    }
 
     sound('correct');
     msg.innerHTML = '✨ 正解！';
@@ -630,93 +570,10 @@ function answer(choice, clickedBtn){
     }, 500);
 
   } else {
-    if(clickedBtn) clickedBtn.classList.add('wrongPick');
-
-    sound('wrong');
-    msg.innerHTML = '❌ 正解は「' + qq.jp + '」';
-    msg.className = 'message bad';
-
-    setTimeout(() => {
-      nextQuestion();
-    }, 800);
-  }
-}
-
-  function showStageClear(){
-    const oldFx = document.getElementById('stageClearFx');
-    if(oldFx) oldFx.remove();
-
-    const fx = document.createElement('div');
-    fx.id = 'stageClearFx';
-    fx.textContent = '🎉 STAGE CLEAR! 🎉';
-    fx.style.position = 'fixed';
-    fx.style.left = '50%';
-    fx.style.top = '50%';
-    fx.style.transform = 'translate(-50%,-50%) scale(0.7)';
-    fx.style.background = 'linear-gradient(90deg,#ff5f9c,#ff9f43)';
-    fx.style.color = '#fff';
-    fx.style.fontSize = '28px';
-    fx.style.fontWeight = '1000';
-    fx.style.padding = '18px 24px';
-    fx.style.borderRadius = '20px';
-    fx.style.boxShadow = '0 10px 30px rgba(0,0,0,.25)';
-    fx.style.zIndex = '9999';
-    fx.style.opacity = '0';
-    fx.style.pointerEvents = 'none';
-    fx.style.whiteSpace = 'nowrap';
-    document.body.appendChild(fx);
-
-    fx.animate(
-      [
-        { opacity:0, transform:'translate(-50%,-50%) scale(0.7)' },
-        { opacity:1, transform:'translate(-50%,-50%) scale(1.08)', offset:0.2 },
-        { opacity:1, transform:'translate(-50%,-50%) scale(1)', offset:0.7 },
-        { opacity:0, transform:'translate(-50%,-50%) scale(1.06)' }
-      ],
-      {
-        duration:900,
-        easing:'ease-out'
-      }
-    );
-
-    setTimeout(() => {
-      fx.remove();
-    }, 950);
-  }
-
-  if(choice === qq.jp){
-    sound('correct');
-    msg.innerHTML = '✨ 正解！';
-    msg.className = 'message ok';
-
-    if(qpos === 9){
-      shakeMonster(true);
-    }else{
-      shakeMonster(false);
+    if(clickedBtn){
+      clickedBtn.classList.add('wrongPick');
     }
 
-    setTimeout(() => {
-      document.getElementById('hpfill').style.width = Math.max(0, (9 - qpos) * 10) + '%';
-    }, 120);
-
-    setTimeout(() => {
-      if(qpos === 9){
-        if(stage === 4){
-          clearGame();
-        }else{
-          sound('stage');
-          msg.innerHTML = '🎉 ステージクリア！';
-          showStageClear();
-          setTimeout(() => {
-            nextQuestion();
-          }, 1000);
-        }
-      }else{
-        nextQuestion();
-      }
-    }, 500);
-
-  } else {
     sound('wrong');
     msg.innerHTML = '❌ 正解は「' + qq.jp + '」';
     msg.className = 'message bad';
@@ -726,7 +583,7 @@ function answer(choice, clickedBtn){
     }, 800);
   }
 }
-  
+
 function nextQuestion(){
   if(qpos === 9){
     stage++;
