@@ -674,8 +674,8 @@ function sound(name){
   }
 
   if(name==='correct'){
-    beep(660,.1);
-    setTimeout(()=>beep(880,.13),90);
+    beep(660,.1,'square',.07);
+    setTimeout(()=>beep(880,.13,'square',.07),90);
   }
 
   if(name==='wrong'){
@@ -683,16 +683,17 @@ function sound(name){
   }
 
   if(name==='stage'){
-    const notes = [523,659,784,1046,784,1046,1318];
+    const notes = [784,784,880,988,1046,1175,1318];
     notes.forEach((f,i)=>{
-      setTimeout(()=>beep(f,.18,'triangle',.09), i*120);
+      setTimeout(()=>beep(f,.12,'square',.08), i*95);
     });
   }
 
   if(name==='clear'){
-    [523,659,784,1046,784,1046,1318].forEach((f,i)=>
-      setTimeout(()=>beep(f,.22,'triangle',.1),i*170)
-    );
+    const notes = [523,659,784,1046,1175,1318,1568];
+    notes.forEach((f,i)=>{
+      setTimeout(()=>beep(f,.16,'square',.08), i*110);
+    });
   }
 }
 </script>
