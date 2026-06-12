@@ -4,366 +4,437 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>英検5級モンスターバトル</title>
+
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
 html,body{
   margin:0;
   padding:0;
-  height:100%;
-  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
-  background:linear-gradient(135deg,#fff7d6,#dff6ff);
+  min-height:100%;
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  background:linear-gradient(135deg,#fff7d6,#e6fff8);
   color:#333;
 }
+
 body{
-  overflow:hidden;
+  overflow-x:hidden;
 }
+
 .wrap{
+  width:100%;
   max-width:430px;
-  height:100dvh;
+  min-height:100svh;
   margin:0 auto;
-  padding:6px;
-}
-.card{
-  background:#fff;
-  border-radius:18px;
-  box-shadow:0 8px 24px rgba(0,0,0,.15);
-  padding:10px;
-  height:calc(100dvh - 12px);
-  overflow:hidden;
-}
-h1{
-  margin:0 0 8px;
-  text-align:center;
-  font-size:21px;
-  color:#ff4d8d;
-}
-.startScreen{
-  text-align:center;
-  height:100%;
+  padding:18px 12px;
   display:flex;
-  flex-direction:column;
+  align-items:center;
   justify-content:center;
 }
-.startScreen h2{
-  margin:6px 0 4px;
-  font-size:24px;
-  line-height:1.2;
-  color:#ff4d8d;
+
+.card{
+  width:100%;
+  min-height:92svh;
+  background:white;
+  border-radius:22px;
+  padding:22px 14px;
+  box-shadow:0 8px 20px rgba(0,0,0,.12);
+  text-align:center;
+  position:relative;
 }
-.startScreen p{
-  margin:4px 0;
+
+.hidden{
+  display:none !important;
+}
+
+h1{
+  margin:8px 0 10px;
+  font-size:28px;
+  color:#ff4f9a;
+  line-height:1.35;
+}
+
+h2{
+  margin:8px 0;
+  font-size:25px;
+  color:#ff4f9a;
+  line-height:1.35;
+}
+
+p{
+  font-size:17px;
+  line-height:1.6;
   font-weight:700;
-  font-size:14px;
 }
+
 .party{
+  margin:22px auto 18px;
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  justify-items:center;
+  gap:14px;
   align-items:center;
-  margin:12px 0;
+  justify-items:center;
 }
+
 .party img{
-  width:72px;
-  height:72px;
+  width:92px;
+  height:92px;
   object-fit:contain;
 }
-.startBtn{
-  width:100%;
+
+.startButtons{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+button{
   border:none;
-  border-radius:14px;
-  padding:12px;
-  font-size:17px;
-  font-weight:900;
-  color:#fff;
-  background:linear-gradient(90deg,#ff5f9c,#ff9f43);
-  box-shadow:0 4px 0 rgba(0,0,0,.18);
-  margin-top:8px;
-}
-.subBtn{
-  background:linear-gradient(90deg,#248cff,#23c36b);
-}
-.stage{
-  text-align:center;
-  font-weight:900;
-  font-size:14px;
-  background:linear-gradient(90deg,#8de77c,#6bd5ff);
-  border-radius:12px;
-  padding:7px;
-  margin-bottom:8px;
-}
-.monsterArea{
-  background:#f7fbff;
-  border:3px dashed #b9e4ff;
   border-radius:18px;
-  padding:8px;
-  text-align:center;
-}
-.monsterName{
-  font-size:16px;
+  padding:14px 18px;
+  font-size:18px;
   font-weight:900;
-  margin-bottom:4px;
-}
-.monsterImg{
-  width:105px;
-  height:105px;
-  object-fit:contain;
-  display:block;
-  margin:0 auto 4px;
-}
-.hpLabel{
-  font-weight:900;
-  margin-bottom:4px;
-  font-size:13px;
-}
-.hpbar{
-  height:16px;
-  background:#e7eef5;
-  border-radius:999px;
-  overflow:hidden;
-  border:2px solid #d2dde8;
-}
-.hpfill{
-  height:100%;
-  width:100%;
-  background:linear-gradient(90deg,#36d16f,#ffd447,#ff5a7c);
-  transition:.35s;
-}
-.progress{
-  text-align:center;
-  font-weight:900;
-  margin:8px 0 6px;
-  color:#555;
-  font-size:13px;
-}
-.questionBox{
-  background:#fff9e8;
-  border:3px solid #ffd66b;
-  border-radius:16px;
-  padding:8px;
-  margin:6px 0;
-  text-align:center;
-}
-.question{
-  font-size:21px;
-  font-weight:900;
-  color:#263238;
-  line-height:1.2;
+  color:white;
+  background:linear-gradient(135deg,#ff4f9a,#ff9d3b);
+  box-shadow:0 6px 0 rgba(0,0,0,.18);
   cursor:pointer;
 }
-.kana{
-  font-size:14px;
-  font-weight:900;
-  color:#ff4d8d;
-  margin-top:3px;
+
+button:active{
+  transform:translateY(4px);
+  box-shadow:0 2px 0 rgba(0,0,0,.18);
 }
+
+.subBtn{
+  background:linear-gradient(135deg,#1e9bff,#19c37d);
+}
+
+.stage{
+  font-size:18px;
+  font-weight:900;
+  color:#0aa36d;
+  margin-top:2px;
+}
+
+.monsterArea{
+  margin-top:10px;
+}
+
+.monsterName{
+  font-size:20px;
+  font-weight:900;
+  color:#555;
+}
+
+.monsterImg{
+  width:145px;
+  height:145px;
+  object-fit:contain;
+  margin:8px auto;
+  display:block;
+  transition:.18s;
+}
+
+.damage{
+  animation:shake .25s;
+}
+
+@keyframes shake{
+  0%{transform:translateX(0)}
+  25%{transform:translateX(-8px)}
+  50%{transform:translateX(8px)}
+  75%{transform:translateX(-5px)}
+  100%{transform:translateX(0)}
+}
+
+.hpLabel{
+  font-size:13px;
+  font-weight:900;
+  color:#555;
+}
+
+.hpBar{
+  width:88%;
+  height:18px;
+  border-radius:999px;
+  background:#eee;
+  margin:6px auto 14px;
+  overflow:hidden;
+  border:2px solid #333;
+}
+
+.hpFill{
+  height:100%;
+  width:100%;
+  background:linear-gradient(90deg,#28d17c,#ffd84d,#ff5b5b);
+  transition:.25s;
+}
+
+.questionBox{
+  margin-top:10px;
+  padding:14px;
+  border-radius:18px;
+  background:#fff6df;
+  border:3px solid #ffd36a;
+}
+
+.question{
+  font-size:22px;
+  font-weight:900;
+  margin-bottom:10px;
+  cursor:pointer;
+}
+
 .hint{
-  font-size:11px;
-  background:#fff1b5;
-  border-radius:10px;
-  padding:5px;
-  margin-top:6px;
+  font-size:15px;
+  color:#666;
   font-weight:700;
 }
+
 .choices{
   display:grid;
-  gap:7px;
-  margin-top:6px;
+  gap:10px;
+  margin-top:14px;
 }
+
 .choice{
-  border:0;
-  border-radius:13px;
-  padding:9px;
-  font-size:15px;
-  font-weight:900;
-  color:#fff;
-  box-shadow:0 4px 0 rgba(0,0,0,.18);
-  transition:.15s;
-}
-.choice:nth-child(1){background:#ff6b8f}
-.choice:nth-child(2){background:#42a5f5}
-.choice:nth-child(3){background:#37c978}
-.choice:disabled{opacity:.95}
-.choice.selected{
-  outline:4px solid #222;
-  transform:scale(0.97);
-}
-.choice.correctPick{
-  background:#20b86f !important;
-}
-.choice.wrongPick{
-  background:#ff4d6d !important;
-}
-.message{
-  text-align:center;
-  font-size:14px;
-  font-weight:900;
-  margin:6px 0;
-  padding:7px;
-  border-radius:13px;
-  background:#f4f7ff;
-  min-height:34px;
-}
-.ok{color:#20b86f}
-.bad{color:#ff4d6d}
-.restartBtn{
   width:100%;
-  border:0;
-  border-radius:14px;
-  padding:10px;
+  padding:14px;
+  border-radius:15px;
+  border:3px solid #333;
+  background:white;
+  color:#333;
+  font-size:19px;
+  font-weight:900;
+  box-shadow:3px 3px 0 #333;
+}
+
+.choice:active{
+  transform:translate(3px,3px);
+  box-shadow:none;
+}
+
+.choice.correct{
+  background:#31d17c;
+  color:white;
+  border-color:#118b4e;
+}
+
+.choice.wrong{
+  background:#ff5c5c;
+  color:white;
+  border-color:#b82121;
+}
+
+.info{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:10px 4px 0;
   font-size:15px;
   font-weight:900;
-  color:#fff;
-  background:#00bcd4;
-  box-shadow:0 4px 0 rgba(0,0,0,.18);
-  margin-top:6px;
 }
-.clear{
+
+.message{
+  min-height:34px;
+  margin-top:10px;
   font-size:20px;
-  text-align:center;
   font-weight:900;
-  color:#ff4d8d;
-  background:#fff2fb;
-  border-radius:16px;
-  padding:12px;
-  margin-top:8px;
-  display:none;
+  color:#ff4f9a;
 }
-.hidden{display:none}
-.note{
-  text-align:center;
-  font-size:10px;
-  color:#666;
-  margin-top:6px;
+
+.clearBox{
+  position:absolute;
+  inset:0;
+  background:rgba(255,255,255,.94);
+  border-radius:22px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:10;
+  padding:20px;
+}
+
+.clearText{
+  font-size:34px;
+  font-weight:900;
+  color:#ff4f9a;
+  margin-bottom:18px;
+}
+
+.small{
+  font-size:14px;
+  color:#555;
 }
 </style>
 </head>
+
 <body>
 <div class="wrap">
   <div class="card">
 
-    <div id="startScreen" class="startScreen">
+    <div id="startScreen">
       <h1>英検5級モンスターバトル</h1>
       <h2>かわいいモンスターと<br>英語バトル！</h2>
       <p>10問正解で1体たおそう！</p>
 
       <div class="party">
-        <img src="img/green_monster.png?v=20" alt="green monster">
-        <img src="img/blue_monster.png?v=20" alt="blue monster">
-        <img src="img/purple_monster.png?v=20" alt="purple monster">
-        <img src="img/orange_monster.png?v=20" alt="orange monster">
-        <img src="img/yellow_monster.png?v=20" alt="yellow monster"><button class="startBtn" onclick="startGame(false)">⭐ 順番どおり</button>
-        <button class="startBtn" onclick="startGame(false)">⭐ 順番どおり</button>
-        <button class="startBtn subBtn" onclick="startGame(true)">🎲 ステージ内ランダム</button>
-      <p>英文をタップすると、もう一度しゃべるよ♪</p>
+        <img src="img/green_monster.png?v=30" alt="green monster">
+        <img src="img/blue_monster.png?v=30" alt="blue monster">
+        <img src="img/purple_monster.png?v=30" alt="purple monster">
+        <img src="img/orange_monster.png?v=30" alt="orange monster">
+        <img src="img/yellow_monster.png?v=30" alt="yellow monster">
+      </div>
+
+      <div class="startButtons">
+        <button onclick="startGame(false)">⭐ 順番どおり</button>
+        <button class="subBtn" onclick="startGame(true)">🎲 ステージ内ランダム</button>
+      </div>
+
+      <p class="small">英文をタップすると、もう一度しゃべるよ♪</p>
     </div>
 
     <div id="gameScreen" class="hidden">
       <h1>英検5級モンスターバトル</h1>
-      <div class="stage" id="stageName"></div>
+
+      <div class="stage" id="stageName">STAGE 1</div>
 
       <div class="monsterArea">
-        <div class="monsterName" id="monsterName"></div>
-        <img id="monsterImage" class="monsterImg" src="" alt="monster">
+        <div class="monsterName" id="monsterName">Green Monster</div>
+        <img id="monsterImage" class="monsterImg" src="img/green_monster.png" alt="monster">
         <div class="hpLabel">MONSTER HP</div>
-        <div class="hpbar"><div class="hpfill" id="hpfill"></div></div>
+        <div class="hpBar"><div class="hpFill" id="hpFill"></div></div>
       </div>
 
-      <div class="progress" id="progress"></div>
-
       <div class="questionBox">
-        <div class="question" id="question" onclick="tapSpeak()"></div>
-        <div class="kana" id="kana"></div>
-        <div class="hint" id="hint"></div>
+        <div class="question" id="questionText" onclick="speakCurrent()">Question</div>
+        <div class="hint" id="hintText">ヒント</div>
       </div>
 
       <div class="choices" id="choices"></div>
-      <div class="message" id="message">答えを選んで攻撃！</div>
-      <button class="restartBtn" onclick="restart()">最初から 🔁</button>
-      <div class="clear" id="clearBox">🏆 GAME CLEAR!<br>英検5級モンスターを全部たおした！</div>
-      <div class="note">※iPhoneではマナーモード中、音が小さい場合があります。</div>
+
+      <div class="info">
+        <div id="countText">1 / 10</div>
+        <div id="scoreText">正解 0</div>
+      </div>
+
+      <div class="message" id="message"></div>
+    </div>
+
+    <div id="clearBox" class="clearBox hidden">
+      <div class="clearText">🎉 STAGE CLEAR! 🎉</div>
+      <p id="clearMessage">モンスターをたおした！</p>
+      <button onclick="nextStage()">次へ</button>
     </div>
 
   </div>
 </div>
 
 <script>
+let audioCtx = null;
+let stage = 0;
+let qpos = 0;
+let correctCount = 0;
+let answered = false;
+let order = [];
+
 const monsters = [
-  {name:'Greeting Monster',stage:'🌱 Stage1 あいさつの森',image:'img/green_monster.png?v=20'},
-  {name:'Family Monster',stage:'🏠 Stage2 家族の洞窟',image:'img/blue_monster.png?v=20'},
-  {name:'Number Monster',stage:'🔢 Stage3 数字火山',image:'img/orange_monster.png?v=20'},
-  {name:'Food Monster',stage:'🍎 Stage4 食べ物の城',image:'img/yellow_monster.png?v=20'},
-  {name:'King Eiken',stage:'👑 Stage5 英検5級魔王城',image:'img/purple_monster.png?v=20'}
+  {
+    name:"Green Monster",
+    image:"img/green_monster.png?v=30",
+    stage:"STAGE 1 あいさつ"
+  },
+  {
+    name:"Blue Monster",
+    image:"img/blue_monster.png?v=30",
+    stage:"STAGE 2 家族"
+  },
+  {
+    name:"Orange Monster",
+    image:"img/orange_monster.png?v=30",
+    stage:"STAGE 3 数字"
+  },
+  {
+    name:"Yellow Monster",
+    image:"img/yellow_monster.png?v=30",
+    stage:"STAGE 4 食べもの"
+  },
+  {
+    name:"Purple King",
+    image:"img/purple_monster.png?v=30",
+    stage:"FINAL STAGE"
+  }
 ];
 
 const stages = [
-[
-{en:'Hello.',kana:'ハロー',jp:'こんにちは',choices:['こんにちは','さようなら','おやすみ'],hint:'会ったときのあいさつ'},
-{en:'Good morning.',kana:'グッド モーニング',jp:'おはよう',choices:['こんばんは','おはよう','ありがとう'],hint:'朝のあいさつ'},
-{en:'Good night.',kana:'グッド ナイト',jp:'おやすみ',choices:['こんにちは','おやすみ','またね'],hint:'寝る前の言葉'},
-{en:'Thank you.',kana:'サンキュー',jp:'ありがとう',choices:['ありがとう','ごめんなさい','どういたしまして'],hint:'感謝する言葉'},
-{en:"You're welcome.",kana:'ユア ウェルカム',jp:'どういたしまして',choices:['どういたしまして','ありがとう','こんにちは'],hint:'Thank you.への返事'},
-{en:'See you.',kana:'シー ユー',jp:'またね',choices:['またね','おはよう','こんばんは'],hint:'別れるとき'},
-{en:'Goodbye.',kana:'グッドバイ',jp:'さようなら',choices:['さようなら','ありがとう','こんにちは'],hint:'別れのあいさつ'},
-{en:'How are you?',kana:'ハウ アー ユー',jp:'元気ですか？',choices:['元気ですか？','何歳ですか？','どこですか？'],hint:'調子を聞く'},
-{en:"I'm fine.",kana:'アイム ファイン',jp:'元気です',choices:['眠いです','元気です','疲れました'],hint:'返事'},
-{en:'Nice to meet you.',kana:'ナイス トゥ ミート ユー',jp:'はじめまして',choices:['はじめまして','ありがとう','おやすみ'],hint:'初対面'}
-],
-[
-{en:'father',kana:'ファーザー',jp:'父',choices:['父','母','兄'],hint:'お父さん'},
-{en:'mother',kana:'マザー',jp:'母',choices:['兄','母','姉'],hint:'お母さん'},
-{en:'brother',kana:'ブラザー',jp:'兄・弟',choices:['兄・弟','姉・妹','父'],hint:'男のきょうだい'},
-{en:'sister',kana:'シスター',jp:'姉・妹',choices:['兄','母','姉・妹'],hint:'女のきょうだい'},
-{en:'family',kana:'ファミリー',jp:'家族',choices:['学校','家族','先生'],hint:'家の人たち'},
-{en:'grandfather',kana:'グランドファーザー',jp:'祖父',choices:['祖父','祖母','父'],hint:'おじいちゃん'},
-{en:'grandmother',kana:'グランドマザー',jp:'祖母',choices:['祖母','母','姉'],hint:'おばあちゃん'},
-{en:'uncle',kana:'アンクル',jp:'おじ',choices:['おじ','おば','兄'],hint:'父母の兄弟など'},
-{en:'aunt',kana:'アント',jp:'おば',choices:['おば','おじ','母'],hint:'父母の姉妹など'},
-{en:'This is my family.',kana:'ディス イズ マイ ファミリー',jp:'これは私の家族です',choices:['これは私の学校です','これは私の家族です','これは私の先生です'],hint:'This is は「これは」'}
-],
-[
-{en:'one',kana:'ワン',jp:'1',choices:['1','2','3'],hint:'数字'},
-{en:'two',kana:'トゥー',jp:'2',choices:['1','2','5'],hint:'数字'},
-{en:'three',kana:'スリー',jp:'3',choices:['2','3','4'],hint:'数字'},
-{en:'four',kana:'フォー',jp:'4',choices:['4','5','6'],hint:'数字'},
-{en:'five',kana:'ファイブ',jp:'5',choices:['5','7','8'],hint:'数字'},
-{en:'six',kana:'シックス',jp:'6',choices:['6','9','10'],hint:'数字'},
-{en:'seven',kana:'セブン',jp:'7',choices:['7','8','9'],hint:'数字'},
-{en:'eight',kana:'エイト',jp:'8',choices:['8','10','12'],hint:'数字'},
-{en:'nine',kana:'ナイン',jp:'9',choices:['7','8','9'],hint:'数字'},
-{en:'ten',kana:'テン',jp:'10',choices:['10','11','12'],hint:'数字'}
-],
-[
-{en:'apple',kana:'アポー',jp:'りんご',choices:['りんご','みかん','ぶどう'],hint:'赤い果物'},
-{en:'banana',kana:'バナーナ',jp:'バナナ',choices:['りんご','バナナ','いちご'],hint:'黄色い果物'},
-{en:'bread',kana:'ブレッド',jp:'パン',choices:['牛乳','パン','ごはん'],hint:'朝ごはんにも出る'},
-{en:'rice',kana:'ライス',jp:'ごはん',choices:['ごはん','パン','肉'],hint:'日本の主食'},
-{en:'water',kana:'ウォーター',jp:'水',choices:['水','牛乳','お茶'],hint:'飲み物'},
-{en:'milk',kana:'ミルク',jp:'牛乳',choices:['ジュース','牛乳','水'],hint:'白い飲み物'},
-{en:'egg',kana:'エッグ',jp:'卵',choices:['卵','肉','魚'],hint:'にわとりから'},
-{en:'fish',kana:'フィッシュ',jp:'魚',choices:['魚','鳥','犬'],hint:'海や川にいる'},
-{en:'meat',kana:'ミート',jp:'肉',choices:['肉','魚','卵'],hint:'ステーキなど'},
-{en:'I like apples.',kana:'アイ ライク アポーズ',jp:'私はりんごが好きです',choices:['私は犬が好きです','私はりんごが好きです','私は魚が好きです'],hint:'I like は「私は好き」'}
-],
-[
-{en:'I am Ken.',kana:'アイ アム ケン',jp:'私はケンです',choices:['私はケンです','私は先生です','私は元気です'],hint:'自己紹介'},
-{en:'I am ten years old.',kana:'アイ アム テン イヤーズ オールド',jp:'私は10歳です',choices:['私は10歳です','私は10人います','私は10冊持っています'],hint:'年齢'},
-{en:'This is a dog.',kana:'ディス イズ ア ドッグ',jp:'これは犬です',choices:['これは猫です','これは犬です','これは鳥です'],hint:'This is は「これは」'},
-{en:'Can you swim?',kana:'キャン ユー スウィム',jp:'泳げますか？',choices:['泳げますか？','走れますか？','歌えますか？'],hint:'Can you は「できますか」'},
-{en:'Yes, I can.',kana:'イエス アイ キャン',jp:'はい',choices:['いいえ','はい','たぶん'],hint:'肯定'},
-{en:"No, I can't.",kana:'ノー アイ キャント',jp:'いいえ',choices:['はい','こんにちは','いいえ'],hint:'否定'},
-{en:'What is your name?',kana:'ワット イズ ユア ネーム',jp:'あなたの名前は何ですか？',choices:['あなたの名前は何ですか？','あなたは何歳ですか？','どこに住んでいますか？'],hint:'name は名前'},
-{en:'Where do you live?',kana:'ウェア ドゥー ユー リブ',jp:'どこに住んでいますか？',choices:['何歳ですか？','どこに住んでいますか？','何が好きですか？'],hint:'Where は「どこ」'},
-{en:'I like dogs.',kana:'アイ ライク ドッグズ',jp:'私は犬が好きです',choices:['私は犬が好きです','私は猫です','私は犬です'],hint:'dogs は犬全般'},
-{en:'Your brother is tall.',kana:'ユア ブラザー イズ トール',jp:'あなたの兄弟は背が高いです',choices:['あなたの兄弟は背が高いです','あなたの兄弟は速いです','あなたの兄弟は若いです'],hint:'tall は背が高い'}
-]
+  [
+    {q:"Good morning.", ja:"おはよう。", a:"おはよう。", c:["おはよう。","おやすみ。","ありがとう。"]},
+    {q:"Hello.", ja:"こんにちは。", a:"こんにちは。", c:["こんにちは。","さようなら。","ごめんなさい。"]},
+    {q:"Good night.", ja:"おやすみ。", a:"おやすみ。", c:["おやすみ。","おはよう。","またね。"]},
+    {q:"Thank you.", ja:"ありがとう。", a:"ありがとう。", c:["ありがとう。","こんにちは。","私は元気です。"]},
+    {q:"I am fine.", ja:"私は元気です。", a:"私は元気です。", c:["私は元気です。","私は眠いです。","私は先生です。"]},
+    {q:"See you.", ja:"またね。", a:"またね。", c:["またね。","はじめまして。","どういたしまして。"]},
+    {q:"Nice to meet you.", ja:"はじめまして。", a:"はじめまして。", c:["はじめまして。","おかえり。","おめでとう。"]},
+    {q:"I'm sorry.", ja:"ごめんなさい。", a:"ごめんなさい。", c:["ごめんなさい。","ありがとう。","いただきます。"]},
+    {q:"You're welcome.", ja:"どういたしまして。", a:"どういたしまして。", c:["どういたしまして。","おはよう。","さようなら。"]},
+    {q:"Good bye.", ja:"さようなら。", a:"さようなら。", c:["さようなら。","こんばんは。","元気です。"]}
+  ],
+  [
+    {q:"This is my mother.", ja:"こちらは私の母です。", a:"こちらは私の母です。", c:["こちらは私の母です。","こちらは私の兄です。","これは私の犬です。"]},
+    {q:"He is my father.", ja:"彼は私の父です。", a:"彼は私の父です。", c:["彼は私の父です。","彼女は私の母です。","これは本です。"]},
+    {q:"She is my sister.", ja:"彼女は私の姉妹です。", a:"彼女は私の姉妹です。", c:["彼女は私の姉妹です。","彼は私の先生です。","私は学生です。"]},
+    {q:"My brother is tall.", ja:"私の兄弟は背が高いです。", a:"私の兄弟は背が高いです。", c:["私の兄弟は背が高いです。","私の犬は小さいです。","私の母は料理します。"]},
+    {q:"I have a cat.", ja:"私は猫を飼っています。", a:"私は猫を飼っています。", c:["私は猫を飼っています。","私は学校へ行きます。","私は本を読みます。"]},
+    {q:"This is my family.", ja:"これは私の家族です。", a:"これは私の家族です。", c:["これは私の家族です。","これは私の机です。","これはリンゴです。"]},
+    {q:"My father likes soccer.", ja:"私の父はサッカーが好きです。", a:"私の父はサッカーが好きです。", c:["私の父はサッカーが好きです。","私の父は犬です。","私の父は赤いです。"]},
+    {q:"My mother cooks dinner.", ja:"私の母は夕食を作ります。", a:"私の母は夕食を作ります。", c:["私の母は夕食を作ります。","私の母は走ります。","私の母は青いです。"]},
+    {q:"My sister is kind.", ja:"私の姉妹は親切です。", a:"私の姉妹は親切です。", c:["私の姉妹は親切です。","私の姉妹は魚です。","私の姉妹は古いです。"]},
+    {q:"We are happy.", ja:"私たちは幸せです。", a:"私たちは幸せです。", c:["私たちは幸せです。","私たちは本です。","私たちは雨です。"]}
+  ],
+  [
+    {q:"One apple.", ja:"りんご1つ。", a:"りんご1つ。", c:["りんご1つ。","犬2匹。","本5冊。"]},
+    {q:"Two dogs.", ja:"犬2匹。", a:"犬2匹。", c:["犬2匹。","猫1匹。","水3杯。"]},
+    {q:"Three books.", ja:"本3冊。", a:"本3冊。", c:["本3冊。","ペン1本。","机2つ。"]},
+    {q:"Four cats.", ja:"猫4匹。", a:"猫4匹。", c:["猫4匹。","鳥1羽。","車5台。"]},
+    {q:"Five pens.", ja:"ペン5本。", a:"ペン5本。", c:["ペン5本。","犬5匹。","リンゴ5つ。"]},
+    {q:"I am ten years old.", ja:"私は10歳です。", a:"私は10歳です。", c:["私は10歳です。","私は10時に寝ます。","私は10冊あります。"]},
+    {q:"It is seven o'clock.", ja:"7時です。", a:"7時です。", c:["7時です。","7歳です。","7人です。"]},
+    {q:"There are six balls.", ja:"ボールが6個あります。", a:"ボールが6個あります。", c:["ボールが6個あります。","ボールが赤いです。","ボールが好きです。"]},
+    {q:"Eight birds are in the tree.", ja:"木に鳥が8羽います。", a:"木に鳥が8羽います。", c:["木に鳥が8羽います。","木に犬がいます。","鳥は青いです。"]},
+    {q:"Nine students are here.", ja:"9人の生徒がここにいます。", a:"9人の生徒がここにいます。", c:["9人の生徒がここにいます。","9冊の本です。","9時です。"]}
+  ],
+  [
+    {q:"I like apples.", ja:"私はりんごが好きです。", a:"私はりんごが好きです。", c:["私はりんごが好きです。","私は犬が好きです。","私は水を飲みます。"]},
+    {q:"I eat breakfast.", ja:"私は朝食を食べます。", a:"私は朝食を食べます。", c:["私は朝食を食べます。","私は本を読みます。","私は走ります。"]},
+    {q:"I drink milk.", ja:"私は牛乳を飲みます。", a:"私は牛乳を飲みます。", c:["私は牛乳を飲みます。","私は魚を見ます。","私は学校へ行きます。"]},
+    {q:"This cake is good.", ja:"このケーキはおいしいです。", a:"このケーキはおいしいです。", c:["このケーキはおいしいです。","この犬は速いです。","この本は古いです。"]},
+    {q:"Do you like rice?", ja:"あなたはご飯が好きですか。", a:"あなたはご飯が好きですか。", c:["あなたはご飯が好きですか。","あなたは泳げますか。","これはご飯ですか。"]},
+    {q:"I want water.", ja:"私は水がほしいです。", a:"私は水がほしいです。", c:["私は水がほしいです。","私は水色です。","私は水曜日です。"]},
+    {q:"She likes bread.", ja:"彼女はパンが好きです。", a:"彼女はパンが好きです。", c:["彼女はパンが好きです。","彼女はパンを描きます。","彼女はパンです。"]},
+    {q:"He eats eggs.", ja:"彼は卵を食べます。", a:"彼は卵を食べます。", c:["彼は卵を食べます。","彼は卵を読みます。","彼は卵を走ります。"]},
+    {q:"The fish is big.", ja:"その魚は大きいです。", a:"その魚は大きいです。", c:["その魚は大きいです。","その魚は歌います。","その魚は先生です。"]},
+    {q:"I cook dinner.", ja:"私は夕食を作ります。", a:"私は夕食を作ります。", c:["私は夕食を作ります。","私は夕食を走ります。","私は夕食を読みます。"]}
+  ],
+  [
+    {q:"What is this?", ja:"これは何ですか。", a:"これは何ですか。", c:["これは何ですか。","これは誰ですか。","これはどこですか。"]},
+    {q:"Where is my bag?", ja:"私のバッグはどこですか。", a:"私のバッグはどこですか。", c:["私のバッグはどこですか。","私のバッグは何ですか。","私のバッグは誰ですか。"]},
+    {q:"Who is he?", ja:"彼は誰ですか。", a:"彼は誰ですか。", c:["彼は誰ですか。","彼はどこですか。","彼は何ですか。"]},
+    {q:"When is your birthday?", ja:"あなたの誕生日はいつですか。", a:"あなたの誕生日はいつですか。", c:["あなたの誕生日はいつですか。","あなたの名前は何ですか。","あなたはどこですか。"]},
+    {q:"How are you?", ja:"元気ですか。", a:"元気ですか。", c:["元気ですか。","何歳ですか。","どこですか。"]},
+    {q:"Can you swim?", ja:"あなたは泳げますか。", a:"あなたは泳げますか。", c:["あなたは泳げますか。","あなたは魚ですか。","あなたは水ですか。"]},
+    {q:"I can play soccer.", ja:"私はサッカーができます。", a:"私はサッカーができます。", c:["私はサッカーができます。","私はサッカーを食べます。","私はサッカーです。"]},
+    {q:"Let's go to school.", ja:"学校へ行きましょう。", a:"学校へ行きましょう。", c:["学校へ行きましょう。","学校を食べましょう。","学校を寝ましょう。"]},
+    {q:"Open the door.", ja:"ドアを開けて。", a:"ドアを開けて。", c:["ドアを開けて。","ドアを食べて。","ドアを読んで。"]},
+    {q:"Please sit down.", ja:"座ってください。", a:"座ってください。", c:["座ってください。","走ってください。","歌ってください。"]}
+  ]
 ];
-
-let order = [];
-let stage = 0;
-let qpos = 0;
-let answered = false;
-let audioCtx = null;
 
 function shuffle(arr){
   for(let i=arr.length-1;i>0;i--){
@@ -373,297 +444,204 @@ function shuffle(arr){
   return arr;
 }
 
-function q(){
+function currentQuestion(){
   return stages[stage][order[stage][qpos]];
 }
 
 function startGame(random){
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  sound('start');
+  try{
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }catch(e){
+    audioCtx = null;
+  }
+
+  sound("start");
 
   order = stages.map(s => [...Array(s.length).keys()]);
   if(random) order.forEach(o => shuffle(o));
 
   stage = 0;
   qpos = 0;
+  correctCount = 0;
   answered = false;
 
-  document.getElementById('startScreen').classList.add('hidden');
-  document.getElementById('gameScreen').classList.remove('hidden');
-  document.getElementById('clearBox').style.display = 'none';
+  const startScreen = document.getElementById("startScreen");
+  const gameScreen = document.getElementById("gameScreen");
+  const clearBox = document.getElementById("clearBox");
+
+  if(startScreen) startScreen.classList.add("hidden");
+  if(gameScreen) gameScreen.classList.remove("hidden");
+  if(clearBox) clearBox.classList.add("hidden");
 
   render();
 }
 
 function render(){
-  answered = false;
   const m = monsters[stage];
-  const qq = q();
+  const item = currentQuestion();
 
-  document.getElementById('stageName').textContent = m.stage;
-  document.getElementById('monsterName').textContent = m.name;
-  document.getElementById('monsterImage').src = m.image;
-  document.getElementById('hpfill').style.width = ((10 - qpos) * 10) + '%';
-  document.getElementById('progress').textContent = 'Stage ' + (stage + 1) + ' / 5　Question ' + (qpos + 1) + ' / 10';
-  document.getElementById('question').textContent = qq.en;
-  document.getElementById('kana').textContent = qq.kana;
-  document.getElementById('hint').textContent = 'ヒント：' + qq.hint;
-  document.getElementById('message').textContent = '答えを選んで攻撃！';
-  document.getElementById('message').className = 'message';
+  document.getElementById("stageName").textContent = m.stage;
+  document.getElementById("monsterName").textContent = m.name;
+  document.getElementById("monsterImage").src = m.image;
 
-  const choices = document.getElementById('choices');
-  choices.innerHTML = '';
+  document.getElementById("questionText").textContent = item.q;
+  document.getElementById("hintText").textContent = "ヒント：" + item.ja;
 
-  const shuffledChoices = [...qq.choices];
-  for(let i = shuffledChoices.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffledChoices[i], shuffledChoices[j]] = [shuffledChoices[j], shuffledChoices[i]];
-  }
+  const hp = Math.max(0, 100 - qpos * 10);
+  document.getElementById("hpFill").style.width = hp + "%";
 
-  shuffledChoices.forEach(c => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'choice';
-    b.textContent = c;
-    b.onclick = function(){
-      answer(c, this);
-    };
-    choices.appendChild(b);
+  document.getElementById("countText").textContent = (qpos + 1) + " / 10";
+  document.getElementById("scoreText").textContent = "正解 " + correctCount;
+  document.getElementById("message").textContent = "";
+
+  const choicesBox = document.getElementById("choices");
+  choicesBox.innerHTML = "";
+
+  const shuffledChoices = shuffle([...item.c]);
+
+  shuffledChoices.forEach(choice => {
+    const btn = document.createElement("button");
+    btn.className = "choice";
+    btn.textContent = choice;
+    btn.onclick = () => answer(btn, choice);
+    choicesBox.appendChild(btn);
   });
 
-  setTimeout(() => speak(), 250);
+  speak(item.q);
 }
 
-function answer(choice, clickedBtn){
+function answer(btn, choice){
   if(answered) return;
   answered = true;
 
-  speechSynthesis.cancel();
+  const item = currentQuestion();
+  const buttons = document.querySelectorAll(".choice");
 
-  document.querySelectorAll('.choice').forEach(b => {
-    b.disabled = true;
-    b.classList.remove('selected','correctPick','wrongPick');
-  });
+  buttons.forEach(b => b.disabled = true);
 
-  const qq = q();
-  const msg = document.getElementById('message');
-  const monsterImg = document.getElementById('monsterImage');
-
-  if(clickedBtn){
-    clickedBtn.classList.add('selected');
+  if(choice === item.a){
+    btn.classList.add("correct");
+    correctCount++;
+    qpos++;
+    document.getElementById("message").textContent = "正解！";
+    damageMonster();
+    sound("correct");
+  }else{
+    btn.classList.add("wrong");
+    document.getElementById("message").textContent = "ざんねん！正解は「" + item.a + "」";
+    sound("wrong");
   }
 
-  function shakeMonster(big=false){
-    if(!monsterImg || !monsterImg.animate) return;
-
-    if(big){
-      monsterImg.animate(
-        [
-          { transform:'scale(1) rotate(0deg)' },
-          { transform:'scale(1.06) rotate(-4deg)' },
-          { transform:'scale(1.06) rotate(4deg)' },
-          { transform:'scale(1.04) rotate(-3deg)' },
-          { transform:'scale(1.04) rotate(3deg)' },
-          { transform:'scale(1) rotate(0deg)' }
-        ],
-        {
-          duration:700,
-          easing:'ease-in-out'
-        }
-      );
+  setTimeout(() => {
+    if(qpos >= 10){
+      showStageClear();
     }else{
-      monsterImg.animate(
-        [
-          { transform:'translateX(0) rotate(0deg)' },
-          { transform:'translateX(-8px) rotate(-3deg)' },
-          { transform:'translateX(8px) rotate(3deg)' },
-          { transform:'translateX(-6px) rotate(-2deg)' },
-          { transform:'translateX(6px) rotate(2deg)' },
-          { transform:'translateX(0) rotate(0deg)' }
-        ],
-        {
-          duration:450,
-          easing:'ease-in-out'
-        }
-      );
+      answered = false;
+      render();
     }
-  }
-
-  function showStageClear(){
-    const oldFx = document.getElementById('stageClearFx');
-    if(oldFx) oldFx.remove();
-
-    const fx = document.createElement('div');
-    fx.id = 'stageClearFx';
-    fx.textContent = '🎉 STAGE CLEAR! 🎉';
-    fx.style.position = 'fixed';
-    fx.style.left = '50%';
-    fx.style.top = '50%';
-    fx.style.transform = 'translate(-50%,-50%) scale(0.7)';
-    fx.style.background = 'linear-gradient(90deg,#ff5f9c,#ff9f43)';
-    fx.style.color = '#fff';
-    fx.style.fontSize = '28px';
-    fx.style.fontWeight = '1000';
-    fx.style.padding = '18px 24px';
-    fx.style.borderRadius = '20px';
-    fx.style.boxShadow = '0 10px 30px rgba(0,0,0,.25)';
-    fx.style.zIndex = '9999';
-    fx.style.opacity = '0';
-    fx.style.pointerEvents = 'none';
-    fx.style.whiteSpace = 'nowrap';
-    document.body.appendChild(fx);
-
-    fx.animate(
-      [
-        { opacity:0, transform:'translate(-50%,-50%) scale(0.7)' },
-        { opacity:1, transform:'translate(-50%,-50%) scale(1.08)', offset:0.2 },
-        { opacity:1, transform:'translate(-50%,-50%) scale(1)', offset:0.7 },
-        { opacity:0, transform:'translate(-50%,-50%) scale(1.06)' }
-      ],
-      {
-        duration:900,
-        easing:'ease-out'
-      }
-    );
-
-    setTimeout(() => {
-      fx.remove();
-    }, 950);
-  }
-
-  if(choice === qq.jp){
-    if(clickedBtn){
-      clickedBtn.classList.add('correctPick');
-    }
-
-    sound('correct');
-    msg.innerHTML = '✨ 正解！';
-    msg.className = 'message ok';
-
-    if(qpos === 9){
-      shakeMonster(true);
-    }else{
-      shakeMonster(false);
-    }
-
-    setTimeout(() => {
-      document.getElementById('hpfill').style.width = Math.max(0, (9 - qpos) * 10) + '%';
-    }, 120);
-
-    setTimeout(() => {
-      if(qpos === 9){
-        if(stage === 4){
-          clearGame();
-        }else{
-          sound('stage');
-          msg.innerHTML = '🎉 ステージクリア！';
-          showStageClear();
-          setTimeout(() => {
-            nextQuestion();
-          }, 1000);
-        }
-      }else{
-        nextQuestion();
-      }
-    }, 500);
-
-  } else {
-    if(clickedBtn){
-      clickedBtn.classList.add('wrongPick');
-    }
-
-    sound('wrong');
-    msg.innerHTML = '❌ 正解は「' + qq.jp + '」';
-    msg.className = 'message bad';
-
-    setTimeout(() => {
-      nextQuestion();
-    }, 800);
-  }
+  }, 900);
 }
 
-function nextQuestion(){
-  if(qpos === 9){
-    stage++;
-    qpos = 0;
-  }else{
-    qpos++;
-  }
+function damageMonster(){
+  const img = document.getElementById("monsterImage");
+  img.classList.add("damage");
+  setTimeout(() => img.classList.remove("damage"), 260);
+}
 
-  if(stage >= 5){
-    clearGame();
+function showStageClear(){
+  document.getElementById("clearMessage").textContent = monsters[stage].name + " をたおした！";
+  document.getElementById("clearBox").classList.remove("hidden");
+  sound("clear");
+}
+
+function nextStage(){
+  document.getElementById("clearBox").classList.add("hidden");
+
+  stage++;
+
+  if(stage >= stages.length){
+    showEnding();
     return;
   }
 
+  qpos = 0;
+  answered = false;
   render();
 }
 
-function clearGame(){
-  sound('clear');
-  document.getElementById('clearBox').style.display = 'block';
-  document.getElementById('message').innerHTML = '🏆 全ステージクリア！';
-  document.getElementById('hpfill').style.width = '0%';
+function showEnding(){
+  const gameScreen = document.getElementById("gameScreen");
+  const clearBox = document.getElementById("clearBox");
+
+  if(gameScreen) gameScreen.classList.add("hidden");
+
+  clearBox.classList.remove("hidden");
+  clearBox.innerHTML = `
+    <div class="clearText">🏆 全クリア！ 🏆</div>
+    <p>英検5級モンスターを全部たおした！</p>
+    <button onclick="location.reload()">もう一回</button>
+  `;
+
+  sound("clear");
 }
 
-function restart(){
-  speechSynthesis.cancel();
-  document.getElementById('gameScreen').classList.add('hidden');
-  document.getElementById('startScreen').classList.remove('hidden');
+function speakCurrent(){
+  const item = currentQuestion();
+  speak(item.q);
 }
 
-function speak(){
-  const qq = q();
-  const u = new SpeechSynthesisUtterance(qq.en);
-  u.lang = 'en-US';
-  u.rate = 0.85;
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+
   speechSynthesis.cancel();
+
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.82;
+  u.pitch = 1.05;
+
   speechSynthesis.speak(u);
 }
 
-function tapSpeak(){
-  speak();
-}
-
-function beep(freq,dur,type='sine',gain=.08){
+function tone(freq,duration,type="sine",vol=0.06){
   if(!audioCtx) return;
-  const o = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  o.type = type;
-  o.frequency.value = freq;
-  g.gain.value = gain;
-  o.connect(g);
-  g.connect(audioCtx.destination);
-  o.start();
-  g.gain.exponentialRampToValueAtTime(.001, audioCtx.currentTime + dur);
-  o.stop(audioCtx.currentTime + dur);
+
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(vol,audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime + duration);
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start();
+  osc.stop(audioCtx.currentTime + duration);
 }
 
-function sound(name){
-  if(name==='start'){
-    [523,659,784].forEach((f,i)=>setTimeout(()=>beep(f,.12),i*90));
+function sound(type){
+  if(type === "start"){
+    tone(440,.08,"square",.05);
+    setTimeout(()=>tone(660,.08,"square",.05),90);
+    setTimeout(()=>tone(880,.12,"square",.05),180);
   }
 
-  if(name==='correct'){
-    beep(660,.1,'square',.07);
-    setTimeout(()=>beep(880,.13,'square',.07),90);
+  if(type === "correct"){
+    tone(700,.08,"triangle",.05);
+    setTimeout(()=>tone(950,.08,"triangle",.05),90);
   }
 
-  if(name==='wrong'){
-    beep(180,.22,'sawtooth',.06);
+  if(type === "wrong"){
+    tone(180,.14,"sawtooth",.04);
   }
 
-  if(name==='stage'){
-    const notes = [784,784,880,988,1046,1175,1318];
-    notes.forEach((f,i)=>{
-      setTimeout(()=>beep(f,.12,'square',.08), i*95);
-    });
-  }
-
-  if(name==='clear'){
-    const notes = [523,659,784,1046,1175,1318,1568];
-    notes.forEach((f,i)=>{
-      setTimeout(()=>beep(f,.16,'square',.08), i*110);
-    });
+  if(type === "clear"){
+    tone(523,.12,"square",.06);
+    setTimeout(()=>tone(659,.12,"square",.06),140);
+    setTimeout(()=>tone(784,.12,"square",.06),280);
+    setTimeout(()=>tone(1046,.22,"square",.06),430);
   }
 }
 </script>
