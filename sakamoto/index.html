@@ -146,7 +146,6 @@ button:active {
   pointer-events: none;
 }
 
-/* 完成後は顔が見えるように、結果画面は下だけ */
 #resultScreen {
   top: auto;
   bottom: 0;
@@ -211,7 +210,7 @@ button:active {
       <h2>ぐるぐる顔面ピンボール</h2>
 
       <div id="sampleTitle">完成見本：これがサカモトだ！</div>
-      <img id="sampleImage" src="img/gattai.PNG?v=1" alt="完成見本">
+      <img id="sampleImage" src="img/gattai.PNG?v=3" alt="完成見本">
 
       <p>
         顔パーツが壁に当たって<br>
@@ -250,6 +249,7 @@ let W = 0;
 let H = 0;
 let dpr = 1;
 let images = {};
+let crops = {};
 let parts = [];
 let currentIndex = 0;
 let running = false;
@@ -290,7 +290,7 @@ function loadImages() {
 
   keys.forEach(key => {
     const img = new Image();
-    img.src = imageFiles[key] + "?v=1";
+    img.src = imageFiles[key] + "?v=3";
 
     img.onload = () => {
       images[key] = img;
@@ -298,6 +298,7 @@ function loadImages() {
       message.textContent = `画像読み込み中 ${loaded} / ${keys.length}`;
 
       if (loaded === keys.length) {
+        makeAllCrops();
         resizeCanvas();
         message.textContent = "スタートを押してね";
         draw();
@@ -310,6 +311,80 @@ function loadImages() {
   });
 }
 
+/*
+  黒い線がある範囲だけを自動で探す。
+  白背景・透明背景どちらでも拾えるようにしています。
+*/
+function makeAllCrops() {
+  Object.keys(images).forEach(key => {
+    crops[key] = findInkBounds(images[key]);
+  });
+}
+
+function findInkBounds(img) {
+  const temp = document.createElement("canvas");
+  const tctx = temp.getContext("2d");
+
+  temp.width = img.width;
+  temp.height = img.height;
+
+  tctx.drawImage(img, 0, 0);
+
+  const data = tctx.getImageData(0, 0, temp.width, temp.height).data;
+
+  let minX = temp.width;
+  let minY = temp.height;
+  let maxX = 0;
+  let maxY = 0;
+  let found = false;
+
+  for (let y = 0; y < temp.height; y += 2) {
+    for (let x = 0; x < temp.width; x += 2) {
+      const i = (y * temp.width + x) * 4;
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+      const a = data[i + 3];
+
+      /*
+        黒っぽい線だけを拾う。
+        透明は無視。
+        白背景は無視。
+      */
+      if (a > 20 && r < 120 && g < 120 && b < 120) {
+        found = true;
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+      }
+    }
+  }
+
+  if (!found) {
+    return {
+      sx: 0,
+      sy: 0,
+      sw: img.width,
+      sh: img.height
+    };
+  }
+
+  const pad = 18;
+
+  minX = Math.max(0, minX - pad);
+  minY = Math.max(0, minY - pad);
+  maxX = Math.min(img.width, maxX + pad);
+  maxY = Math.min(img.height, maxY + pad);
+
+  return {
+    sx: minX,
+    sy: minY,
+    sw: maxX - minX,
+    sh: maxY - minY
+  };
+}
+
 function setupParts() {
   if (!W || !H) return;
 
@@ -317,31 +392,31 @@ function setupParts() {
   const cy = H / 2 + 20;
 
   /*
-    ここが正解位置とサイズ。
-    gattai.PNGの見た目に近づけた配置です。
+    ここが正解位置と見た目サイズ。
+    自動トリミング後に効くサイズです。
   */
   parts = [
     {
       key: "eyeL",
       name: "左目",
-      targetX: cx - 58,
-      targetY: cy - 72,
+      targetX: cx - 62,
+      targetY: cy - 62,
       targetAngle: 0,
-      size: 92
+      size: 95
     },
     {
       key: "eyeR",
       name: "右目",
-      targetX: cx + 58,
-      targetY: cy - 72,
+      targetX: cx + 62,
+      targetY: cy - 62,
       targetAngle: 0,
-      size: 92
+      size: 95
     },
     {
       key: "nose",
       name: "鼻",
       targetX: cx,
-      targetY: cy - 10,
+      targetY: cy + 6,
       targetAngle: 0,
       size: 88
     },
@@ -349,33 +424,33 @@ function setupParts() {
       key: "mouth",
       name: "口",
       targetX: cx,
-      targetY: cy + 82,
+      targetY: cy + 93,
       targetAngle: 0,
-      size: 105
+      size: 115
     },
     {
       key: "earL",
       name: "左耳",
-      targetX: cx - 142,
-      targetY: cy - 34,
+      targetX: cx - 145,
+      targetY: cy - 28,
       targetAngle: 0,
-      size: 90
+      size: 92
     },
     {
       key: "earR",
       name: "右耳",
-      targetX: cx + 142,
-      targetY: cy - 34,
+      targetX: cx + 145,
+      targetY: cy - 28,
       targetAngle: 0,
-      size: 90
+      size: 92
     },
     {
       key: "hair",
       name: "髪",
       targetX: cx,
-      targetY: cy - 152,
+      targetY: cy - 150,
       targetAngle: 0,
-      size: 255
+      size: 275
     }
   ];
 
@@ -459,7 +534,7 @@ function calculateScore(p) {
   const dy = p.y - p.targetY;
   const distance = Math.sqrt(dx * dx + dy * dy);
 
-  const maxDistance = 180;
+  const maxDistance = 185;
   const positionScore = Math.max(0, 100 - distance / maxDistance * 100);
 
   const angleDiff = Math.abs(normalizeAngle(p.angle - p.targetAngle));
@@ -614,7 +689,7 @@ function drawFace() {
   const cx = W / 2;
   const cy = H / 2 + 20;
 
-  drawImageCenter(images.face, cx, cy, 300, 0, 0.95);
+  drawCroppedImageCenter("face", cx, cy, 300, 0, 0.95);
 }
 
 function drawGuide() {
@@ -633,13 +708,16 @@ function drawGuide() {
 }
 
 function drawPart(p) {
-  const img = images[p.key];
-  if (!img) return;
-  drawImageCenter(img, p.x, p.y, p.size, p.angle, 1);
+  drawCroppedImageCenter(p.key, p.x, p.y, p.size, p.angle, 1);
 }
 
-function drawImageCenter(img, x, y, size, angle, alpha) {
-  const ratio = img.height / img.width;
+function drawCroppedImageCenter(key, x, y, size, angle, alpha) {
+  const img = images[key];
+  const crop = crops[key];
+
+  if (!img || !crop) return;
+
+  const ratio = crop.sh / crop.sw;
   const w = size;
   const h = size * ratio;
 
@@ -647,7 +725,19 @@ function drawImageCenter(img, x, y, size, angle, alpha) {
   ctx.globalAlpha = alpha;
   ctx.translate(x, y);
   ctx.rotate(angle);
-  ctx.drawImage(img, -w / 2, -h / 2, w, h);
+
+  ctx.drawImage(
+    img,
+    crop.sx,
+    crop.sy,
+    crop.sw,
+    crop.sh,
+    -w / 2,
+    -h / 2,
+    w,
+    h
+  );
+
   ctx.restore();
 }
 
