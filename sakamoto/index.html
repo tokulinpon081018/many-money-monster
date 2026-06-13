@@ -86,12 +86,12 @@ p {
 
 button {
   margin-top: 10px;
-  padding: 13px 26px;
+  padding: 13px 28px;
   border: 3px solid #222;
   border-radius: 18px;
   background: linear-gradient(135deg, #ff4f9a, #ff9d3b);
   color: white;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 900;
   box-shadow: 4px 4px 0 #222;
 }
@@ -99,6 +99,18 @@ button {
 button:active {
   transform: translate(4px, 4px);
   box-shadow: none;
+}
+
+.modeButtons {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.modeButtons button:nth-child(2) {
+  background: linear-gradient(135deg, #1e9bff, #19c37d);
 }
 
 #sampleTitle {
@@ -207,19 +219,25 @@ button:active {
 
     <div id="startScreen" class="screen">
       <h1>サカモト</h1>
-      <h2>ぐるぐる顔面ピンボール</h2>
+      <h2>顔面ピンボール</h2>
 
       <div id="sampleTitle">完成見本：これがサカモトだ！</div>
-      <img id="sampleImage" src="img/gattai.PNG?v=3" alt="完成見本">
+      <img id="sampleImage" src="img/gattai.PNG?v=5" alt="完成見本">
 
       <p>
-        顔パーツが壁に当たって<br>
-        跳ねながらくるくる回る！<br>
+        顔パーツが壁に当たって跳ねる！<br>
         見本を覚えて、ここだと思ったらタップ！
       </p>
 
-      <button onclick="startGame()">スタート</button>
-      <p class="small">タップで1パーツずつ止める</p>
+      <div class="modeButtons">
+        <button onclick="startGame('easy')">初級</button>
+        <button onclick="startGame('hard')">上級</button>
+      </div>
+
+      <p class="small">
+        初級：向きそのまま<br>
+        上級：くるくる回転
+      </p>
     </div>
 
     <div id="resultScreen" class="screen hidden">
@@ -227,7 +245,7 @@ button:active {
       <div id="resultScore">0%</div>
       <div id="resultRank">サカモトの気配</div>
       <p id="resultDetail"></p>
-      <button onclick="startGame()">もう一回</button>
+      <button onclick="backToStart()">もう一回</button>
     </div>
   </div>
 </div>
@@ -255,6 +273,7 @@ let currentIndex = 0;
 let running = false;
 let finished = false;
 let audioCtx = null;
+let gameMode = "easy";
 
 const imageFiles = {
   face: "img/face.PNG",
@@ -290,7 +309,7 @@ function loadImages() {
 
   keys.forEach(key => {
     const img = new Image();
-    img.src = imageFiles[key] + "?v=3";
+    img.src = imageFiles[key] + "?v=5";
 
     img.onload = () => {
       images[key] = img;
@@ -300,7 +319,7 @@ function loadImages() {
       if (loaded === keys.length) {
         makeAllCrops();
         resizeCanvas();
-        message.textContent = "スタートを押してね";
+        message.textContent = "初級か上級を選んでね";
         draw();
       }
     };
@@ -311,10 +330,6 @@ function loadImages() {
   });
 }
 
-/*
-  黒い線がある範囲だけを自動で探す。
-  白背景・透明背景どちらでも拾えるようにしています。
-*/
 function makeAllCrops() {
   Object.keys(images).forEach(key => {
     crops[key] = findInkBounds(images[key]);
@@ -346,12 +361,7 @@ function findInkBounds(img) {
       const b = data[i + 2];
       const a = data[i + 3];
 
-      /*
-        黒っぽい線だけを拾う。
-        透明は無視。
-        白背景は無視。
-      */
-      if (a > 20 && r < 120 && g < 120 && b < 120) {
+      if (a > 20 && r < 130 && g < 130 && b < 130) {
         found = true;
         if (x < minX) minX = x;
         if (y < minY) minY = y;
@@ -391,10 +401,6 @@ function setupParts() {
   const cx = W / 2;
   const cy = H / 2 + 20;
 
-  /*
-    ここが正解位置と見た目サイズ。
-    自動トリミング後に効くサイズです。
-  */
   parts = [
     {
       key: "eyeL",
@@ -402,7 +408,7 @@ function setupParts() {
       targetX: cx - 62,
       targetY: cy - 62,
       targetAngle: 0,
-      size: 95
+      size: 105
     },
     {
       key: "eyeR",
@@ -410,7 +416,7 @@ function setupParts() {
       targetX: cx + 62,
       targetY: cy - 62,
       targetAngle: 0,
-      size: 95
+      size: 105
     },
     {
       key: "nose",
@@ -418,31 +424,31 @@ function setupParts() {
       targetX: cx,
       targetY: cy + 6,
       targetAngle: 0,
-      size: 130
+      size: 115
     },
     {
       key: "mouth",
       name: "口",
       targetX: cx,
-      targetY: cy + 93,
+      targetY: cy + 98,
       targetAngle: 0,
-      size: 115
+      size: 130
     },
     {
       key: "earL",
       name: "左耳",
       targetX: cx - 145,
-      targetY: cy - 28,
+      targetY: cy - 20,
       targetAngle: 0,
-      size: 65
+      size: 70
     },
     {
       key: "earR",
       name: "右耳",
       targetX: cx + 145,
-      targetY: cy - 28,
+      targetY: cy - 20,
       targetAngle: 0,
-      size: 65
+      size: 70
     },
     {
       key: "hair",
@@ -450,7 +456,7 @@ function setupParts() {
       targetX: cx,
       targetY: cy - 150,
       targetAngle: 0,
-      size: 350
+      size: 300
     }
   ];
 
@@ -475,11 +481,18 @@ function resetPart(p, i) {
   p.vx = Math.cos(dir) * speed;
   p.vy = Math.sin(dir) * speed;
 
-  p.angle = Math.random() * Math.PI * 2;
+  if (gameMode === "hard") {
+    p.angle = Math.random() * Math.PI * 2;
+  } else {
+    p.angle = 0;
+  }
+
   p.spin = (0.045 + Math.random() * 0.095) * (Math.random() < 0.5 ? -1 : 1);
 }
 
-function startGame() {
+function startGame(mode) {
+  gameMode = mode;
+
   try {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   } catch(e) {
@@ -503,9 +516,13 @@ function startGame() {
   startScreen.classList.add("hidden");
   resultScreen.classList.add("hidden");
 
-  message.textContent = `${parts[currentIndex].name}を止めろ！`;
-  updateInfo();
+  if (gameMode === "easy") {
+    message.textContent = `${parts[currentIndex].name}を止めろ！`;
+  } else {
+    message.textContent = `${parts[currentIndex].name}を止めろ！`;
+  }
 
+  updateInfo();
   soundStart();
 }
 
@@ -537,13 +554,18 @@ function calculateScore(p) {
   const maxDistance = 185;
   const positionScore = Math.max(0, 100 - distance / maxDistance * 100);
 
-  const angleDiff = Math.abs(normalizeAngle(p.angle - p.targetAngle));
-  const angleScore = Math.max(0, 100 - angleDiff / Math.PI * 100);
+  let angleScore = 100;
+
+  if (gameMode === "hard") {
+    const angleDiff = Math.abs(normalizeAngle(p.angle - p.targetAngle));
+    angleScore = Math.max(0, 100 - angleDiff / Math.PI * 100);
+    p.score = positionScore * 0.75 + angleScore * 0.25;
+  } else {
+    p.score = positionScore;
+  }
 
   p.positionScore = positionScore;
   p.angleScore = angleScore;
-
-  p.score = positionScore * 0.75 + angleScore * 0.25;
 }
 
 function normalizeAngle(a) {
@@ -572,11 +594,21 @@ function finishGame() {
 
   resultScore.textContent = `${final}%`;
   resultRank.textContent = getRank(final);
-  resultDetail.innerHTML = `
-    位置スコア：${posAvg}点<br>
-    角度スコア：${angleAvg}点<br>
-    サカモト度：${final}%
-  `;
+
+  if (gameMode === "easy") {
+    resultDetail.innerHTML = `
+      モード：初級<br>
+      位置スコア：${posAvg}点<br>
+      サカモト度：${final}%
+    `;
+  } else {
+    resultDetail.innerHTML = `
+      モード：上級<br>
+      位置スコア：${posAvg}点<br>
+      角度スコア：${angleAvg}点<br>
+      サカモト度：${final}%
+    `;
+  }
 
   message.textContent = "サカモト完成！";
   updateInfo();
@@ -595,6 +627,15 @@ function getRank(score) {
   return "誰だお前";
 }
 
+function backToStart() {
+  running = false;
+  finished = false;
+  resultScreen.classList.add("hidden");
+  startScreen.classList.remove("hidden");
+  message.textContent = "初級か上級を選んでね";
+  draw();
+}
+
 function update() {
   if (running && !finished) {
     const p = parts[currentIndex];
@@ -602,7 +643,12 @@ function update() {
     if (p && !p.stopped) {
       p.x += p.vx;
       p.y += p.vy;
-      p.angle += p.spin;
+
+      if (gameMode === "hard") {
+        p.angle += p.spin;
+      } else {
+        p.angle = 0;
+      }
 
       const r = p.size / 2;
 
