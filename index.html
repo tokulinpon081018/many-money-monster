@@ -192,6 +192,7 @@ button:active{
 }
 
 .hint{
+  min-height:24px;
   font-size:15px;
   color:#666;
   font-weight:700;
@@ -286,11 +287,11 @@ button:active{
       <p>10問正解で1体たおそう！</p>
 
       <div class="party">
-        <img src="img/green_monster.png?v=30" alt="green monster">
-        <img src="img/blue_monster.png?v=30" alt="blue monster">
-        <img src="img/purple_monster.png?v=30" alt="purple monster">
-        <img src="img/orange_monster.png?v=30" alt="orange monster">
-        <img src="img/yellow_monster.png?v=30" alt="yellow monster">
+        <img src="img/green_monster.png?v=100" alt="green monster">
+        <img src="img/blue_monster.png?v=100" alt="blue monster">
+        <img src="img/purple_monster.png?v=100" alt="purple monster">
+        <img src="img/orange_monster.png?v=100" alt="orange monster">
+        <img src="img/yellow_monster.png?v=100" alt="yellow monster">
       </div>
 
       <div class="startButtons">
@@ -298,7 +299,7 @@ button:active{
         <button class="subBtn" onclick="startGame(true)">🎲 ステージ内ランダム</button>
       </div>
 
-      <p class="small">英文をタップすると、もう一度しゃべるよ♪</p>
+      <p class="small">英文をタップすると、もう一度しゃべるよ♪<br>ヒントは10秒後に出ます</p>
     </div>
 
     <div id="gameScreen" class="hidden">
@@ -315,7 +316,7 @@ button:active{
 
       <div class="questionBox">
         <div class="question" id="questionText" onclick="speakCurrent()">Question</div>
-        <div class="hint" id="hintText">ヒント</div>
+        <div class="hint" id="hintText"></div>
       </div>
 
       <div class="choices" id="choices"></div>
@@ -344,31 +345,32 @@ let qpos = 0;
 let correctCount = 0;
 let answered = false;
 let order = [];
+let hintTimer = null;
 
 const monsters = [
   {
     name:"Green Monster",
-    image:"img/green_monster.png?v=30",
+    image:"img/green_monster.png?v=100",
     stage:"STAGE 1 あいさつ"
   },
   {
     name:"Blue Monster",
-    image:"img/blue_monster.png?v=30",
+    image:"img/blue_monster.png?v=100",
     stage:"STAGE 2 家族"
   },
   {
     name:"Orange Monster",
-    image:"img/orange_monster.png?v=30",
+    image:"img/orange_monster.png?v=100",
     stage:"STAGE 3 数字"
   },
   {
     name:"Yellow Monster",
-    image:"img/yellow_monster.png?v=30",
+    image:"img/yellow_monster.png?v=100",
     stage:"STAGE 4 食べもの"
   },
   {
     name:"Purple King",
-    image:"img/purple_monster.png?v=30",
+    image:"img/purple_monster.png?v=100",
     stage:"FINAL STAGE"
   }
 ];
@@ -465,6 +467,11 @@ function startGame(random){
   correctCount = 0;
   answered = false;
 
+  if(hintTimer){
+    clearTimeout(hintTimer);
+    hintTimer = null;
+  }
+
   const startScreen = document.getElementById("startScreen");
   const gameScreen = document.getElementById("gameScreen");
   const clearBox = document.getElementById("clearBox");
@@ -477,6 +484,11 @@ function startGame(random){
 }
 
 function render(){
+  if(hintTimer){
+    clearTimeout(hintTimer);
+    hintTimer = null;
+  }
+
   const m = monsters[stage];
   const item = currentQuestion();
 
@@ -485,7 +497,13 @@ function render(){
   document.getElementById("monsterImage").src = m.image;
 
   document.getElementById("questionText").textContent = item.q;
-  document.getElementById("hintText").textContent = "ヒント：" + item.ja;
+
+  const hintText = document.getElementById("hintText");
+  hintText.textContent = "ヒントは10秒後に出るよ";
+
+  hintTimer = setTimeout(() => {
+    hintText.textContent = "ヒント：" + item.ja;
+  }, 10000);
 
   const hp = Math.max(0, 100 - qpos * 10);
   document.getElementById("hpFill").style.width = hp + "%";
@@ -513,6 +531,11 @@ function render(){
 function answer(btn, choice){
   if(answered) return;
   answered = true;
+
+  if(hintTimer){
+    clearTimeout(hintTimer);
+    hintTimer = null;
+  }
 
   const item = currentQuestion();
   const buttons = document.querySelectorAll(".choice");
@@ -549,12 +572,22 @@ function damageMonster(){
 }
 
 function showStageClear(){
+  if(hintTimer){
+    clearTimeout(hintTimer);
+    hintTimer = null;
+  }
+
   document.getElementById("clearMessage").textContent = monsters[stage].name + " をたおした！";
   document.getElementById("clearBox").classList.remove("hidden");
   sound("clear");
 }
 
 function nextStage(){
+  if(hintTimer){
+    clearTimeout(hintTimer);
+    hintTimer = null;
+  }
+
   document.getElementById("clearBox").classList.add("hidden");
 
   stage++;
@@ -570,6 +603,11 @@ function nextStage(){
 }
 
 function showEnding(){
+  if(hintTimer){
+    clearTimeout(hintTimer);
+    hintTimer = null;
+  }
+
   const gameScreen = document.getElementById("gameScreen");
   const clearBox = document.getElementById("clearBox");
 
