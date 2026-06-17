@@ -68,7 +68,7 @@ h2 {
 /* 体 */
 #body {
   position: absolute;
-  width: 400px;
+  width: 300px;
   left: 50%;
   bottom: 0px;
   transform: translateX(-50%);
