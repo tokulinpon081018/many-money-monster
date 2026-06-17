@@ -7,33 +7,39 @@ body {
   font-family: sans-serif;
   background: #dff3ff;
   text-align: center;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 #game {
   width: 100vw;
-  height: 120vh;
-  padding-top: 20px;
+  height: 100dvh;
+  padding-top: 10px;
 }
 
+/* タイトル */
 h1 {
-  margin: 5px 0;
+  margin: 4px 0;
   font-size: 34px;
   color: #222;
+  line-height: 1.1;
 }
 
 h2 {
-  margin: 0 0 10px;
+  margin: 0 0 8px;
   font-size: 22px;
   color: #d12b2b;
+  line-height: 1.1;
 }
 
+/* 野球選手が入っている黒枠 */
 #field {
   position: relative;
   width: 100%;
   max-width: 430px;
-  height: 350px;
+
+  /* ここが重要：画面内でできるだけ縦長にする */
+  height: calc(100dvh - 210px);
+
   margin: 0 auto;
   background: linear-gradient(
     #bdefff 0%,
@@ -46,6 +52,7 @@ h2 {
   overflow: hidden;
 }
 
+/* メッセージ */
 #message {
   position: absolute;
   top: 16px;
@@ -58,15 +65,17 @@ h2 {
   text-shadow: 2px 2px 0 white;
 }
 
+/* 体 */
 #body {
   position: absolute;
   width: 400px;
   left: 50%;
-  bottom: 35px;
+  bottom: 0px;
   transform: translateX(-50%);
   z-index: 2;
 }
 
+/* 頭 */
 #head {
   position: absolute;
   width: 300px;
@@ -77,6 +86,7 @@ h2 {
   touch-action: none;
 }
 
+/* 正解位置の赤い丸 */
 #targetCircle {
   position: absolute;
   width: 125px;
@@ -90,10 +100,11 @@ h2 {
   pointer-events: none;
 }
 
+/* ボタン */
 button {
-  margin-top: 14px;
-  padding: 16px 26px;
-  font-size: 22px;
+  margin-top: 10px;
+  padding: 14px 28px;
+  font-size: 24px;
   font-weight: bold;
   border: 3px solid #222;
   border-radius: 14px;
@@ -111,6 +122,7 @@ button:active {
   display: none;
 }
 
+/* 成功時の光る演出 */
 .success {
   animation: flash 0.4s infinite;
 }
@@ -127,6 +139,7 @@ button:active {
   }
 }
 
+/* 失敗時の揺れ */
 .shake {
   animation: shake 0.25s;
 }
