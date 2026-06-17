@@ -78,7 +78,7 @@ h2 {
 /* 頭 */
 #head {
   position: absolute;
-  width: 200px;
+  width: 100px;
   left: 50%;
   top: -140px;
   transform: translateX(-50%);
