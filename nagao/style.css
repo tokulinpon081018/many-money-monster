@@ -38,7 +38,7 @@ h2 {
   max-width: 430px;
 
   /* ここが重要：画面内でできるだけ縦長にする */
-  height: calc(100dvh - 110px);
+  height: calc(100dvh - 190px);
 
   margin: 0 auto;
   background: linear-gradient(
