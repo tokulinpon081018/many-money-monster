@@ -279,6 +279,7 @@
        動き・判定・ゲーム処理
   ========================== -->
   <script>
+    const headStartOffsetX = -30;
     const head = document.getElementById("head");
     const body = document.getElementById("body");
     const field = document.getElementById("field");
@@ -364,7 +365,7 @@
 
       const fieldRect = field.getBoundingClientRect();
 
-      headX = fieldRect.width / 2 -30;
+　　　　headX = fieldRect.width / 2 + headStartOffsetX;
       headY = -100;
 
       fallSpeed = 3.2;
@@ -392,9 +393,10 @@
 
       /* 下まで行きすぎたら上からやり直し */
       if (headY > field.clientHeight - 40) {
-        headY = -100;
-        message.textContent = "もう一回落ちてくる！";
-      }
+       headX = field.clientWidth / 2 + headStartOffsetX;
+       headY = -100;
+       message.textContent = "もう一回落ちてくる！";
+　　　　}
 
       const distance = getDistanceFromTarget();
 
