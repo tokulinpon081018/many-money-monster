@@ -2,28 +2,268 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+
+  <!-- iPhoneで画面幅に合わせる設定 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>長尾バッティング</title>
-  <link rel="stylesheet" href="style.css?v=10">
+
+  <!-- =========================
+       ここから CSS
+       見た目・大きさ・位置を調整する場所
+  ========================== -->
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #dff3ff;
+      text-align: center;
+
+      /* スクロールさせたくないので hidden */
+      overflow: hidden;
+    }
+
+    /* ゲーム全体 */
+    #game {
+      width: 100vw;
+      height: 100dvh;
+      padding: 8px;
+    }
+
+    /* =========================
+       黒いゲーム枠
+       枠を大きくしたい時はここ
+    ========================== */
+    #field {
+      position: relative;
+      width: 100%;
+      max-width: 430px;
+
+      /* 枠の縦サイズ。画面いっぱいに近くする */
+      height: calc(100dvh - 16px);
+
+      margin: 0 auto;
+      background: linear-gradient(
+        #bdefff 0%,
+        #bdefff 56%,
+        #8fd36b 57%,
+        #62b94f 100%
+      );
+      border: 4px solid #222;
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    /* =========================
+       タイトル
+       上の文字の大きさ・位置
+    ========================== */
+    #titleArea {
+      position: absolute;
+      top: 8px;
+      left: 0;
+      width: 100%;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      color: #222;
+      line-height: 1.1;
+      text-shadow: 2px 2px 0 white;
+    }
+
+    h2 {
+      margin: 2px 0 0;
+      font-size: 18px;
+      color: #d12b2b;
+      line-height: 1.1;
+      text-shadow: 2px 2px 0 white;
+    }
+
+    /* =========================
+       メッセージ
+       「いまだー！」などの位置
+    ========================== */
+    #message {
+      position: absolute;
+      top: 72px;
+      left: 0;
+      width: 100%;
+      z-index: 20;
+      font-size: 23px;
+      font-weight: bold;
+      color: #222;
+      text-shadow: 2px 2px 0 white;
+    }
+
+    /* =========================
+       体の画像
+       身体を大きく/小さく/上下に動かす場所
+    ========================== */
+    #body {
+      position: absolute;
+
+      /* 身体の大きさ */
+      width: 200px;
+
+      /* 中央配置 */
+      left: 50%;
+
+      /* 下げたい時はマイナスを大きくする */
+      bottom: -20px;
+
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+
+    /* =========================
+       頭の画像
+       頭を大きく/小さくする場所
+    ========================== */
+    #head {
+      position: absolute;
+
+      /* 頭の大きさ */
+      width: 70px !important;
+      max-width: 70px !important;
+      height: auto !important;
+
+      left: 50%;
+
+      /* 落ち始めの高さ */
+      top: -100px;
+
+      transform: translateX(-50%);
+      z-index: 4;
+      touch-action: none;
+    }
+
+    /* =========================
+       ターゲット円
+       見た目には不要なので非表示
+    ========================== */
+    #targetCircle {
+      display: none;
+    }
+
+    /* =========================
+       ボタン位置
+       右下に置く
+    ========================== */
+    #buttonArea {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      z-index: 30;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    button {
+      margin: 0;
+      padding: 12px 18px;
+      font-size: 20px;
+      font-weight: bold;
+      border: 3px solid #222;
+      border-radius: 14px;
+      background: #fff34d;
+      box-shadow: 3px 3px 0 #222;
+    }
+
+    button:active {
+      transform: translate(3px, 3px);
+      box-shadow: none;
+    }
+
+    #stopButton,
+    #retryButton {
+      display: none;
+    }
+
+    /* =========================
+       ホームラン時の光る演出
+    ========================== */
+    .success {
+      animation: flash 0.4s infinite;
+    }
+
+    @keyframes flash {
+      0% {
+        background: #fff;
+      }
+      50% {
+        background: #ffeb3b;
+      }
+      100% {
+        background: #fff;
+      }
+    }
+
+    /* =========================
+       失敗時の揺れ
+    ========================== */
+    .shake {
+      animation: shake 0.25s;
+    }
+
+    @keyframes shake {
+      0% {
+        transform: translateX(0);
+      }
+      25% {
+        transform: translateX(-8px);
+      }
+      50% {
+        transform: translateX(8px);
+      }
+      75% {
+        transform: translateX(-8px);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+  </style>
 </head>
+
 <body>
+
+  <!-- =========================
+       ここから HTML
+       画面に表示する部品
+  ========================== -->
 
   <div id="game">
 
     <div id="field">
 
+      <!-- タイトル -->
       <div id="titleArea">
         <h1>長尾バッティング</h1>
         <h2>ねらえ！ホームラン！</h2>
       </div>
 
+      <!-- メッセージ -->
       <div id="message">プレイボールを押してね</div>
 
+      <!-- 見えないターゲット -->
       <div id="targetCircle"></div>
 
+      <!-- 頭画像 -->
       <img id="head" src="img/atama1.png" alt="頭">
+
+      <!-- 体画像 -->
       <img id="body" src="img/karada1.png" alt="体">
 
+      <!-- ボタン -->
       <div id="buttonArea">
         <button id="startButton">プレイボール</button>
         <button id="stopButton">ここだ！</button>
@@ -34,6 +274,280 @@
 
   </div>
 
-  <script src="script.js?v=10"></script>
+  <!-- =========================
+       ここから JavaScript
+       動き・判定・ゲーム処理
+  ========================== -->
+  <script>
+    const head = document.getElementById("head");
+    const body = document.getElementById("body");
+    const field = document.getElementById("field");
+    const message = document.getElementById("message");
+
+    const startButton = document.getElementById("startButton");
+    const stopButton = document.getElementById("stopButton");
+    const retryButton = document.getElementById("retryButton");
+
+    let headX = 0;
+    let headY = -100;
+
+    let falling = false;
+    let fallSpeed = 3.2;
+    let animationId = null;
+
+    let bodyFrame = 1;
+    let bodyTimer = null;
+
+    let isDragging = false;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+
+    /* =========================
+       成功位置
+       ホームラン時に頭がハマる場所
+
+       targetX：左右位置
+       targetY：上下位置
+
+       右に動かしたい → targetX を大きくする
+       左に動かしたい → targetX を小さくする
+       下に動かしたい → targetY を大きくする
+       上に動かしたい → targetY を小さくする
+    ========================== */
+    const targetX = 215;
+    const targetY = 430;
+
+    /* 成功判定のゆるさ */
+    const successRange = 35;
+
+    function setHeadPosition() {
+      head.style.left = headX + "px";
+      head.style.top = headY + "px";
+    }
+
+    /* =========================
+       体を karada1 / karada2 で交互に揺らす
+    ========================== */
+    function startBodyAnimation() {
+      stopBodyAnimation();
+
+      bodyTimer = setInterval(() => {
+        if (bodyFrame === 1) {
+          body.src = "img/karada2.png";
+          bodyFrame = 2;
+        } else {
+          body.src = "img/karada1.png";
+          bodyFrame = 1;
+        }
+      }, 180);
+    }
+
+    function stopBodyAnimation() {
+      if (bodyTimer) {
+        clearInterval(bodyTimer);
+        bodyTimer = null;
+      }
+    }
+
+    /* =========================
+       ゲーム開始
+    ========================== */
+    function startGame() {
+      field.classList.remove("success");
+      field.classList.remove("shake");
+
+      message.textContent = "顔をハメろ！";
+
+      startButton.style.display = "none";
+      retryButton.style.display = "none";
+      stopButton.style.display = "inline-block";
+
+      const fieldRect = field.getBoundingClientRect();
+
+      headX = fieldRect.width / 2;
+      headY = -100;
+
+      fallSpeed = 3.2;
+      falling = true;
+
+      head.src = "img/atama1.png";
+      body.src = "img/karada1.png";
+
+      head.style.transform = "translateX(-50%)";
+
+      setHeadPosition();
+      startBodyAnimation();
+      fallLoop();
+    }
+
+    /* =========================
+       頭が上から落ちる処理
+    ========================== */
+    function fallLoop() {
+      if (!falling) return;
+
+      headY += fallSpeed;
+
+      /* 少し左右に揺れる */
+      headX += Math.sin(headY / 25) * 1.5;
+
+      /* 下まで行きすぎたら上からやり直し */
+      if (headY > field.clientHeight - 40) {
+        headY = -100;
+        message.textContent = "もう一回落ちてくる！";
+      }
+
+      const distance = getDistanceFromTarget();
+
+      /* 正解位置に近づいたらスロー */
+      if (distance < 70) {
+        message.textContent = "いまだーー！！";
+        fallSpeed = 1.4;
+      } else {
+        message.textContent = "顔をハメろ！";
+        fallSpeed = 3.2;
+      }
+
+      setHeadPosition();
+
+      animationId = requestAnimationFrame(fallLoop);
+    }
+
+    /* =========================
+       ここだ！を押した時
+    ========================== */
+    function stopHead() {
+      if (!falling) return;
+
+      falling = false;
+      cancelAnimationFrame(animationId);
+      stopBodyAnimation();
+
+      /* 押した瞬間に少しズレる運ゲー */
+      const luck = Math.random();
+
+      if (luck < 0.25) {
+        headX += randomRange(-18, 18);
+        headY += randomRange(-10, 10);
+        message.textContent = "顔がズレた！？";
+      } else if (luck < 0.4) {
+        head.style.transform = "translateX(-50%) rotate(12deg)";
+        message.textContent = "顔が回った！？";
+      } else {
+        message.textContent = "ピタッ！？";
+      }
+
+      setHeadPosition();
+
+      setTimeout(() => {
+        judge();
+      }, 300);
+    }
+
+    /* =========================
+       成功か失敗か判定
+    ========================== */
+    function judge() {
+      const distance = getDistanceFromTarget();
+
+      if (distance <= successRange) {
+        success();
+      } else {
+        miss();
+      }
+    }
+
+    /* =========================
+       成功：ホームラン
+    ========================== */
+    function success() {
+      headX = targetX;
+      headY = targetY;
+
+      head.src = "img/atama2.png";
+      body.src = "img/karada2.png";
+
+      head.style.left = headX + "px";
+      head.style.top = headY + "px";
+      head.style.transform = "translateX(-50%)";
+
+      field.classList.add("success");
+      message.textContent = "ホームラン！！";
+
+      stopButton.style.display = "none";
+      retryButton.style.display = "inline-block";
+    }
+
+    /* =========================
+       失敗
+    ========================== */
+    function miss() {
+      field.classList.add("shake");
+      message.textContent = "おしい！もう一回！";
+
+      stopButton.style.display = "none";
+      retryButton.style.display = "inline-block";
+    }
+
+    /* =========================
+       頭と正解位置の距離を計算
+    ========================== */
+    function getDistanceFromTarget() {
+      const dx = headX - targetX;
+      const dy = headY - targetY;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    function randomRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    /* =========================
+       指で頭を動かせる処理
+    ========================== */
+    head.addEventListener("pointerdown", (e) => {
+      isDragging = true;
+      head.setPointerCapture(e.pointerId);
+
+      const rect = head.getBoundingClientRect();
+
+      dragOffsetX = e.clientX - rect.left;
+      dragOffsetY = e.clientY - rect.top;
+
+      e.preventDefault();
+    });
+
+    head.addEventListener("pointermove", (e) => {
+      if (!isDragging || !falling) return;
+
+      const fieldRect = field.getBoundingClientRect();
+
+      headX = e.clientX - fieldRect.left;
+      headY = e.clientY - fieldRect.top - dragOffsetY;
+
+      /* 動かせる範囲 */
+      if (headX < 30) headX = 30;
+      if (headX > fieldRect.width - 30) headX = fieldRect.width - 30;
+      if (headY < -80) headY = -80;
+      if (headY > fieldRect.height - 40) headY = fieldRect.height - 40;
+
+      setHeadPosition();
+
+      e.preventDefault();
+    });
+
+    head.addEventListener("pointerup", () => {
+      isDragging = false;
+    });
+
+    head.addEventListener("pointercancel", () => {
+      isDragging = false;
+    });
+
+    startButton.addEventListener("click", startGame);
+    stopButton.addEventListener("click", stopHead);
+    retryButton.addEventListener("click", startGame);
+  </script>
+
 </body>
 </html>
