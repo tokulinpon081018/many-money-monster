@@ -319,7 +319,7 @@
     const targetY = 290;
 
     /* 成功判定のゆるさ */
-    const successRange = 50;
+    const successRange = 45;
 
     function setHeadPosition() {
       head.style.left = headX + "px";
@@ -424,26 +424,26 @@
       cancelAnimationFrame(animationId);
       stopBodyAnimation();
 
-      /* 押した瞬間に少しズレる運ゲー */
-      const luck = Math.random();
+/* 押した瞬間に80%で首がズレる運ゲー */
+const luck = Math.random();
 
-      if (luck < 0.25) {
-        headX += randomRange(-18, 18);
-        headY += randomRange(-10, 10);
-        message.textContent = "顔がズレた！？";
-      } else if (luck < 0.4) {
-        head.style.transform = "translateX(-50%) rotate(12deg)";
-        message.textContent = "顔が回った！？";
-      } else {
-        message.textContent = "ピタッ！？";
-      }
+if (luck < 0.8) {
+  headX += randomRange(-45, 45);
+  headY += randomRange(-25, 25);
 
-      setHeadPosition();
+  const angle = randomRange(-25, 25);
+  head.style.transform = `translateX(-50%) rotate(${angle}deg)`;
 
-      setTimeout(() => {
-        judge();
-      }, 300);
-    }
+  message.textContent = "首がズレたーー！？";
+} else {
+  message.textContent = "奇跡のピタッ！！";
+}
+
+setHeadPosition();
+
+setTimeout(() => {
+  judge();
+}, 300);
 
     /* =========================
        成功か失敗か判定
