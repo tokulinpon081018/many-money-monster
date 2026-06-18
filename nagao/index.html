@@ -315,7 +315,7 @@
        上に動かしたい → targetY を小さくする
     ========================== */
     const targetX = 215;
-    const targetY = 550;
+    const targetY = 300;
 
     /* 成功判定のゆるさ */
     const successRange = 35;
@@ -388,8 +388,7 @@
 
       headY += fallSpeed;
 
-      /* 少し左右に揺れる */
-      headX += Math.sin(headY / 25) * 1.5;
+
 
       /* 下まで行きすぎたら上からやり直し */
       if (headY > field.clientHeight - 40) {
