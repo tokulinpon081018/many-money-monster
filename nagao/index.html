@@ -316,10 +316,10 @@
        上に動かしたい → targetY を小さくする
     ========================== */
     const targetX = 215;
-    const targetY = 280;
+    const targetY = 290;
 
     /* 成功判定のゆるさ */
-    const successRange = 35;
+    const successRange = 50;
 
     function setHeadPosition() {
       head.style.left = headX + "px";
@@ -374,7 +374,7 @@
       head.src = "img/atama1.png";
       body.src = "img/karada1.png";
 
-      head.style.transform = "translateX(-50%) rotate(10deg)";
+      head.style.transform = "translateX(-50%) rotate(-10deg)";
 
       setHeadPosition();
       startBodyAnimation();
