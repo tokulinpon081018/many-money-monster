@@ -2,15 +2,11 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-
-  <!-- iPhoneで画面幅に合わせる設定 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>長尾バッティング</title>
 
   <!-- =========================
-       ここから CSS
-       見た目・大きさ・位置を調整する場所
+       CSS：見た目・大きさ・位置
   ========================== -->
   <style>
     * {
@@ -22,30 +18,21 @@
       font-family: sans-serif;
       background: #dff3ff;
       text-align: center;
-
-      /* スクロールさせたくないので hidden */
       overflow: hidden;
     }
 
-    /* ゲーム全体 */
     #game {
       width: 100vw;
       height: 100dvh;
       padding: 8px;
     }
 
-    /* =========================
-       黒いゲーム枠
-       枠を大きくしたい時はここ
-    ========================== */
+    /* 黒いゲーム枠 */
     #field {
       position: relative;
       width: 100%;
       max-width: 430px;
-
-      /* 枠の縦サイズ。画面いっぱいに近くする */
       height: calc(100dvh - 16px);
-
       margin: 0 auto;
       background: linear-gradient(
         #bdefff 0%,
@@ -58,10 +45,7 @@
       overflow: hidden;
     }
 
-    /* =========================
-       タイトル
-       上の文字の大きさ・位置
-    ========================== */
+    /* タイトル */
     #titleArea {
       position: absolute;
       top: 8px;
@@ -87,10 +71,7 @@
       text-shadow: 2px 2px 0 white;
     }
 
-    /* =========================
-       メッセージ
-       「いまだー！」などの位置
-    ========================== */
+    /* メッセージ */
     #message {
       position: absolute;
       top: 72px;
@@ -103,60 +84,44 @@
       text-shadow: 2px 2px 0 white;
     }
 
-    /* =========================
-       体の画像
-       身体を大きく/小さく/上下に動かす場所
-    ========================== */
+    /* 身体の画像 */
     #body {
       position: absolute;
 
-      /* 身体の大きさ */
-      width: 250px;
+      /* 身体の大きさ：大きくしたいなら 220px、小さくしたいなら 180px */
+      width: 200px;
 
-      /* 中央配置 */
       left: 50%;
 
-      /* 下げたい時はマイナスを大きくする */
+      /* 身体の上下位置：もっと下げるなら -40px */
       bottom: -20px;
 
       transform: translateX(-50%);
       z-index: 2;
     }
 
-    /* =========================
-       頭の画像
-       頭を大きく/小さくする場所
-    ========================== */
+    /* 頭の画像 */
     #head {
       position: absolute;
 
-      /* 頭の大きさ */
+      /* 頭の大きさ：小さくしたいなら 60px、大きくしたいなら 80px */
       width: 70px !important;
       max-width: 70px !important;
       height: auto !important;
 
       left: 50%;
-
-      /* 落ち始めの高さ */
       top: -100px;
-
-      transform: translateX(-50%);
+      transform: translateX(-50%) rotate(-5deg);
       z-index: 4;
       touch-action: none;
     }
 
-    /* =========================
-       ターゲット円
-       見た目には不要なので非表示
-    ========================== */
+    /* ターゲット円は不要なので非表示 */
     #targetCircle {
       display: none;
     }
 
-    /* =========================
-       ボタン位置
-       右下に置く
-    ========================== */
+    /* ボタンを右下へ */
     #buttonArea {
       position: absolute;
       right: 10px;
@@ -188,48 +153,26 @@
       display: none;
     }
 
-    /* =========================
-       ホームラン時の光る演出
-    ========================== */
     .success {
       animation: flash 0.4s infinite;
     }
 
     @keyframes flash {
-      0% {
-        background: #fff;
-      }
-      50% {
-        background: #ffeb3b;
-      }
-      100% {
-        background: #fff;
-      }
+      0% { background: #fff; }
+      50% { background: #ffeb3b; }
+      100% { background: #fff; }
     }
 
-    /* =========================
-       失敗時の揺れ
-    ========================== */
     .shake {
       animation: shake 0.25s;
     }
 
     @keyframes shake {
-      0% {
-        transform: translateX(0);
-      }
-      25% {
-        transform: translateX(-8px);
-      }
-      50% {
-        transform: translateX(8px);
-      }
-      75% {
-        transform: translateX(-8px);
-      }
-      100% {
-        transform: translateX(0);
-      }
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-8px); }
+      100% { transform: translateX(0); }
     }
   </style>
 </head>
@@ -237,49 +180,36 @@
 <body>
 
   <!-- =========================
-       ここから HTML
-       画面に表示する部品
+       HTML：画面の部品
   ========================== -->
-
   <div id="game">
-
     <div id="field">
 
-      <!-- タイトル -->
       <div id="titleArea">
         <h1>長尾バッティング</h1>
         <h2>ねらえ！ホームラン！</h2>
       </div>
 
-      <!-- メッセージ -->
       <div id="message">プレイボールを押してね</div>
 
-      <!-- 見えないターゲット -->
       <div id="targetCircle"></div>
 
-      <!-- 頭画像 -->
-      <img id="head" src="img/atama2.png" alt="頭">
-
-      <!-- 体画像 -->
+      <img id="head" src="img/atama1.png" alt="頭">
       <img id="body" src="img/karada1.png" alt="体">
 
-      <!-- ボタン -->
       <div id="buttonArea">
         <button id="startButton">プレイボール</button>
-        <button id="stopButton">ココだ！</button>
+        <button id="stopButton">ここだ！</button>
         <button id="retryButton">もう一回</button>
       </div>
 
     </div>
-
   </div>
 
   <!-- =========================
-       ここから JavaScript
-       動き・判定・ゲーム処理
+       JavaScript：動き・判定
   ========================== -->
   <script>
-    const headStartOffsetX = -30;
     const head = document.getElementById("head");
     const body = document.getElementById("body");
     const field = document.getElementById("field");
@@ -304,31 +234,45 @@
     let dragOffsetY = 0;
 
     /* =========================
-       成功位置
-       ホームラン時に頭がハマる場所
+       微調整ポイント①
+       頭が落ち始める左右位置
 
-       targetX：左右位置
-       targetY：上下位置
-
-       右に動かしたい → targetX を大きくする
-       左に動かしたい → targetX を小さくする
-       下に動かしたい → targetY を大きくする
-       上に動かしたい → targetY を小さくする
+       -30 → 少し左
+       -50 → もっと左
+       0   → 中央
+       30  → 少し右
     ========================== */
-    const targetX = 175;
-    const targetY = 290;
+    const headStartOffsetX = -30;
 
-    /* 成功判定のゆるさ */
-    const successRange = 45;
+    /* =========================
+       微調整ポイント②
+       ホームラン時に頭がハマる位置
+
+       targetX：左右
+       小さくする → 左へ
+       大きくする → 右へ
+
+       targetY：上下
+       小さくする → 上へ
+       大きくする → 下へ
+    ========================== */
+    const targetX = 165;
+    const targetY = 430;
+
+    /* =========================
+       微調整ポイント③
+       ホームラン判定のゆるさ
+
+       大きくする → ホームランが出やすい
+       小さくする → ホームランが出にくい
+    ========================== */
+    const successRange = 60;
 
     function setHeadPosition() {
       head.style.left = headX + "px";
       head.style.top = headY + "px";
     }
 
-    /* =========================
-       体を karada1 / karada2 で交互に揺らす
-    ========================== */
     function startBodyAnimation() {
       stopBodyAnimation();
 
@@ -344,15 +288,12 @@
     }
 
     function stopBodyAnimation() {
-      if (bodyTimer) {
+      if (bodyTimer !== null) {
         clearInterval(bodyTimer);
         bodyTimer = null;
       }
     }
 
-    /* =========================
-       ゲーム開始
-    ========================== */
     function startGame() {
       field.classList.remove("success");
       field.classList.remove("shake");
@@ -365,43 +306,46 @@
 
       const fieldRect = field.getBoundingClientRect();
 
-　　　　headX = fieldRect.width / 2 + headStartOffsetX;
+      headX = fieldRect.width / 2 + headStartOffsetX;
       headY = -100;
 
       fallSpeed = 3.2;
       falling = true;
 
-      head.src = "img/atama2.png";
+      head.src = "img/atama1.png";
       body.src = "img/karada1.png";
 
+      /* 落ちてくる時の頭の角度 */
       head.style.transform = "translateX(-50%) rotate(-5deg)";
 
       setHeadPosition();
       startBodyAnimation();
+
+      if (animationId !== null) {
+        cancelAnimationFrame(animationId);
+      }
+
       fallLoop();
     }
 
-    /* =========================
-       頭が上から落ちる処理
-    ========================== */
     function fallLoop() {
       if (!falling) return;
 
       headY += fallSpeed;
 
+      /* 少し左右に揺れる */
+      headX += Math.sin(headY / 25) * 1.5;
 
-
-      /* 下まで行きすぎたら上からやり直し */
+      /* 下まで行ったら上に戻す */
       if (headY > field.clientHeight - 40) {
-       headX = field.clientWidth / 2 + headStartOffsetX;
-       headY = -100;
-       message.textContent = "もう一回落ちてくる！";
-　　　　}
+        headX = field.clientWidth / 2 + headStartOffsetX;
+        headY = -100;
+        message.textContent = "もう一回落ちてくる！";
+      }
 
       const distance = getDistanceFromTarget();
 
-      /* 正解位置に近づいたらスロー */
-      if (distance < 70) {
+      if (distance < 80) {
         message.textContent = "いまだーー！！";
         fallSpeed = 1.4;
       } else {
@@ -414,63 +358,73 @@
       animationId = requestAnimationFrame(fallLoop);
     }
 
-    /* =========================
-       ここだ！を押した時
-    ========================== */
     function stopHead() {
       if (!falling) return;
 
       falling = false;
-      cancelAnimationFrame(animationId);
+
+      if (animationId !== null) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
+
       stopBodyAnimation();
 
-/* 押した瞬間に80%で首がズレる運ゲー */
-const luck = Math.random();
+      const beforeDistance = getDistanceFromTarget();
 
-if (luck < 0.8) {
-  headX += randomRange(-45, 45);
-  headY += randomRange(-25, 25);
+      /* =========================
+         運ゲー判定
 
-  const angle = randomRange(-25, 25);
-  head.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+         まず、押した瞬間がホームラン圏内か見る。
+         ホームラン圏内でも80%で首がズレる。
+         20%だけ奇跡のホームラン。
+      ========================== */
+      if (beforeDistance <= successRange) {
+        const luck = Math.random();
 
-  message.textContent = "首がズレたーー！？";
-} else {
-  message.textContent = "奇跡のピタッ！！";
-}
+        if (luck < 0.8) {
+          /* 80%で首ズレ */
+          headX += randomRange(-45, 45);
+          headY += randomRange(-25, 25);
 
-setHeadPosition();
+          const angle = randomRange(-25, 25);
+          head.style.transform = "translateX(-50%) rotate(" + angle + "deg)";
 
-setTimeout(() => {
-  judge();
-}, 300);
+          message.textContent = "首がズレたーー！？";
 
-    /* =========================
-       成功か失敗か判定
-    ========================== */
-    function judge() {
-      const distance = getDistanceFromTarget();
+          setHeadPosition();
 
-      if (distance <= successRange) {
-        success();
+          setTimeout(() => {
+            miss();
+          }, 400);
+        } else {
+          /* 20%で成功 */
+          message.textContent = "奇跡のピタッ！！";
+
+          setTimeout(() => {
+            success();
+          }, 300);
+        }
       } else {
-        miss();
+        /* そもそも位置がズレていた場合 */
+        message.textContent = "ぜんぜん違う！";
+
+        setTimeout(() => {
+          miss();
+        }, 300);
       }
     }
 
-    /* =========================
-       成功：ホームラン
-    ========================== */
     function success() {
       headX = targetX;
       headY = targetY;
 
-      head.src = "img/atama1.png";
+      head.src = "img/atama2.png";
       body.src = "img/karada2.png";
 
       head.style.left = headX + "px";
       head.style.top = headY + "px";
-      head.style.transform = "translateX(-50%)";
+      head.style.transform = "translateX(-50%) rotate(0deg)";
 
       field.classList.add("success");
       message.textContent = "ホームラン！！";
@@ -479,9 +433,6 @@ setTimeout(() => {
       retryButton.style.display = "inline-block";
     }
 
-    /* =========================
-       失敗
-    ========================== */
     function miss() {
       field.classList.add("shake");
       message.textContent = "おしい！もう一回！";
@@ -490,9 +441,6 @@ setTimeout(() => {
       retryButton.style.display = "inline-block";
     }
 
-    /* =========================
-       頭と正解位置の距離を計算
-    ========================== */
     function getDistanceFromTarget() {
       const dx = headX - targetX;
       const dy = headY - targetY;
@@ -503,9 +451,7 @@ setTimeout(() => {
       return Math.random() * (max - min) + min;
     }
 
-    /* =========================
-       指で頭を動かせる処理
-    ========================== */
+    /* 指で頭を動かす */
     head.addEventListener("pointerdown", (e) => {
       isDragging = true;
       head.setPointerCapture(e.pointerId);
@@ -526,7 +472,6 @@ setTimeout(() => {
       headX = e.clientX - fieldRect.left;
       headY = e.clientY - fieldRect.top - dragOffsetY;
 
-      /* 動かせる範囲 */
       if (headX < 30) headX = 30;
       if (headX > fieldRect.width - 30) headX = fieldRect.width - 30;
       if (headY < -80) headY = -80;
