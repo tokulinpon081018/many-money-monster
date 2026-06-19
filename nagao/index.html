@@ -89,7 +89,7 @@
       position: absolute;
 
       /* 身体の大きさ：大きくしたいなら 220px、小さくしたいなら 180px */
-      width: 200px;
+      width: 220px;
 
       left: 50%;
 
@@ -256,8 +256,8 @@
        小さくする → 上へ
        大きくする → 下へ
     ========================== */
-    const targetX = 165;
-    const targetY = 430;
+    const targetX = 185;
+    const targetY = 400;
 
     /* =========================
        微調整ポイント③
@@ -266,7 +266,7 @@
        大きくする → ホームランが出やすい
        小さくする → ホームランが出にくい
     ========================== */
-    const successRange = 60;
+    const successRange = 50;
 
     function setHeadPosition() {
       head.style.left = headX + "px";
@@ -298,7 +298,7 @@
       field.classList.remove("success");
       field.classList.remove("shake");
 
-      message.textContent = "顔をハメろ！";
+      message.textContent = "あの看板を思い出せ！";
 
       startButton.style.display = "none";
       retryButton.style.display = "none";
@@ -349,7 +349,7 @@
         message.textContent = "いまだーー！！";
         fallSpeed = 1.4;
       } else {
-        message.textContent = "顔をハメろ！";
+        message.textContent = "あの看板を思い出せ！";
         fallSpeed = 3.2;
       }
 
