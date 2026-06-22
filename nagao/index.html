@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>長尾バッティング</title>
 
-  <!-- =========================
-       CSS：見た目・大きさ・位置
-  ========================== -->
   <style>
     * {
       box-sizing: border-box;
@@ -27,22 +24,22 @@
       padding: 8px;
     }
 
-    /* 黒いゲーム枠 */
+    /* ゲーム全体の黒枠 */
     #field {
       position: relative;
       width: 100%;
       max-width: 430px;
       height: calc(100dvh - 16px);
       margin: 0 auto;
+      overflow: hidden;
+      border: 4px solid #222;
+      border-radius: 18px;
       background: linear-gradient(
         #bdefff 0%,
         #bdefff 56%,
         #8fd36b 57%,
         #62b94f 100%
       );
-      border: 4px solid #222;
-      border-radius: 18px;
-      overflow: hidden;
     }
 
     /* タイトル */
@@ -51,7 +48,7 @@
       top: 8px;
       left: 0;
       width: 100%;
-      z-index: 20;
+      z-index: 30;
       pointer-events: none;
     }
 
@@ -60,7 +57,7 @@
       font-size: 30px;
       color: #222;
       line-height: 1.1;
-      text-shadow: 2px 2px 0 white;
+      text-shadow: 2px 2px 0 #fff;
     }
 
     h2 {
@@ -68,7 +65,7 @@
       font-size: 18px;
       color: #d12b2b;
       line-height: 1.1;
-      text-shadow: 2px 2px 0 white;
+      text-shadow: 2px 2px 0 #fff;
     }
 
     /* メッセージ */
@@ -77,69 +74,64 @@
       top: 72px;
       left: 0;
       width: 100%;
-      z-index: 20;
+      z-index: 30;
       font-size: 23px;
       font-weight: bold;
       color: #222;
-      text-shadow: 2px 2px 0 white;
+      text-shadow: 2px 2px 0 #fff;
     }
 
-    /* 身体の画像 */
+    /* 身体 */
     #body {
       position: absolute;
-
-      /* 身体の大きさ：大きくしたいなら 220px、小さくしたいなら 180px */
-      width: 250px;
-
+      width: 200px;
       left: 50%;
-
-      /* 身体の上下位置：もっと下げるなら -40px */
       bottom: -20px;
-
       transform: translateX(-50%);
-      z-index: 2;
+      z-index: 5;
     }
 
-    /* 頭の画像 */
+    /* 落ちてくる頭 */
     #head {
       position: absolute;
-
-      /* 頭の大きさ：小さくしたいなら 60px、大きくしたいなら 80px */
       width: 70px !important;
       max-width: 70px !important;
       height: auto !important;
-
       left: 50%;
       top: -100px;
       transform: translateX(-50%) rotate(-5deg);
-      z-index: 4;
+      z-index: 10;
       touch-action: none;
     }
 
-    /* ターゲット円は不要なので非表示 */
-    #targetCircle {
+    /* ボール */
+    #ball {
+      position: absolute;
+      width: 45px;
+      height: auto;
+      left: -100px;
+      top: -100px;
+      z-index: 20;
       display: none;
+      pointer-events: none;
     }
 
-    /* ボタンを右下へ */
+    /* ボタン */
     #buttonArea {
       position: absolute;
       right: 10px;
       bottom: 10px;
-      z-index: 30;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
+      z-index: 40;
     }
 
     button {
-      margin: 0;
       padding: 12px 18px;
       font-size: 20px;
       font-weight: bold;
+      color: #222;
+      background: #fff34d;
       border: 3px solid #222;
       border-radius: 14px;
-      background: #fff34d;
       box-shadow: 3px 3px 0 #222;
     }
 
@@ -153,16 +145,30 @@
       display: none;
     }
 
-    .success {
-      animation: flash 0.4s infinite;
+    /* 通常ホームラン */
+    .homerunFlash {
+      animation: homerunFlash 0.35s infinite;
     }
 
-    @keyframes flash {
+    @keyframes homerunFlash {
       0% { background: #fff; }
       50% { background: #ffeb3b; }
       100% { background: #fff; }
     }
 
+    /* 大ホームラン */
+    .bigFlash {
+      animation: bigFlash 0.2s infinite;
+    }
+
+    @keyframes bigFlash {
+      0% { background: #ff4d4d; }
+      33% { background: #fff34d; }
+      66% { background: #7ee7ff; }
+      100% { background: #ff4d4d; }
+    }
+
+    /* 失敗時 */
     .shake {
       animation: shake 0.25s;
     }
@@ -174,14 +180,49 @@
       75% { transform: translateX(-8px); }
       100% { transform: translateX(0); }
     }
+
+    /* ボールが飛ぶ */
+    .flyBall {
+      animation: flyBall 1.1s ease-out forwards;
+    }
+
+    @keyframes flyBall {
+      0% {
+        left: 52%;
+        top: 68%;
+        transform: translate(-50%, -50%) scale(0.7);
+      }
+
+      100% {
+        left: 120%;
+        top: 5%;
+        transform: translate(-50%, -50%) scale(1.8) rotate(720deg);
+      }
+    }
+
+    /* 大ホームランのボール */
+    .flyBallBig {
+      animation: flyBallBig 1.4s ease-out forwards;
+    }
+
+    @keyframes flyBallBig {
+      0% {
+        left: 52%;
+        top: 68%;
+        transform: translate(-50%, -50%) scale(0.8);
+      }
+
+      100% {
+        left: 130%;
+        top: -10%;
+        transform: translate(-50%, -50%) scale(3) rotate(1440deg);
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- =========================
-       HTML：画面の部品
-  ========================== -->
   <div id="game">
     <div id="field">
 
@@ -192,10 +233,9 @@
 
       <div id="message">プレイボールを押してね</div>
 
-      <div id="targetCircle"></div>
-
       <img id="head" src="img/atama1.png" alt="頭">
       <img id="body" src="img/karada1.png" alt="体">
+      <img id="ball" src="img/ball1.png" alt="ボール">
 
       <div id="buttonArea">
         <button id="startButton">プレイボール</button>
@@ -206,12 +246,10 @@
     </div>
   </div>
 
-  <!-- =========================
-       JavaScript：動き・判定
-  ========================== -->
   <script>
     const head = document.getElementById("head");
     const body = document.getElementById("body");
+    const ball = document.getElementById("ball");
     const field = document.getElementById("field");
     const message = document.getElementById("message");
 
@@ -221,56 +259,59 @@
 
     let headX = 0;
     let headY = -100;
-
     let falling = false;
-    let fallSpeed = 3.2;
-    let animationId = null;
+    let specialMode = false;
 
-    let bodyFrame = 1;
+    let animationId = null;
     let bodyTimer = null;
+    let bodyFrame = 1;
 
     let isDragging = false;
     let dragOffsetX = 0;
     let dragOffsetY = 0;
 
     /* =========================
-       微調整ポイント①
-       頭が落ち始める左右位置
-
-       -30 → 少し左
-       -50 → もっと左
-       0   → 中央
-       30  → 少し右
+       微調整する場所
     ========================== */
+
+    /* 落ち始めの左右位置 */
     const headStartOffsetX = -30;
 
-    /* =========================
-       微調整ポイント②
-       ホームラン時に頭がハマる位置
+    /* 頭がハマる位置 */
+    const targetX = 165;
+    const targetY = 430;
 
-       targetX：左右
-       小さくする → 左へ
-       大きくする → 右へ
+    /* 位置が合っていると判断する範囲 */
+    const successRange = 60;
 
-       targetY：上下
-       小さくする → 上へ
-       大きくする → 下へ
-    ========================== */
-    const targetX = 185;
-    const targetY = 400;
+    /* atama4が来る確率 5% */
+    const specialRate = 0.05;
 
-    /* =========================
-       微調整ポイント③
-       ホームラン判定のゆるさ
-
-       大きくする → ホームランが出やすい
-       小さくする → ホームランが出にくい
-    ========================== */
-    const successRange = 50;
+    /* ========================= */
 
     function setHeadPosition() {
       head.style.left = headX + "px";
       head.style.top = headY + "px";
+    }
+
+    function randomRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function getDistanceFromTarget() {
+      const dx = headX - targetX;
+      const dy = headY - targetY;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    function clearEffects() {
+      field.classList.remove("homerunFlash");
+      field.classList.remove("bigFlash");
+      field.classList.remove("shake");
+
+      ball.classList.remove("flyBall");
+      ball.classList.remove("flyBallBig");
+      ball.style.display = "none";
     }
 
     function startBodyAnimation() {
@@ -295,28 +336,31 @@
     }
 
     function startGame() {
-      field.classList.remove("success");
-      field.classList.remove("shake");
+      clearEffects();
 
-      message.textContent = "あの看板を思い出せ！";
+      specialMode = Math.random() < specialRate;
 
       startButton.style.display = "none";
       retryButton.style.display = "none";
       stopButton.style.display = "inline-block";
 
+      body.src = "img/karada1.png";
+      head.style.transform = "translateX(-50%) rotate(-5deg)";
+
       const fieldRect = field.getBoundingClientRect();
 
+      if (specialMode) {
+        startSpecialAtama4(fieldRect);
+        return;
+      }
+
+      message.textContent = "顔をハメろ！";
+
+      head.src = "img/atama1.png";
       headX = fieldRect.width / 2 + headStartOffsetX;
       headY = -100;
 
-      fallSpeed = 3.2;
       falling = true;
-
-      head.src = "img/atama1.png";
-      body.src = "img/karada1.png";
-
-      /* 落ちてくる時の頭の角度 */
-      head.style.transform = "translateX(-50%) rotate(-5deg)";
 
       setHeadPosition();
       startBodyAnimation();
@@ -325,41 +369,106 @@
         cancelAnimationFrame(animationId);
       }
 
-      fallLoop();
+      normalFallLoop();
     }
 
-    function fallLoop() {
+    /* =========================
+       通常の頭が落ちる処理
+    ========================== */
+    function normalFallLoop() {
       if (!falling) return;
 
-      headY += fallSpeed;
-
-      /* 少し左右に揺れる */
+      headY += 3.2;
       headX += Math.sin(headY / 25) * 1.5;
 
-      /* 下まで行ったら上に戻す */
       if (headY > field.clientHeight - 40) {
         headX = field.clientWidth / 2 + headStartOffsetX;
         headY = -100;
-        message.textContent = "もう一回落ちてくる！";
       }
 
       const distance = getDistanceFromTarget();
 
       if (distance < 80) {
         message.textContent = "いまだーー！！";
-        fallSpeed = 1.4;
       } else {
-        message.textContent = "あの看板を思い出せ！";
-        fallSpeed = 3.2;
+        message.textContent = "顔をハメろ！";
       }
 
       setHeadPosition();
-
-      animationId = requestAnimationFrame(fallLoop);
+      animationId = requestAnimationFrame(normalFallLoop);
     }
 
+    /* =========================
+       atama4 特殊演出
+       5%で自動大ホームラン
+    ========================== */
+    function startSpecialAtama4(fieldRect) {
+      specialMode = true;
+      falling = false;
+
+      stopBodyAnimation();
+
+      message.textContent = "な、なんだあれは！？";
+      stopButton.style.display = "none";
+
+      head.src = "img/atama4.png";
+
+      const direction = Math.floor(Math.random() * 4);
+
+      if (direction === 0) {
+        /* 上から */
+        headX = fieldRect.width / 2;
+        headY = -100;
+      } else if (direction === 1) {
+        /* 下から */
+        headX = fieldRect.width / 2;
+        headY = fieldRect.height + 100;
+      } else if (direction === 2) {
+        /* 左から */
+        headX = -100;
+        headY = targetY;
+      } else {
+        /* 右から */
+        headX = fieldRect.width + 100;
+        headY = targetY;
+      }
+
+      head.style.transform = "translateX(-50%) rotate(0deg)";
+      setHeadPosition();
+
+      const startX = headX;
+      const startY = headY;
+      const duration = 1100;
+      const startTime = performance.now();
+
+      function moveSpecial(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+
+        headX = startX + (targetX - startX) * progress;
+        headY = startY + (targetY - startY) * progress;
+
+        head.style.transform =
+          "translateX(-50%) rotate(" + (progress * 720) + "deg)";
+
+        setHeadPosition();
+
+        if (progress < 1) {
+          requestAnimationFrame(moveSpecial);
+        } else {
+          setTimeout(() => {
+            bigHomerun(true);
+          }, 250);
+        }
+      }
+
+      requestAnimationFrame(moveSpecial);
+    }
+
+    /* =========================
+       「ここだ！」を押した処理
+    ========================== */
     function stopHead() {
-      if (!falling) return;
+      if (!falling || specialMode) return;
 
       falling = false;
 
@@ -370,52 +479,79 @@
 
       stopBodyAnimation();
 
-      const beforeDistance = getDistanceFromTarget();
+      const distance = getDistanceFromTarget();
 
-      /* =========================
-         運ゲー判定
+      /* 位置が合っていなければ即アウト */
+      if (distance > successRange) {
+        message.textContent = "空振り！！";
+        setTimeout(out, 350);
+        return;
+      }
 
-         まず、押した瞬間がホームラン圏内か見る。
-         ホームラン圏内でも80%で首がズレる。
-         20%だけ奇跡のホームラン。
-      ========================== */
-      if (beforeDistance <= successRange) {
-        const luck = Math.random();
+      /*
+        位置が合っていても運ゲー
 
-        if (luck < 0.8) {
-          /* 80%で首ズレ */
-          headX += randomRange(-45, 45);
-          headY += randomRange(-25, 25);
+        80% アウト
+        20% ヒット抽選へ
+      */
+      const luck = Math.random();
 
-          const angle = randomRange(-25, 25);
-          head.style.transform = "translateX(-50%) rotate(" + angle + "deg)";
+      if (luck < 0.8) {
+        headX += randomRange(-45, 45);
+        headY += randomRange(-25, 25);
 
-          message.textContent = "首がズレたーー！？";
+        const angle = randomRange(-25, 25);
 
-          setHeadPosition();
+        head.style.transform =
+          "translateX(-50%) rotate(" + angle + "deg)";
 
-          setTimeout(() => {
-            miss();
-          }, 400);
-        } else {
-          /* 20%で成功 */
-          message.textContent = "奇跡のピタッ！！";
+        setHeadPosition();
 
-          setTimeout(() => {
-            success();
-          }, 300);
-        }
+        message.textContent = "首がズレたーー！？";
+
+        setTimeout(out, 500);
+        return;
+      }
+
+      hitLottery();
+    }
+
+    /* =========================
+       20%で入ったヒットの中の抽選
+
+       50% ヒット
+       30% ホームラン
+       20% 大ホームラン
+    ========================== */
+    function hitLottery() {
+      const hitLuck = Math.random();
+
+      if (hitLuck < 0.5) {
+        hit();
+      } else if (hitLuck < 0.8) {
+        homerun();
       } else {
-        /* そもそも位置がズレていた場合 */
-        message.textContent = "ぜんぜん違う！";
-
-        setTimeout(() => {
-          miss();
-        }, 300);
+        bigHomerun(false);
       }
     }
 
-    function success() {
+    /* =========================
+       アウト
+    ========================== */
+    function out() {
+      field.classList.add("shake");
+
+      message.textContent = "アウト！もう一回！";
+
+      stopButton.style.display = "none";
+      retryButton.style.display = "inline-block";
+    }
+
+    /* =========================
+       ヒット
+       atama2 + karada2
+    ========================== */
+    function hit() {
       headX = targetX;
       headY = targetY;
 
@@ -426,33 +562,105 @@
       head.style.top = headY + "px";
       head.style.transform = "translateX(-50%) rotate(0deg)";
 
-      field.classList.add("success");
+      message.textContent = "ヒット！！";
+
+      stopButton.style.display = "none";
+      retryButton.style.display = "inline-block";
+    }
+
+    /* =========================
+       ホームラン
+       karada3 / karada4 / ball1
+    ========================== */
+    function homerun() {
+      headX = targetX;
+      headY = targetY;
+
+      head.src = "img/atama2.png";
+      body.src = "img/karada3.png";
+
+      head.style.left = headX + "px";
+      head.style.top = headY + "px";
+      head.style.transform = "translateX(-50%) rotate(0deg)";
+
+      field.classList.add("homerunFlash");
       message.textContent = "ホームラン！！";
 
-      stopButton.style.display = "none";
-      retryButton.style.display = "inline-block";
+      ball.src = "img/ball1.png";
+      ball.style.display = "block";
+
+      ball.classList.remove("flyBall");
+      void ball.offsetWidth;
+      ball.classList.add("flyBall");
+
+      setTimeout(() => {
+        body.src = "img/karada4.png";
+      }, 300);
+
+      setTimeout(() => {
+        stopButton.style.display = "none";
+        retryButton.style.display = "inline-block";
+      }, 1100);
     }
 
-    function miss() {
-      field.classList.add("shake");
-      message.textContent = "おしい！もう一回！";
+    /* =========================
+       大ホームラン
+       atama3 / karada3 / karada4
+       ball1 → ball2 → ball3 → ball4
 
-      stopButton.style.display = "none";
-      retryButton.style.display = "inline-block";
+       special=true はatama4確定演出
+    ========================== */
+    function bigHomerun(special) {
+      headX = targetX;
+      headY = targetY;
+
+      head.src = special ? "img/atama4.png" : "img/atama3.png";
+      body.src = "img/karada3.png";
+
+      head.style.left = headX + "px";
+      head.style.top = headY + "px";
+      head.style.transform = "translateX(-50%) rotate(0deg)";
+
+      field.classList.add("bigFlash");
+
+      if (special) {
+        message.textContent = "確定！！大ホームラン！！";
+      } else {
+        message.textContent = "大ホームラン！！";
+      }
+
+      showBigBall("img/ball1.png", 0);
+      showBigBall("img/ball2.png", 230);
+      showBigBall("img/ball3.png", 460);
+      showBigBall("img/ball4.png", 690);
+
+      setTimeout(() => {
+        body.src = "img/karada4.png";
+      }, 350);
+
+      setTimeout(() => {
+        stopButton.style.display = "none";
+        retryButton.style.display = "inline-block";
+      }, 1600);
     }
 
-    function getDistanceFromTarget() {
-      const dx = headX - targetX;
-      const dy = headY - targetY;
-      return Math.sqrt(dx * dx + dy * dy);
+    function showBigBall(imagePath, delay) {
+      setTimeout(() => {
+        ball.src = imagePath;
+        ball.style.display = "block";
+
+        ball.classList.remove("flyBallBig");
+        void ball.offsetWidth;
+        ball.classList.add("flyBallBig");
+      }, delay);
     }
 
-    function randomRange(min, max) {
-      return Math.random() * (max - min) + min;
-    }
-
-    /* 指で頭を動かす */
+    /* =========================
+       指で頭を動かす
+    ========================== */
     head.addEventListener("pointerdown", (e) => {
+      if (!falling || specialMode) return;
+
       isDragging = true;
       head.setPointerCapture(e.pointerId);
 
@@ -465,7 +673,7 @@
     });
 
     head.addEventListener("pointermove", (e) => {
-      if (!isDragging || !falling) return;
+      if (!isDragging || !falling || specialMode) return;
 
       const fieldRect = field.getBoundingClientRect();
 
@@ -473,9 +681,14 @@
       headY = e.clientY - fieldRect.top - dragOffsetY;
 
       if (headX < 30) headX = 30;
-      if (headX > fieldRect.width - 30) headX = fieldRect.width - 30;
+      if (headX > fieldRect.width - 30) {
+        headX = fieldRect.width - 30;
+      }
+
       if (headY < -80) headY = -80;
-      if (headY > fieldRect.height - 40) headY = fieldRect.height - 40;
+      if (headY > fieldRect.height - 40) {
+        headY = fieldRect.height - 40;
+      }
 
       setHeadPosition();
 
