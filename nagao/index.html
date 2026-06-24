@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>長尾バッティング</title>
-
-  <style>
+    <style>
     * {
       box-sizing: border-box;
     }
@@ -86,11 +85,6 @@
       bottom: -20px;
       transform: translateX(-50%);
       z-index: 5;
-
-      /* karada4・5だけ大きくする */
-　　　　#body.bigBody {
-      width: 300px;
-　　　　}
     }
 
     #head {
@@ -188,7 +182,6 @@
       100% { transform: translateX(0); }
     }
 
-    /* ヒット・ホームラン用：ボールがゆっくり回って飛ぶ */
     .flyBallSpin {
       animation: flyBallSpin 2s ease-out forwards;
     }
@@ -207,7 +200,6 @@
       }
     }
 
-    /* 大ホームラン用：ball1 */
     .flyBallBigSpin {
       animation: flyBallBigSpin 2.2s ease-out forwards;
     }
@@ -226,7 +218,6 @@
       }
     }
 
-    /* 大ホームラン用：atama4 */
     .flyHeadBigSpin {
       animation: flyHeadBigSpin 2.2s ease-out forwards;
     }
@@ -245,39 +236,35 @@
       }
     }
   </style>
-</head>
-
+  </head>
 <body>
-
   <div id="game">
     <div id="field">
-
-      <div id="titleArea">
-        <h1>長尾バッティング</h1>
-        <h2>ねらえ！ホームラン！</h2>
-      </div>
-
-      <div id="message">プレイボールを押してね</div>
-
-      <img id="head" src="img/atama1.png" alt="頭">
-      <img id="body" src="img/karada1.png" alt="体">
-
-      <img id="flyingHead" src="img/atama4.png" alt="飛ぶ頭">
-
-      <img id="ball1" class="ball" src="img/ball1.png" alt="ボール1">
-      <img id="ball2" class="ball" src="img/ball2.png" alt="ボール2">
-      <img id="ball3" class="ball" src="img/ball3.png" alt="ボール3">
-      <img id="ball4" class="ball" src="img/ball4.png" alt="ボール4">
-
-      <div id="buttonArea">
-        <button id="startButton">プレイボール</button>
-        <button id="stopButton">ここだ！</button>
-        <button id="retryButton">もう一回</button>
-      </div>
-
-    </div>
+  <div id="titleArea">
+    <h1>長尾バッティング</h1>
+    <h2>ねらえ！ホームラン！</h2>
   </div>
 
+  <div id="message">プレイボールを押してね</div>
+
+  <img id="head" src="img/atama1.png" alt="頭">
+  <img id="body" src="img/karada1.png" alt="体">
+
+  <img id="flyingHead" src="img/atama4.png" alt="飛ぶ頭">
+
+  <img id="ball1" class="ball" src="img/ball1.png" alt="ボール1">
+  <img id="ball2" class="ball" src="img/ball2.png" alt="ボール2">
+  <img id="ball3" class="ball" src="img/ball3.png" alt="ボール3">
+  <img id="ball4" class="ball" src="img/ball4.png" alt="ボール4">
+
+  <div id="buttonArea">
+    <button id="startButton">プレイボール</button>
+    <button id="stopButton">ここだ！</button>
+    <button id="retryButton">もう一回</button>
+  </div>
+
+</div>
+      </div>
   <script>
     const field = document.getElementById("field");
     const head = document.getElementById("head");
@@ -306,8 +293,8 @@
     /* atama4特殊演出の確率 */
     const specialRate = 0.05;
 
-    /* 画像を変更した時は数字を増やす */
-    const imageVersion = "?v=2";
+    /* 画像を差し替えた時だけ数字を増やす */
+    const imageVersion = "?v=3";
 
     let headX = 0;
     let headY = -100;
@@ -403,7 +390,6 @@
       }
     }
 
-    /* 落下中の身体：karada1とkarada2を1秒ごとに切替 */
     function startBodyAnimation() {
       stopBodyAnimation();
 
@@ -429,11 +415,9 @@
       head.style.display = "block";
     }
 
-    function finishGame() {
-      wait(() => {
-        stopButton.style.display = "none";
-        retryButton.style.display = "inline-block";
-      }, 1100);
+    function showRetry() {
+      stopButton.style.display = "none";
+      retryButton.style.display = "inline-block";
     }
 
     function startGame() {
@@ -453,7 +437,9 @@
       stopButton.style.display = "inline-block";
 
       showHead();
-      body.classList.remove("bigBody");
+
+      /* 通常のkarada1・2は幅200px */
+      body.style.width = "200px";
 
       const fieldRect = field.getBoundingClientRect();
 
@@ -464,7 +450,6 @@
 
       message.textContent = "顔をハメろ！";
 
-      /* 通常はatama1が落ちてくる */
       head.src = image("atama1.png");
       head.style.transform = "translateX(-50%) rotate(0deg)";
 
@@ -502,7 +487,6 @@
       animationId = requestAnimationFrame(normalFallLoop);
     }
 
-    /* 5%のatama4特殊演出 */
     function startSpecialAtama4(fieldRect) {
       specialMode = true;
       falling = false;
@@ -578,9 +562,7 @@
         return;
       }
 
-      const luck = Math.random();
-
-      if (luck < 0.8) {
+      if (Math.random() < 0.8) {
         out();
         return;
       }
@@ -618,16 +600,13 @@
 
       wait(() => {
         message.textContent = "アウト！もう一回！";
-        stopButton.style.display = "none";
-        retryButton.style.display = "inline-block";
+        showRetry();
       }, 500);
     }
 
-    /* ヒット */
     function hit() {
       message.textContent = "ヒット！！";
 
-      /* atama1のまま */
       head.src = image("atama1.png");
       head.style.transform = "translateX(-50%) rotate(0deg)";
       headX = targetX;
@@ -642,8 +621,8 @@
 
       wait(() => {
         body.src = image("karada4-1.png");
-        body.classList.add("bigBody");
-      hideHead();
+        body.style.width = "300px";
+        hideHead();
       }, 2000);
 
       wait(() => {
@@ -657,15 +636,13 @@
 
       wait(() => {
         message.textContent = "ヒット！もう一回！";
-        finishGame();
-      }, 5000);
+        showRetry();
+      }, 6200);
     }
 
-    /* ホームラン */
     function homerun() {
       message.textContent = "ホームラン確定！！";
 
-      /* 確定した瞬間にatama3 */
       head.src = image("atama3.png");
       head.style.transform = "translateX(-50%) rotate(0deg)";
       headX = targetX;
@@ -682,7 +659,7 @@
 
       wait(() => {
         body.src = image("karada4-2.png");
-        body.classList.add("bigBody");
+        body.style.width = "300px";
         hideHead();
       }, 2000);
 
@@ -696,7 +673,6 @@
         showBall(ball2);
       }, 4000);
 
-      /* ball2が出て2秒後、ball1に戻して飛ばす */
       wait(() => {
         resetBall(ball2);
         showBall(ball1);
@@ -705,11 +681,10 @@
 
       wait(() => {
         message.textContent = "ホームラン！もう一回！";
-        finishGame();
-      }, 7200);
+        showRetry();
+      }, 8200);
     }
 
-    /* 大ホームラン */
     function bigHomerun(special) {
       if (special) {
         message.textContent = "確定！！大ホームラン！！";
@@ -717,7 +692,6 @@
         message.textContent = "大ホームラン確定！！";
       }
 
-      /* 確定した瞬間にatama4 */
       head.src = image("atama4.png");
       head.style.transform = "translateX(-50%) rotate(0deg)";
       headX = targetX;
@@ -735,7 +709,7 @@
 
       wait(() => {
         body.src = image("karada4-3.png");
-        body.classList.add("bigBody");
+        body.style.width = "300px";
         hideHead();
       }, 2000);
 
@@ -759,7 +733,6 @@
         showBall(ball4);
       }, 6000);
 
-      /* ball4の出現から2秒後、ball1とatama4が並んで飛ぶ */
       wait(() => {
         resetBall(ball4);
 
@@ -781,11 +754,10 @@
 
       wait(() => {
         message.textContent = "大ホームラン！！！もう一回！";
-        finishGame();
-      }, 10300);
+        showRetry();
+      }, 10500);
     }
 
-    /* 指で頭を動かす */
     head.addEventListener("pointerdown", (e) => {
       if (!falling || specialMode) return;
 
@@ -807,11 +779,13 @@
       headY = e.clientY - fieldRect.top - dragOffsetY;
 
       if (headX < 30) headX = 30;
+
       if (headX > fieldRect.width - 30) {
         headX = fieldRect.width - 30;
       }
 
       if (headY < -80) headY = -80;
+
       if (headY > fieldRect.height - 40) {
         headY = fieldRect.height - 40;
       }
@@ -833,6 +807,7 @@
     stopButton.addEventListener("click", stopHead);
     retryButton.addEventListener("click", startGame);
   </script>
-
 </body>
 </html>
+
+
