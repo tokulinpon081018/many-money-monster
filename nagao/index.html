@@ -6,9 +6,6 @@
   <title>長尾バッティング</title>
 
   <style>
-    /* =========================
-       基本設定
-    ========================== */
     * {
       box-sizing: border-box;
     }
@@ -27,9 +24,6 @@
       padding: 8px;
     }
 
-    /* =========================
-       ゲーム全体の黒枠
-    ========================== */
     #field {
       position: relative;
       width: 100%;
@@ -47,9 +41,6 @@
       );
     }
 
-    /* =========================
-       タイトル
-    ========================== */
     #titleArea {
       position: absolute;
       top: 8px;
@@ -75,9 +66,6 @@
       text-shadow: 2px 2px 0 #fff;
     }
 
-    /* =========================
-       メッセージ
-    ========================== */
     #message {
       position: absolute;
       top: 72px;
@@ -88,12 +76,9 @@
       font-weight: bold;
       color: #222;
       text-shadow: 2px 2px 0 #fff;
+      pointer-events: none;
     }
 
-    /* =========================
-       身体
-       width と bottom を変えると調整できる
-    ========================== */
     #body {
       position: absolute;
       width: 200px;
@@ -103,15 +88,11 @@
       z-index: 5;
     }
 
-    /* =========================
-       頭
-       width を変えると大きさを調整できる
-    ========================== */
     #head {
       position: absolute;
-      width: 70px !important;
-      max-width: 70px !important;
-      height: auto !important;
+      width: 70px;
+      max-width: 70px;
+      height: auto;
       left: 50%;
       top: -100px;
       transform: translateX(-50%);
@@ -119,7 +100,6 @@
       touch-action: none;
     }
 
-    /* 大ホームランで飛んでいくatama3 */
     #flyingHead {
       position: absolute;
       width: 70px;
@@ -131,7 +111,6 @@
       pointer-events: none;
     }
 
-    /* ボール共通 */
     .ball {
       position: absolute;
       width: 45px;
@@ -143,9 +122,6 @@
       pointer-events: none;
     }
 
-    /* =========================
-       ボタン
-    ========================== */
     #buttonArea {
       position: absolute;
       right: 10px;
@@ -174,9 +150,6 @@
       display: none;
     }
 
-    /* =========================
-       ホームランの光
-    ========================== */
     .homerunFlash {
       animation: homerunFlash 0.35s infinite;
     }
@@ -187,7 +160,6 @@
       100% { background: #fff; }
     }
 
-    /* 大ホームランの光 */
     .bigFlash {
       animation: bigFlash 0.2s infinite;
     }
@@ -199,7 +171,6 @@
       100% { background: #ff4d4d; }
     }
 
-    /* アウト時の揺れ */
     .shake {
       animation: shake 0.25s;
     }
@@ -212,60 +183,60 @@
       100% { transform: translateX(0); }
     }
 
-    /* 普通のボール飛行。回転なし */
-    .flyBall {
-      animation: flyBall 1.05s ease-out forwards;
+    /* ヒット・ホームラン用：ボールがゆっくり回って飛ぶ */
+    .flyBallSpin {
+      animation: flyBallSpin 2s ease-out forwards;
     }
 
-    @keyframes flyBall {
+    @keyframes flyBallSpin {
       0% {
         left: 52%;
         top: 68%;
-        transform: translate(-50%, -50%) scale(0.7);
+        transform: translate(-50%, -50%) scale(0.8) rotate(0deg);
       }
 
       100% {
         left: 120%;
         top: 5%;
-        transform: translate(-50%, -50%) scale(1.8);
+        transform: translate(-50%, -50%) scale(2) rotate(720deg);
       }
     }
 
-    /* 大ホームラン用ボール。回転なし */
-    .flyBallBig {
-      animation: flyBallBig 1.2s ease-out forwards;
+    /* 大ホームラン用：ball1 */
+    .flyBallBigSpin {
+      animation: flyBallBigSpin 2.2s ease-out forwards;
     }
 
-    @keyframes flyBallBig {
+    @keyframes flyBallBigSpin {
       0% {
-        left: 52%;
+        left: 43%;
         top: 68%;
-        transform: translate(-50%, -50%) scale(0.8);
-      }
-
-      100% {
-        left: 130%;
-        top: -10%;
-        transform: translate(-50%, -50%) scale(3);
-      }
-    }
-
-    /* 大ホームランでatama3が飛んでいく。回転なし */
-    .flyHeadBig {
-      animation: flyHeadBig 1.25s ease-out forwards;
-    }
-
-    @keyframes flyHeadBig {
-      0% {
-        left: 50%;
-        top: 68%;
-        transform: translate(-50%, -50%) scale(1);
+        transform: translate(-50%, -50%) scale(0.9) rotate(0deg);
       }
 
       100% {
         left: 125%;
+        top: -10%;
+        transform: translate(-50%, -50%) scale(2.8) rotate(1080deg);
+      }
+    }
+
+    /* 大ホームラン用：atama4 */
+    .flyHeadBigSpin {
+      animation: flyHeadBigSpin 2.2s ease-out forwards;
+    }
+
+    @keyframes flyHeadBigSpin {
+      0% {
+        left: 61%;
+        top: 68%;
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+      }
+
+      100% {
+        left: 140%;
         top: -15%;
-        transform: translate(-50%, -50%) scale(2.8);
+        transform: translate(-50%, -50%) scale(3) rotate(1080deg);
       }
     }
   </style>
@@ -283,14 +254,11 @@
 
       <div id="message">プレイボールを押してね</div>
 
-      <!-- 頭と身体 -->
-      <img id="head" src="img/atama2.png" alt="頭">
+      <img id="head" src="img/atama1.png" alt="頭">
       <img id="body" src="img/karada1.png" alt="体">
 
-      <!-- 大ホームラン用：atama3が飛ぶ -->
-      <img id="flyingHead" src="img/atama3.png" alt="飛ぶ頭">
+      <img id="flyingHead" src="img/atama4.png" alt="飛ぶ頭">
 
-      <!-- ボール -->
       <img id="ball1" class="ball" src="img/ball1.png" alt="ボール1">
       <img id="ball2" class="ball" src="img/ball2.png" alt="ボール2">
       <img id="ball3" class="ball" src="img/ball3.png" alt="ボール3">
@@ -306,9 +274,6 @@
   </div>
 
   <script>
-    /* =========================
-       画面部品を取得
-    ========================== */
     const field = document.getElementById("field");
     const head = document.getElementById("head");
     const body = document.getElementById("body");
@@ -325,55 +290,20 @@
     const stopButton = document.getElementById("stopButton");
     const retryButton = document.getElementById("retryButton");
 
-    /* =========================
-       微調整する場所
-    ========================== */
-
-    /* 落ちてくる頭の開始位置
-       -30なら少し左
-       -50ならもっと左
-       0なら中央 */
+    /* 調整する場所 */
     const headStartOffsetX = -30;
 
-    /* 通常、頭が身体にハマる位置 */
     const targetX = 165;
     const targetY = 430;
 
-    /* ヒット時のatama2位置 */
-　　　const hitX = 300;
-　　　const hitY = 200;
-
-　　　/* ホームラン時のatama2位置 */
-　　　const homerunX = 300;
-　　　const homerunY = 200;
-
-　　　/* 大ホームラン時のatama3位置 */
-　　　const bigHomerunX = 300;
-　　　const bigHomerunY = 200;
-
-　　　/* atama4確定演出の位置 */
-　　　const specialX = 300;
-　　　const specialY = 200;
-
-    /* karada4の瞬間だけ頭を動かす量
-       Xを小さくすると左
-       Yを小さくすると上 */
-    const karada4HeadOffsetX = 50;
-    const karada4HeadOffsetY = 50;
-
-    /* 当たり判定の広さ */
     const successRange = 60;
 
-    /* atama4が来る確率。5% */
+    /* atama4特殊演出の確率 */
     const specialRate = 0.05;
 
-    /* 画像を差し替えた時だけ数字を増やす
-       例：?v=2 */
-    const imageVersion = "?v=1";
+    /* 画像を変更した時は数字を増やす */
+    const imageVersion = "?v=2";
 
-    /* =========================
-       ゲーム状態
-    ========================== */
     let headX = 0;
     let headY = -100;
 
@@ -388,10 +318,6 @@
     let dragOffsetY = 0;
 
     let timers = [];
-
-    /* =========================
-       共通関数
-    ========================== */
 
     function image(fileName) {
       return "img/" + fileName + imageVersion;
@@ -423,11 +349,30 @@
     }
 
     function resetBall(ball) {
-      ball.classList.remove("flyBall");
-      ball.classList.remove("flyBallBig");
+      ball.classList.remove("flyBallSpin");
+      ball.classList.remove("flyBallBigSpin");
       ball.style.display = "none";
       ball.style.left = "-100px";
       ball.style.top = "-100px";
+    }
+
+    function showBall(ball) {
+      ball.style.display = "block";
+      ball.style.left = "52%";
+      ball.style.top = "68%";
+      ball.style.transform = "translate(-50%, -50%)";
+    }
+
+    function flyNormalBall(ball) {
+      ball.classList.remove("flyBallSpin");
+      void ball.offsetWidth;
+      ball.classList.add("flyBallSpin");
+    }
+
+    function flyBigBall(ball) {
+      ball.classList.remove("flyBallBigSpin");
+      void ball.offsetWidth;
+      ball.classList.add("flyBallBigSpin");
     }
 
     function clearEffects() {
@@ -440,7 +385,7 @@
       resetBall(ball3);
       resetBall(ball4);
 
-      flyingHead.classList.remove("flyHeadBig");
+      flyingHead.classList.remove("flyHeadBigSpin");
       flyingHead.style.display = "none";
       flyingHead.style.left = "-150px";
       flyingHead.style.top = "-150px";
@@ -453,11 +398,12 @@
       }
     }
 
-    /* 待機中のkarada1・2の揺れ */
+    /* 落下中の身体：karada1とkarada2を1秒ごとに切替 */
     function startBodyAnimation() {
       stopBodyAnimation();
 
       bodyFrame = 1;
+      body.src = image("karada1.png");
 
       bodyTimer = setInterval(() => {
         if (bodyFrame === 1) {
@@ -467,35 +413,24 @@
           body.src = image("karada1.png");
           bodyFrame = 1;
         }
-      }, 180);
+      }, 1000);
     }
 
-    function moveHeadForKarada4() {
-      headX = targetX + karada4HeadOffsetX;
-      headY = targetY + karada4HeadOffsetY;
-
-      head.style.left = headX + "px";
-      head.style.top = headY + "px";
+    function hideHead() {
+      head.style.display = "none";
     }
 
-    function showBall(ball, big) {
-      ball.style.display = "block";
-
-      ball.classList.remove("flyBall");
-      ball.classList.remove("flyBallBig");
-
-      void ball.offsetWidth;
-
-      if (big) {
-        ball.classList.add("flyBallBig");
-      } else {
-        ball.classList.add("flyBall");
-      }
+    function showHead() {
+      head.style.display = "block";
     }
 
-    /* =========================
-       ゲーム開始
-    ========================== */
+    function finishGame() {
+      wait(() => {
+        stopButton.style.display = "none";
+        retryButton.style.display = "inline-block";
+      }, 1100);
+    }
+
     function startGame() {
       clearTimers();
       clearEffects();
@@ -512,11 +447,10 @@
       retryButton.style.display = "none";
       stopButton.style.display = "inline-block";
 
-      body.src = image("karada1.png");
+      showHead();
 
       const fieldRect = field.getBoundingClientRect();
 
-      /* 5%のatama4特殊演出 */
       if (specialMode) {
         startSpecialAtama4(fieldRect);
         return;
@@ -524,8 +458,8 @@
 
       message.textContent = "顔をハメろ！";
 
-      /* ❶ atama2がまっすぐ降りる */
-      head.src = image("atama2.png");
+      /* 通常はatama1が落ちてくる */
+      head.src = image("atama1.png");
       head.style.transform = "translateX(-50%) rotate(0deg)";
 
       headX = fieldRect.width / 2 + headStartOffsetX;
@@ -539,16 +473,11 @@
       normalFallLoop();
     }
 
-    /* =========================
-       通常落下
-       atama2は横揺れなし
-    ========================== */
     function normalFallLoop() {
       if (!falling) return;
 
       const distance = getDistanceFromTarget();
 
-      /* ❸ 思い出せー！でかなりゆっくり */
       if (distance < 100) {
         headY += 0.65;
         message.textContent = "思い出せー！";
@@ -567,10 +496,7 @@
       animationId = requestAnimationFrame(normalFallLoop);
     }
 
-    /* =========================
-       atama4特殊演出
-       5%でボタンなし大ホームラン
-    ========================== */
+    /* 5%のatama4特殊演出 */
     function startSpecialAtama4(fieldRect) {
       specialMode = true;
       falling = false;
@@ -582,23 +508,20 @@
 
       head.src = image("atama4.png");
       head.style.transform = "translateX(-50%) rotate(0deg)";
+      showHead();
 
       const direction = Math.floor(Math.random() * 4);
 
       if (direction === 0) {
-        /* 上から */
         headX = fieldRect.width / 2;
         headY = -100;
       } else if (direction === 1) {
-        /* 下から */
         headX = fieldRect.width / 2;
         headY = fieldRect.height + 100;
       } else if (direction === 2) {
-        /* 左から */
         headX = -100;
         headY = targetY;
       } else {
-        /* 右から */
         headX = fieldRect.width + 100;
         headY = targetY;
       }
@@ -623,16 +546,13 @@
         } else {
           wait(() => {
             bigHomerun(true);
-          }, 180);
+          }, 300);
         }
       }
 
       requestAnimationFrame(specialMove);
     }
 
-    /* =========================
-       ここだ！を押した時
-    ========================== */
     function stopHead() {
       if (!falling || specialMode) return;
 
@@ -647,13 +567,11 @@
 
       const distance = getDistanceFromTarget();
 
-      /* 位置が違うならアウト */
       if (distance > successRange) {
         out();
         return;
       }
 
-      /* 80%アウト、20%だけ当たり抽選 */
       const luck = Math.random();
 
       if (luck < 0.8) {
@@ -664,12 +582,6 @@
       hitLottery();
     }
 
-    /* =========================
-       20%当たりの中の抽選
-       50% ヒット
-       30% ホームラン
-       20% 大ホームラン
-    ========================== */
     function hitLottery() {
       const hitLuck = Math.random();
 
@@ -682,10 +594,6 @@
       }
     }
 
-    /* =========================
-       ❷ アウト
-       atama1に変わってズレる
-    ========================== */
     function out() {
       head.src = image("atama1.png");
 
@@ -706,99 +614,107 @@
         message.textContent = "アウト！もう一回！";
         stopButton.style.display = "none";
         retryButton.style.display = "inline-block";
-      }, 450);
+      }, 500);
     }
 
-    /* =========================
-       ❹ ヒット
-       karada3 → karada4
-       karada4の瞬間にball1
-    ========================== */
+    /* ヒット */
     function hit() {
-      headX = targetX;
-      headY = targetY;
-
-      head.src = image("atama2.png");
-      head.style.transform = "translateX(-50%) rotate(0deg)";
-      setHeadPosition();
-
       message.textContent = "ヒット！！";
 
-      body.src = image("karada3.png");
-
-      wait(() => {
-        body.src = image("karada4.png");
-
-        moveHeadForKarada4();
-
-        showBall(ball1, false);
-      }, 280);
-
-      wait(() => {
-        stopButton.style.display = "none";
-        retryButton.style.display = "inline-block";
-      }, 1200);
-    }
-
-    /* =========================
-       ❺ ホームラン
-       karada1 → 2 → 3 → 4
-       karada4の瞬間にball4
-    ========================== */
-    function homerun() {
+      /* atama1のまま */
+      head.src = image("atama1.png");
+      head.style.transform = "translateX(-50%) rotate(0deg)";
       headX = targetX;
       headY = targetY;
-
-      head.src = image("atama2.png");
-      head.style.transform = "translateX(-50%) rotate(0deg)";
       setHeadPosition();
-
-      field.classList.add("homerunFlash");
-      message.textContent = "ホームラン！！";
 
       body.src = image("karada1.png");
 
       wait(() => {
         body.src = image("karada2.png");
-      }, 170);
+      }, 1000);
 
       wait(() => {
-        body.src = image("karada3.png");
-      }, 340);
+        body.src = image("karada4-1.png");
+        hideHead();
+      }, 2000);
 
       wait(() => {
-        body.src = image("karada4.png");
-
-        moveHeadForKarada4();
-
-        showBall(ball4, false);
-      }, 510);
+        body.src = image("karada5-1.png");
+        showBall(ball1);
+      }, 3000);
 
       wait(() => {
-        stopButton.style.display = "none";
-        retryButton.style.display = "inline-block";
-      }, 1400);
+        flyNormalBall(ball1);
+      }, 4000);
+
+      wait(() => {
+        message.textContent = "ヒット！もう一回！";
+        finishGame();
+      }, 5000);
     }
 
-    /* =========================
-       ❻ 大ホームラン
-       karada1 → 2 → 3 → 4
-       ball1 → ball2 → ball3
-       最後にatama3が飛ぶ
-    ========================== */
-    function bigHomerun(special) {
+    /* ホームラン */
+    function homerun() {
+      message.textContent = "ホームラン確定！！";
+
+      /* 確定した瞬間にatama3 */
+      head.src = image("atama3.png");
+      head.style.transform = "translateX(-50%) rotate(0deg)";
       headX = targetX;
       headY = targetY;
+      setHeadPosition();
 
+      field.classList.add("homerunFlash");
+
+      body.src = image("karada1.png");
+
+      wait(() => {
+        body.src = image("karada2.png");
+      }, 1000);
+
+      wait(() => {
+        body.src = image("karada4-2.png");
+        hideHead();
+      }, 2000);
+
+      wait(() => {
+        body.src = image("karada5-2.png");
+        showBall(ball1);
+      }, 3000);
+
+      wait(() => {
+        resetBall(ball1);
+        showBall(ball2);
+      }, 4000);
+
+      /* ball2が出て2秒後、ball1に戻して飛ばす */
+      wait(() => {
+        resetBall(ball2);
+        showBall(ball1);
+        flyNormalBall(ball1);
+      }, 6000);
+
+      wait(() => {
+        message.textContent = "ホームラン！もう一回！";
+        finishGame();
+      }, 7200);
+    }
+
+    /* 大ホームラン */
+    function bigHomerun(special) {
       if (special) {
-        head.src = image("atama4.png");
         message.textContent = "確定！！大ホームラン！！";
       } else {
-        head.src = image("atama3.png");
-        message.textContent = "大ホームラン！！";
+        message.textContent = "大ホームラン確定！！";
       }
 
+      /* 確定した瞬間にatama4 */
+      head.src = image("atama4.png");
       head.style.transform = "translateX(-50%) rotate(0deg)";
+      headX = targetX;
+      headY = targetY;
+      showHead();
       setHeadPosition();
 
       field.classList.add("bigFlash");
@@ -807,49 +723,60 @@
 
       wait(() => {
         body.src = image("karada2.png");
-      }, 170);
+      }, 1000);
 
       wait(() => {
-        body.src = image("karada3.png");
-      }, 340);
+        body.src = image("karada4-3.png");
+        hideHead();
+      }, 2000);
 
       wait(() => {
-        body.src = image("karada4.png");
-
-        moveHeadForKarada4();
-
-        showBall(ball1, true);
-      }, 510);
+        body.src = image("karada5-3.png");
+        showBall(ball1);
+      }, 3000);
 
       wait(() => {
-        showBall(ball2, true);
-      }, 730);
+        resetBall(ball1);
+        showBall(ball2);
+      }, 4000);
 
       wait(() => {
-        showBall(ball3, true);
-      }, 950);
+        resetBall(ball2);
+        showBall(ball3);
+      }, 5000);
 
       wait(() => {
-        /* 最後にatama3を飛ばす */
-        flyingHead.src = image("atama3.png");
+        resetBall(ball3);
+        showBall(ball4);
+      }, 6000);
+
+      /* ball4の出現から2秒後、ball1とatama4が並んで飛ぶ */
+      wait(() => {
+        resetBall(ball4);
+
+        showBall(ball1);
+        ball1.style.left = "43%";
+        ball1.style.top = "68%";
+        flyBigBall(ball1);
+
+        flyingHead.src = image("atama4.png");
         flyingHead.style.display = "block";
+        flyingHead.style.left = "61%";
+        flyingHead.style.top = "68%";
+        flyingHead.style.transform = "translate(-50%, -50%)";
 
-        flyingHead.classList.remove("flyHeadBig");
-
+        flyingHead.classList.remove("flyHeadBigSpin");
         void flyingHead.offsetWidth;
-
-        flyingHead.classList.add("flyHeadBig");
-      }, 1170);
+        flyingHead.classList.add("flyHeadBigSpin");
+      }, 8000);
 
       wait(() => {
-        stopButton.style.display = "none";
-        retryButton.style.display = "inline-block";
-      }, 1850);
+        message.textContent = "大ホームラン！！！もう一回！";
+        finishGame();
+      }, 10300);
     }
 
-    /* =========================
-       指で頭を動かす
-    ========================== */
+    /* 指で頭を動かす */
     head.addEventListener("pointerdown", (e) => {
       if (!falling || specialMode) return;
 
