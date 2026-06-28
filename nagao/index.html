@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>長尾バッティング</title>
-    <style>
+
+  <style>
     * {
       box-sizing: border-box;
     }
@@ -182,11 +183,31 @@
       100% { transform: translateX(0); }
     }
 
-    .flyBallSpin {
-      animation: flyBallSpin 2s ease-out forwards;
+    /* ヒット：低く短く飛ぶ */
+    .flyHitBall {
+      animation: flyHitBall 1.6s ease-out forwards;
     }
 
-    @keyframes flyBallSpin {
+    @keyframes flyHitBall {
+      0% {
+        left: 52%;
+        top: 69%;
+        transform: translate(-50%, -50%) scale(0.8) rotate(0deg);
+      }
+
+      100% {
+        left: 110%;
+        top: 38%;
+        transform: translate(-50%, -50%) scale(1.3) rotate(540deg);
+      }
+    }
+
+    /* ホームラン：高く遠くへ飛ぶ */
+    .flyHomerunBall {
+      animation: flyHomerunBall 2s ease-out forwards;
+    }
+
+    @keyframes flyHomerunBall {
       0% {
         left: 52%;
         top: 68%;
@@ -194,17 +215,18 @@
       }
 
       100% {
-        left: 120%;
-        top: 5%;
-        transform: translate(-50%, -50%) scale(2) rotate(720deg);
+        left: 125%;
+        top: 3%;
+        transform: translate(-50%, -50%) scale(2) rotate(900deg);
       }
     }
 
-    .flyBallBigSpin {
-      animation: flyBallBigSpin 2.2s ease-out forwards;
+    /* 大ホームラン：超大きく飛ぶ */
+    .flyBigBall {
+      animation: flyBigBall 2.2s ease-out forwards;
     }
 
-    @keyframes flyBallBigSpin {
+    @keyframes flyBigBall {
       0% {
         left: 43%;
         top: 68%;
@@ -212,17 +234,18 @@
       }
 
       100% {
-        left: 125%;
-        top: -10%;
-        transform: translate(-50%, -50%) scale(2.8) rotate(1080deg);
+        left: 130%;
+        top: -12%;
+        transform: translate(-50%, -50%) scale(3) rotate(1440deg);
       }
     }
 
-    .flyHeadBigSpin {
-      animation: flyHeadBigSpin 2.2s ease-out forwards;
+    /* 大ホームラン：atama4も一緒に飛ぶ */
+    .flyBigHead {
+      animation: flyBigHead 2.2s ease-out forwards;
     }
 
-    @keyframes flyHeadBigSpin {
+    @keyframes flyBigHead {
       0% {
         left: 61%;
         top: 68%;
@@ -230,85 +253,80 @@
       }
 
       100% {
-        left: 140%;
-        top: -15%;
-        transform: translate(-50%, -50%) scale(3) rotate(1080deg);
+        left: 145%;
+        top: -18%;
+        transform: translate(-50%, -50%) scale(3.2) rotate(1440deg);
       }
     }
   </style>
-  </head>
+</head>
+
 <body>
   <div id="game">
     <div id="field">
-  <div id="titleArea">
-    <h1>長尾バッティング</h1>
-    <h2>ねらえ！ホームラン！</h2>
-  </div>
 
-  <div id="message">プレイボールを押してね</div>
-
-  <img id="head" src="img/atama1.png" alt="頭">
-  <img id="body" src="img/karada1.png" alt="体">
-
-  <img id="flyingHead" src="img/atama4.png" alt="飛ぶ頭">
-
-  <img id="ball1" class="ball" src="img/ball1.png" alt="ボール1">
-  <img id="ball2" class="ball" src="img/ball2.png" alt="ボール2">
-  <img id="ball3" class="ball" src="img/ball3.png" alt="ボール3">
-  <img id="ball4" class="ball" src="img/ball4.png" alt="ボール4">
-
-  <div id="buttonArea">
-    <button id="startButton">プレイボール</button>
-    <button id="stopButton">ここだ！</button>
-    <button id="retryButton">もう一回</button>
-  </div>
-
-</div>
+      <div id="titleArea">
+        <h1>長尾バッティング</h1>
+        <h2>ねらえ！ホームラン！</h2>
       </div>
+
+      <div id="message">プレイボールを押してね</div>
+
+      <img id="head" src="img/atama1.png" alt="頭">
+      <img id="body" src="img/karada1.png" alt="体">
+      <img id="flyingHead" src="img/atama4.png" alt="飛ぶ頭">
+
+      <!-- ボールはball1だけ -->
+      <img id="ball1" class="ball" src="img/ball1.png" alt="ボール">
+
+      <div id="buttonArea">
+        <button id="startButton">プレイボール</button>
+        <button id="stopButton">ここだ！</button>
+        <button id="retryButton">もう一回</button>
+      </div>
+
+    </div>
+  </div>
+
   <script>
     const field = document.getElementById("field");
     const head = document.getElementById("head");
     const body = document.getElementById("body");
     const flyingHead = document.getElementById("flyingHead");
-
     const ball1 = document.getElementById("ball1");
-    const ball2 = document.getElementById("ball2");
-    const ball3 = document.getElementById("ball3");
-    const ball4 = document.getElementById("ball4");
 
     const message = document.getElementById("message");
-
     const startButton = document.getElementById("startButton");
     const stopButton = document.getElementById("stopButton");
     const retryButton = document.getElementById("retryButton");
 
     /* 調整する場所 */
     const headStartOffsetX = -30;
-
     const targetX = 165;
     const targetY = 430;
-
     const successRange = 60;
-
-    /* atama4特殊演出の確率 */
     const specialRate = 0.05;
 
-    /* 画像を差し替えた時だけ数字を増やす */
-    const imageVersion = "?v=3";
+    /* karada1・2 */
+    const normalBodyWidth = "200px";
+    const normalBodyBottom = "-20px";
+
+    /* karada4・5 */
+    const bigBodyWidth = "300px";
+    const bigBodyBottom = "-70px";
+
+    /* 画像更新後だけ数字を変える */
+    const imageVersion = "?v=6";
 
     let headX = 0;
     let headY = -100;
-
     let falling = false;
     let specialMode = false;
-
     let animationId = null;
     let bodyTimer = null;
     let bodyFrame = 1;
-
     let isDragging = false;
     let dragOffsetY = 0;
-
     let timers = [];
 
     function image(fileName) {
@@ -340,71 +358,14 @@
       return Math.sqrt(dx * dx + dy * dy);
     }
 
-    function resetBall(ball) {
-      ball.classList.remove("flyBallSpin");
-      ball.classList.remove("flyBallBigSpin");
-      ball.style.display = "none";
-      ball.style.left = "-100px";
-      ball.style.top = "-100px";
+    function setNormalBody() {
+      body.style.width = normalBodyWidth;
+      body.style.bottom = normalBodyBottom;
     }
 
-    function showBall(ball) {
-      ball.style.display = "block";
-      ball.style.left = "52%";
-      ball.style.top = "68%";
-      ball.style.transform = "translate(-50%, -50%)";
-    }
-
-    function flyNormalBall(ball) {
-      ball.classList.remove("flyBallSpin");
-      void ball.offsetWidth;
-      ball.classList.add("flyBallSpin");
-    }
-
-    function flyBigBall(ball) {
-      ball.classList.remove("flyBallBigSpin");
-      void ball.offsetWidth;
-      ball.classList.add("flyBallBigSpin");
-    }
-
-    function clearEffects() {
-      field.classList.remove("homerunFlash");
-      field.classList.remove("bigFlash");
-      field.classList.remove("shake");
-
-      resetBall(ball1);
-      resetBall(ball2);
-      resetBall(ball3);
-      resetBall(ball4);
-
-      flyingHead.classList.remove("flyHeadBigSpin");
-      flyingHead.style.display = "none";
-      flyingHead.style.left = "-150px";
-      flyingHead.style.top = "-150px";
-    }
-
-    function stopBodyAnimation() {
-      if (bodyTimer !== null) {
-        clearInterval(bodyTimer);
-        bodyTimer = null;
-      }
-    }
-
-    function startBodyAnimation() {
-      stopBodyAnimation();
-
-      bodyFrame = 1;
-      body.src = image("karada1.png");
-
-      bodyTimer = setInterval(() => {
-        if (bodyFrame === 1) {
-          body.src = image("karada2.png");
-          bodyFrame = 2;
-        } else {
-          body.src = image("karada1.png");
-          bodyFrame = 1;
-        }
-      }, 1000);
+    function setBigBody() {
+      body.style.width = bigBodyWidth;
+      body.style.bottom = bigBodyBottom;
     }
 
     function hideHead() {
@@ -418,6 +379,85 @@
     function showRetry() {
       stopButton.style.display = "none";
       retryButton.style.display = "inline-block";
+    }
+
+    function resetBall() {
+      ball1.classList.remove(
+        "flyHitBall",
+        "flyHomerunBall",
+        "flyBigBall"
+      );
+
+      ball1.style.display = "none";
+      ball1.style.left = "-100px";
+      ball1.style.top = "-100px";
+      ball1.style.transform = "translate(-50%, -50%)";
+    }
+
+    function showBall(left = "52%", top = "68%") {
+      ball1.classList.remove(
+        "flyHitBall",
+        "flyHomerunBall",
+        "flyBigBall"
+      );
+
+      ball1.style.display = "block";
+      ball1.style.left = left;
+      ball1.style.top = top;
+      ball1.style.transform = "translate(-50%, -50%)";
+    }
+
+    function flyBall(animationName) {
+      ball1.classList.remove(
+        "flyHitBall",
+        "flyHomerunBall",
+        "flyBigBall"
+      );
+
+      void ball1.offsetWidth;
+
+      ball1.classList.add(animationName);
+    }
+
+    function clearEffects() {
+      field.classList.remove("homerunFlash");
+      field.classList.remove("bigFlash");
+      field.classList.remove("shake");
+
+      resetBall();
+
+      flyingHead.classList.remove("flyBigHead");
+      flyingHead.style.display = "none";
+      flyingHead.style.left = "-150px";
+      flyingHead.style.top = "-150px";
+      flyingHead.style.transform = "translate(-50%, -50%)";
+    }
+
+    function stopBodyAnimation() {
+      if (bodyTimer !== null) {
+        clearInterval(bodyTimer);
+        bodyTimer = null;
+      }
+    }
+
+    function startBodyAnimation() {
+      stopBodyAnimation();
+      setNormalBody();
+
+      bodyFrame = 1;
+      body.src = image("karada1.png");
+
+      bodyTimer = setInterval(() => {
+        setNormalBody();
+
+        if (bodyFrame === 1) {
+          body.src = image("karada2.png");
+          bodyFrame = 2;
+        } else {
+          body.src = image("karada1.png");
+          bodyFrame = 1;
+        }
+      }, 1000);
     }
 
     function startGame() {
@@ -437,9 +477,7 @@
       stopButton.style.display = "inline-block";
 
       showHead();
-
-      /* 通常のkarada1・2は幅200px */
-      body.style.width = "200px";
+      setNormalBody();
 
       const fieldRect = field.getBoundingClientRect();
 
@@ -460,7 +498,6 @@
 
       setHeadPosition();
       startBodyAnimation();
-
       normalFallLoop();
     }
 
@@ -483,7 +520,6 @@
       }
 
       setHeadPosition();
-
       animationId = requestAnimationFrame(normalFallLoop);
     }
 
@@ -492,6 +528,7 @@
       falling = false;
 
       stopBodyAnimation();
+      setNormalBody();
 
       message.textContent = "な、なんだあれは！？";
       stopButton.style.display = "none";
@@ -524,7 +561,10 @@
       const duration = 1100;
 
       function specialMove(now) {
-        const progress = Math.min((now - startTime) / duration, 1);
+        const progress = Math.min(
+          (now - startTime) / duration,
+          1
+        );
 
         headX = startX + (targetX - startX) * progress;
         headY = startY + (targetY - startY) * progress;
@@ -555,14 +595,10 @@
 
       stopBodyAnimation();
 
-      const distance = getDistanceFromTarget();
-
-      if (distance > successRange) {
-        out();
-        return;
-      }
-
-      if (Math.random() < 0.8) {
+      if (
+        getDistanceFromTarget() > successRange ||
+        Math.random() < 0.8
+      ) {
         out();
         return;
       }
@@ -571,11 +607,11 @@
     }
 
     function hitLottery() {
-      const hitLuck = Math.random();
+      const result = Math.random();
 
-      if (hitLuck < 0.5) {
+      if (result < 0.5) {
         hit();
-      } else if (hitLuck < 0.8) {
+      } else if (result < 0.8) {
         homerun();
       } else {
         bigHomerun(false);
@@ -583,15 +619,18 @@
     }
 
     function out() {
+      setNormalBody();
+      showHead();
+
       head.src = image("atama1.png");
 
       headX += randomRange(-45, 45);
       headY += randomRange(-25, 25);
 
-      const angle = randomRange(-25, 25);
-
       head.style.transform =
-        "translateX(-50%) rotate(" + angle + "deg)";
+        "translateX(-50%) rotate(" +
+        randomRange(-25, 25) +
+        "deg)";
 
       setHeadPosition();
 
@@ -607,43 +646,49 @@
     function hit() {
       message.textContent = "ヒット！！";
 
+      setNormalBody();
+      showHead();
+
       head.src = image("atama1.png");
       head.style.transform = "translateX(-50%) rotate(0deg)";
       headX = targetX;
       headY = targetY;
       setHeadPosition();
 
-      etNormalBody();
       body.src = image("karada1.png");
 
       wait(() => {
-        etNormalBody();
+        setNormalBody();
         body.src = image("karada2.png");
       }, 1000);
 
       wait(() => {
+        setBigBody();
         body.src = image("karada4-1.png");
-        body.style.width = "300px";
         hideHead();
       }, 2000);
 
       wait(() => {
+        setBigBody();
         body.src = image("karada5-1.png");
-        showBall(ball1);
+        showBall();
       }, 3000);
 
       wait(() => {
-        flyNormalBall(ball1);
+        flyBall("flyHitBall");
       }, 4000);
 
       wait(() => {
         message.textContent = "ヒット！もう一回！";
         showRetry();
-      }, 6200);
+      }, 6100);
     }
 
     function homerun() {
       message.textContent = "ホームラン確定！！";
+
+      setNormalBody();
+      showHead();
 
       head.src = image("atama3.png");
       head.style.transform = "translateX(-50%) rotate(0deg)";
@@ -653,40 +698,33 @@
 
       field.classList.add("homerunFlash");
 
-      etNormalBody();
       body.src = image("karada1.png");
 
       wait(() => {
-        etNormalBody();
+        setNormalBody();
         body.src = image("karada2.png");
       }, 1000);
 
       wait(() => {
+        setBigBody();
         body.src = image("karada4-2.png");
-        body.style.width = "300px";
         hideHead();
       }, 2000);
 
       wait(() => {
+        setBigBody();
         body.src = image("karada5-2.png");
-        showBall(ball1);
+        showBall();
       }, 3000);
 
       wait(() => {
-        resetBall(ball1);
-        showBall(ball2);
+        flyBall("flyHomerunBall");
       }, 4000);
-
-      wait(() => {
-        resetBall(ball2);
-        showBall(ball1);
-        flyNormalBall(ball1);
-      }, 6000);
 
       wait(() => {
         message.textContent = "ホームラン！もう一回！";
         showRetry();
-      }, 8200);
+      }, 6600);
     }
 
     function bigHomerun(special) {
@@ -696,56 +734,39 @@
         message.textContent = "大ホームラン確定！！";
       }
 
+      setNormalBody();
+      showHead();
+
       head.src = image("atama4.png");
       head.style.transform = "translateX(-50%) rotate(0deg)";
       headX = targetX;
       headY = targetY;
-      showHead();
       setHeadPosition();
 
       field.classList.add("bigFlash");
 
-      etNormalBody();
       body.src = image("karada1.png");
 
       wait(() => {
-        etNormalBody();
+        setNormalBody();
         body.src = image("karada2.png");
       }, 1000);
 
       wait(() => {
+        setBigBody();
         body.src = image("karada4-3.png");
-        body.style.width = "300px";
         hideHead();
       }, 2000);
 
       wait(() => {
+        setBigBody();
         body.src = image("karada5-3.png");
-        showBall(ball1);
+        showBall();
       }, 3000);
 
       wait(() => {
-        resetBall(ball1);
-        showBall(ball2);
-      }, 4000);
-
-      wait(() => {
-        resetBall(ball2);
-        showBall(ball3);
-      }, 5000);
-
-      wait(() => {
-        resetBall(ball3);
-        showBall(ball4);
-      }, 6000);
-
-      wait(() => {
-        resetBall(ball4);
-
-        showBall(ball1);
-        ball1.style.left = "43%";
-        ball1.style.top = "68%";
-        flyBigBall(ball1);
+        showBall("43%", "68%");
+        flyBall("flyBigBall");
 
         flyingHead.src = image("atama4.png");
         flyingHead.style.display = "block";
@@ -753,15 +774,15 @@
         flyingHead.style.top = "68%";
         flyingHead.style.transform = "translate(-50%, -50%)";
 
-        flyingHead.classList.remove("flyHeadBigSpin");
+        flyingHead.classList.remove("flyBigHead");
         void flyingHead.offsetWidth;
-        flyingHead.classList.add("flyHeadBigSpin");
-      }, 8000);
+        flyingHead.classList.add("flyBigHead");
+      }, 5000);
 
       wait(() => {
         message.textContent = "大ホームラン！！！もう一回！";
         showRetry();
-      }, 10500);
+      }, 7500);
     }
 
     head.addEventListener("pointerdown", (e) => {
@@ -784,17 +805,15 @@
       headX = e.clientX - fieldRect.left;
       headY = e.clientY - fieldRect.top - dragOffsetY;
 
-      if (headX < 30) headX = 30;
+      headX = Math.max(
+        30,
+        Math.min(fieldRect.width - 30, headX)
+      );
 
-      if (headX > fieldRect.width - 30) {
-        headX = fieldRect.width - 30;
-      }
-
-      if (headY < -80) headY = -80;
-
-      if (headY > fieldRect.height - 40) {
-        headY = fieldRect.height - 40;
-      }
+      headY = Math.max(
+        -80,
+        Math.min(fieldRect.height - 40, headY)
+      );
 
       setHeadPosition();
 
@@ -815,5 +834,3 @@
   </script>
 </body>
 </html>
-
-
